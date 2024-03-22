@@ -150,7 +150,7 @@ int main(void){
 <link>
 <https://swedu.pusan.ac.kr>
 ``` 
-[부산대 소프트웨어융합교육원](https://swedu.pusan.ac.kr/swedu/index.do)
+[부산대 소프트웨어융합교육원](https://swedu.pusan.ac.kr)
 
 <https://swedu.pusan.ac.kr/swedu/index.do>  
 <br />
