@@ -219,18 +219,13 @@ __double underscores__ <br />
 
 ### 4.7. 이미지 Image
 ```
-![Alt text](/path/to/img.jpg)
+<img src="/path/to/img.jpg" width="600px" title="Title" alt="Alt text"></img>
 ![Alt text](/path/to/img.jpg "Optional title")
-<img src="/path/to/img.jpg" width="450px" title="부산대학교" alt="Alt text"></img>
 ```
-![부산대](https://www.pusan.ac.kr/_contents/kor/_Img/Layout/logo.png)
+<img src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/be7beb64-490f-4480-b121-f25cde7f2a8d" width="600px" title="부산대학교 소프트웨어융합교육원" alt="부산대학교 소프트웨어융합교육원"></img>
 <br/>
-![부산대](https://www.pusan.ac.kr/_contents/kor/_Img/Layout/logo.png "부산대학교")
+![부산대학교 소프트웨어융합교육원](https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/884154bb-28f6-4498-9f64-a8a878972951, "부산대학교 소프트웨어융합교육원")
 <br/>
-<img src="https://www.pusan.ac.kr/_contents/kor/_Img/Layout/logo.png" width="450px" title="부산대학교" alt="부산대"></img>
-<br/>
-
-
 
 
 
