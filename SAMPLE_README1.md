@@ -50,7 +50,11 @@
   <img width="400px" alt="테스크 플로우 차트" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/b83502a9-032d-4453-8687-428d54643610" />
 
 - 시스템 플로우 차트
-  > 작성하세요.
+  > 코딩 역량강화 플랫폼의 로그인 부분만 작성했습니다. <br/>
+  > 테스크의 흐름에 따른 데이터 처리를 도식화하여 보여줍니다.
+  <img width="600px" alt="테스크 플로우 차트" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/1bfb66f0-446c-4450-8a81-a78bfe5ac9ce" />
+
+  
 - IA(Information Architecture)
   > 작성하세요.
 <br/>
