@@ -52,11 +52,13 @@
 - 시스템 플로우 차트
   > 코딩 역량강화 플랫폼의 로그인 부분만 작성했습니다. <br/>
   > 테스크의 흐름에 따른 데이터 처리를 도식화하여 보여줍니다.
-  <img width="600px" alt="테스크 플로우 차트" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/1bfb66f0-446c-4450-8a81-a78bfe5ac9ce" />
+  <img width="600px" alt="시스템 플로우 차트" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/1bfb66f0-446c-4450-8a81-a78bfe5ac9ce" />
 
   
 - IA(Information Architecture)
-  > 작성하세요.
+  > 정보나 시스템의 구조를 도식화하여 보여줍니다. <br/>
+  <img width="600px" alt="IA" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/07d842fe-fb73-4079-97a3-58b2495ff331" />
+
 <br/>
 
 #### 3.2. 기능설명
