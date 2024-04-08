@@ -8,13 +8,12 @@
 
 
 ## 1. 레파지토리 생성
-- <TODO: classroom link>
+- [https://classroom.github.com/a/8vuYR89j](https://classroom.github.com/a/8vuYR89j)
 - 위 Github Classroom 링크에 접속해 본인 조의 github 레파지토리를 생성하세요.
+<img src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/255ad5f6-c9e2-4b02-bcee-56d90601f14e" width="600px" alt="Classroom에서 team 생성" />
 
-<TODO: classroom createteam image>
-
-- 레파지토리 생성 시, <TODO: format of repository name> 형식으로 생성하세요.
-- 예를 들어, <TODO: example of repository name> 입니다.  
+- 레파지토리 생성 시, `PNUSW_2024_TEAM_XX` 형식으로 생성하세요.
+- 예를 들면, `PNUSW_2024_TEAM_01` 입니다.  
 <br/>
 
 
