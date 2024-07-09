@@ -22,7 +22,7 @@
 
 
 package com.example.chat2
-//ㅁㄴㄻㄴㅇㄹ
+
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
