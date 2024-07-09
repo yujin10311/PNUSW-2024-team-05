@@ -21,8 +21,6 @@
 //}
 
 
-
-
 package com.example.chat2
 //ㅁㄴㄻㄴㅇㄹ
 import android.annotation.SuppressLint
@@ -47,20 +45,21 @@ class HomeActivity : AppCompatActivity() {
         }
 
         findViewById<TextView>(R.id.chat_btn).setOnClickListener {
-            val intent = Intent(this, LogInActivity::class.java)
+            val intent = Intent(this, ChatActivity::class.java)
 
             this.startActivity(intent)
 
-        }
-
-        findViewById<TextView>(R.id.home_btn).setOnClickListener {
-            val intent = Intent(this, HomeActivity::class.java)
-
-            this.startActivity(intent)
         }
 
         findViewById<TextView>(R.id.character_btn).setOnClickListener {
             val intent = Intent(this, AvatarActivity::class.java)
+
+            this.startActivity(intent)
+
+        }
+
+        findViewById<TextView>(R.id.check_btn).setOnClickListener {
+            val intent = Intent(this, CheckActivity::class.java)
 
             this.startActivity(intent)
 
