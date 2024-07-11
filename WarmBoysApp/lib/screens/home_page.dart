@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import '../widgets/custom_app_bar.dart';
+import '../widgets/custom_end_drawer.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('홈페이지'),
-      ),
+      appBar: CustomAppBar(title: '홈페이지'),
       body: ListView(
         children: [
           ImageCard(
@@ -47,6 +47,7 @@ class HomePage extends StatelessWidget {
           // 원하는 만큼 이미지 카드 추가
         ],
       ),
+      endDrawer: CustomEndDrawer(),
     );
   }
 }
