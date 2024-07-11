@@ -219,7 +219,9 @@ class LoginPage extends StatelessWidget {
                         ),
                         padding: EdgeInsets.symmetric(vertical: 15), // 높이 조절
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/register1');
+                      },
                       child: Text(
                         '회원가입',
                         style: TextStyle(
