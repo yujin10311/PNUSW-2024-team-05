@@ -10,22 +10,32 @@ class CustomEndDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
-            child: Text(
-              '프로필 메뉴',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 40,
+                  backgroundImage: AssetImage('assets/icons/profile_blank.png'),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  '사용자 이름',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+              ],
             ),
           ),
           ListTile(
             leading: Icon(Icons.person),
-            title: Text('프로필'),
+            title: Text('프로필 수정'),
             onTap: () {},
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('설정'),
+            leading: Icon(Icons.credit_card),
+            title: Text('내 크레딧'),
             onTap: () {},
           ),
           ListTile(
