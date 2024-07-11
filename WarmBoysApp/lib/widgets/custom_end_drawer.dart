@@ -41,7 +41,9 @@ class CustomEndDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.logout),
             title: Text('로그아웃'),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+            },
           ),
         ],
       ),
