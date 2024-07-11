@@ -8,11 +8,46 @@ class RegisterPage1 extends StatefulWidget {
 }
 
 class _RegisterPage1State extends State<RegisterPage1> {
+  late TextEditingController _nameController;
+  late TextEditingController _ageController;
+  late TextEditingController _contactController;
+  late TextEditingController _address2Controller;
+  late TextEditingController _universityController;
+  late TextEditingController _guardianContactController;
+
   @override
   void initState() {
     super.initState();
     final registerState = Provider.of<RegisterState>(context, listen: false);
-    registerState.reset();
+
+    _nameController = TextEditingController(text: registerState.name);
+    _ageController = TextEditingController(text: registerState.age);
+    _contactController = TextEditingController(text: registerState.contact);
+    _address2Controller = TextEditingController(text: registerState.address2);
+    _universityController =
+        TextEditingController(text: registerState.university);
+    _guardianContactController =
+        TextEditingController(text: registerState.guardianContact);
+
+    _nameController.addListener(() {
+      registerState.updateField('name', _nameController.text);
+    });
+    _ageController.addListener(() {
+      registerState.updateField('age', _ageController.text);
+    });
+    _contactController.addListener(() {
+      registerState.updateField('contact', _contactController.text);
+    });
+    _address2Controller.addListener(() {
+      registerState.updateField('address2', _address2Controller.text);
+    });
+    _universityController.addListener(() {
+      registerState.updateField('university', _universityController.text);
+    });
+    _guardianContactController.addListener(() {
+      registerState.updateField(
+          'guardianContact', _guardianContactController.text);
+    });
   }
 
   void _updateTypeAndClearFields(String value) {
@@ -21,8 +56,10 @@ class _RegisterPage1State extends State<RegisterPage1> {
       registerState.updateField('type', value);
       if (value == '청년') {
         registerState.clearField('guardianContact');
+        _guardianContactController.clear();
       } else if (value == '노인') {
         registerState.clearField('university');
+        _universityController.clear();
       }
     });
   }
@@ -39,28 +76,26 @@ class _RegisterPage1State extends State<RegisterPage1> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            _buildTextField(
-                '이름', 'name', registerState.name, registerState.updateField),
-            _buildTextField(
-                '나이', 'age', registerState.age, registerState.updateField),
+            _buildTextField('이름', _nameController),
+            _buildTextField('나이', _ageController),
             _buildRadioGroup('성별', ['남성', '여성'], registerState.gender, (value) {
-              registerState.updateField('gender', value);
+              setState(() {
+                registerState.updateField('gender', value);
+              });
             }),
             _buildRadioGroup('가입 유형', ['노인', '청년'], registerState.type,
                 _updateTypeAndClearFields),
-            _buildTextField('연락처', 'contact', registerState.contact,
-                registerState.updateField),
+            _buildTextField('연락처', _contactController),
             _buildDropdown('주소_1', ['부산 금정구 동1', '부산 금정구 동2', '부산 금정구 동3'],
                 registerState.dong, (value) {
-              registerState.updateField('dong', value);
+              setState(() {
+                registerState.updateField('dong', value);
+              });
             }),
-            _buildTextField('주소_2', 'address2', registerState.address2,
-                registerState.updateField),
-            _buildTextField('소재대학', 'university', registerState.university,
-                registerState.updateField,
+            _buildTextField('주소_2', _address2Controller),
+            _buildTextField('소재대학', _universityController,
                 enabled: registerState.type == '청년'),
-            _buildTextField('보호자 연락처', 'guardianContact',
-                registerState.guardianContact, registerState.updateField,
+            _buildTextField('보호자 연락처', _guardianContactController,
                 enabled: registerState.type == '노인'),
             SizedBox(height: 20),
             ElevatedButton(
@@ -75,8 +110,7 @@ class _RegisterPage1State extends State<RegisterPage1> {
     );
   }
 
-  Widget _buildTextField(String label, String key, String value,
-      Function(String, String) onChanged,
+  Widget _buildTextField(String label, TextEditingController controller,
       {bool enabled = true}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -85,6 +119,7 @@ class _RegisterPage1State extends State<RegisterPage1> {
         children: [
           Text(label, style: TextStyle(fontSize: 15)),
           TextField(
+            controller: controller,
             enabled: enabled,
             decoration: InputDecoration(
               enabledBorder: UnderlineInputBorder(
@@ -94,8 +129,6 @@ class _RegisterPage1State extends State<RegisterPage1> {
                 borderSide: BorderSide(color: Colors.blue),
               ),
             ),
-            onChanged: (text) => onChanged(key, text),
-            controller: TextEditingController(text: value),
           ),
         ],
       ),
@@ -147,7 +180,9 @@ class _RegisterPage1State extends State<RegisterPage1> {
             value: selectedValue,
             isExpanded: true,
             onChanged: (String? newValue) {
-              onChanged(newValue!);
+              setState(() {
+                onChanged(newValue!);
+              });
             },
             items: options.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(

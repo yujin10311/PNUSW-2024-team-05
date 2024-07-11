@@ -8,6 +8,38 @@ class RegisterPage2 extends StatefulWidget {
 }
 
 class _RegisterPage2State extends State<RegisterPage2> {
+  late TextEditingController _idController;
+  late TextEditingController _passwordController;
+  late TextEditingController _confirmPasswordController;
+  late TextEditingController _emailController;
+
+  @override
+  void initState() {
+    super.initState();
+    final registerState = Provider.of<RegisterState>(context, listen: false);
+
+    _idController = TextEditingController(text: registerState.id);
+    _passwordController = TextEditingController(text: registerState.password);
+    _confirmPasswordController =
+        TextEditingController(text: registerState.confirmPassword);
+    _emailController = TextEditingController(text: registerState.email);
+
+    _idController.addListener(() {
+      registerState.updateField('id', _idController.text);
+    });
+    _passwordController.addListener(() {
+      registerState.updateField('password', _passwordController.text);
+    });
+    _confirmPasswordController.addListener(() {
+      registerState.updateField(
+          'confirmPassword', _confirmPasswordController.text);
+      _checkPasswordMatch(_confirmPasswordController.text);
+    });
+    _emailController.addListener(() {
+      registerState.updateField('email', _emailController.text);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final registerState = Provider.of<RegisterState>(context);
@@ -20,21 +52,10 @@ class _RegisterPage2State extends State<RegisterPage2> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            _buildTextField(
-                'ID', 'id', registerState.id, registerState.updateField),
-            _buildTextField('비밀번호', 'password', registerState.password,
-                registerState.updateField,
+            _buildTextField('ID', _idController),
+            _buildTextField('비밀번호', _passwordController, obscureText: true),
+            _buildTextField('비밀번호 확인', _confirmPasswordController,
                 obscureText: true),
-            _buildTextField(
-              '비밀번호 확인',
-              'confirmPassword',
-              registerState.confirmPassword,
-              (key, value) {
-                registerState.updateField(key, value);
-                _checkPasswordMatch(value);
-              },
-              obscureText: true,
-            ),
             if (registerState.password != registerState.confirmPassword)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -43,8 +64,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                   style: TextStyle(color: Colors.red, fontSize: 14),
                 ),
               ),
-            _buildTextField('이메일 주소', 'email', registerState.email,
-                registerState.updateField),
+            _buildTextField('이메일 주소', _emailController),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -77,9 +97,8 @@ class _RegisterPage2State extends State<RegisterPage2> {
     registerState.updateField('confirmPassword', value);
   }
 
-  Widget _buildTextField(String label, String key, String value,
-      Function(String, String) onChanged,
-      {bool obscureText = false, Function(String)? onChangedLocal}) {
+  Widget _buildTextField(String label, TextEditingController controller,
+      {bool obscureText = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
@@ -87,6 +106,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
         children: [
           Text(label, style: TextStyle(fontSize: 15)),
           TextField(
+            controller: controller,
             obscureText: obscureText,
             decoration: InputDecoration(
               enabledBorder: UnderlineInputBorder(
@@ -96,12 +116,6 @@ class _RegisterPage2State extends State<RegisterPage2> {
                 borderSide: BorderSide(color: Colors.blue),
               ),
             ),
-            onChanged: (text) {
-              onChanged(key, text);
-              if (onChangedLocal != null) {
-                onChangedLocal(text);
-              }
-            },
           ),
         ],
       ),
