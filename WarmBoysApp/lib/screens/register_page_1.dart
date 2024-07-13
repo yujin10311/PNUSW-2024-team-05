@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../models/register_state.dart';
+import '../utils/shared_preferences_helper.dart';
+import '../widgets/radio_button_group.dart';
+import '../widgets/dropdown_with_label.dart';
 
 class RegisterPage1 extends StatefulWidget {
   @override
@@ -12,186 +13,255 @@ class _RegisterPage1State extends State<RegisterPage1> {
   late TextEditingController _ageController;
   late TextEditingController _contactController;
   late TextEditingController _address2Controller;
-  late TextEditingController _universityController;
-  late TextEditingController _guardianContactController;
+  String _gender = '남성';
+  String _type = '청년';
+  String _dong = '구서1동';
+  bool _isFormValid = false;
 
   @override
   void initState() {
     super.initState();
-    final registerState = Provider.of<RegisterState>(context, listen: false);
+    _nameController = TextEditingController();
+    _ageController = TextEditingController();
+    _contactController = TextEditingController();
+    _address2Controller = TextEditingController();
+    _loadData();
+  }
 
-    _nameController = TextEditingController(text: registerState.name);
-    _ageController = TextEditingController(text: registerState.age);
-    _contactController = TextEditingController(text: registerState.contact);
-    _address2Controller = TextEditingController(text: registerState.address2);
-    _universityController =
-        TextEditingController(text: registerState.university);
-    _guardianContactController =
-        TextEditingController(text: registerState.guardianContact);
+  Future<void> _loadData() async {
+    final name = await SharedPreferencesHelper.getData('name');
+    final age = await SharedPreferencesHelper.getData('age');
+    final contact = await SharedPreferencesHelper.getData('contact');
+    final address2 = await SharedPreferencesHelper.getData('address2');
+    final gender = await SharedPreferencesHelper.getData('gender');
+    final type = await SharedPreferencesHelper.getData('type');
+    final dong = await SharedPreferencesHelper.getData('dong');
 
-    _nameController.addListener(() {
-      registerState.updateField('name', _nameController.text);
+    setState(() {
+      _nameController.text = name ?? '';
+      _ageController.text = age ?? '';
+      _contactController.text = contact ?? '';
+      _address2Controller.text = address2 ?? '';
+      _gender = gender ?? '남성';
+      _type = type ?? '청년';
+      _dong = dong ?? '구서1동';
     });
-    _ageController.addListener(() {
-      registerState.updateField('age', _ageController.text);
-    });
-    _contactController.addListener(() {
-      registerState.updateField('contact', _contactController.text);
-    });
-    _address2Controller.addListener(() {
-      registerState.updateField('address2', _address2Controller.text);
-    });
-    _universityController.addListener(() {
-      registerState.updateField('university', _universityController.text);
-    });
-    _guardianContactController.addListener(() {
-      registerState.updateField(
-          'guardianContact', _guardianContactController.text);
+
+    _validateForm();
+  }
+
+  Future<void> _saveData() async {
+    await SharedPreferencesHelper.saveData('name', _nameController.text);
+    await SharedPreferencesHelper.saveData('age', _ageController.text);
+    await SharedPreferencesHelper.saveData('contact', _contactController.text);
+    await SharedPreferencesHelper.saveData(
+        'address2', _address2Controller.text);
+    await SharedPreferencesHelper.saveData('gender', _gender);
+    await SharedPreferencesHelper.saveData('type', _type);
+    await SharedPreferencesHelper.saveData('dong', _dong);
+  }
+
+  void _resetFields() async {
+    await SharedPreferencesHelper.clearData();
+    _nameController.clear();
+    _ageController.clear();
+    _contactController.clear();
+    _address2Controller.clear();
+    setState(() {
+      _gender = '남성';
+      _type = '청년';
+      _dong = '구서1동';
+      _isFormValid = false;
     });
   }
 
-  void _updateTypeAndClearFields(String value) {
-    final registerState = Provider.of<RegisterState>(context, listen: false);
+  void _validateForm() {
     setState(() {
-      registerState.updateField('type', value);
-      if (value == '청년') {
-        registerState.clearField('guardianContact');
-        _guardianContactController.clear();
-      } else if (value == '노인') {
-        registerState.clearField('university');
-        _universityController.clear();
-      }
+      _isFormValid = _nameController.text.isNotEmpty &&
+          _ageController.text.isNotEmpty &&
+          _contactController.text.isNotEmpty &&
+          _address2Controller.text.isNotEmpty &&
+          _gender.isNotEmpty &&
+          _type.isNotEmpty &&
+          _dong.isNotEmpty;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final registerState = Provider.of<RegisterState>(context);
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('회원가입 (1/2)'),
+        title: Text('회원가입 (1/3)'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            _resetFields();
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            _buildTextField('이름', _nameController),
-            _buildTextField('나이', _ageController),
-            _buildRadioGroup('성별', ['남성', '여성'], registerState.gender, (value) {
-              setState(() {
-                registerState.updateField('gender', value);
-              });
-            }),
-            _buildRadioGroup('가입 유형', ['노인', '청년'], registerState.type,
-                _updateTypeAndClearFields),
-            _buildTextField('연락처', _contactController),
-            _buildDropdown('주소_1', ['부산 금정구 동1', '부산 금정구 동2', '부산 금정구 동3'],
-                registerState.dong, (value) {
-              setState(() {
-                registerState.updateField('dong', value);
-              });
-            }),
-            _buildTextField('주소_2', _address2Controller),
-            _buildTextField('소재대학', _universityController,
-                enabled: registerState.type == '청년'),
-            _buildTextField('보호자 연락처', _guardianContactController,
-                enabled: registerState.type == '노인'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('이름', style: TextStyle(fontSize: 15)),
+                  TextField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                    onChanged: (text) {
+                      _validateForm();
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('나이', style: TextStyle(fontSize: 15)),
+                  TextField(
+                    controller: _ageController,
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                    onChanged: (text) {
+                      _validateForm();
+                    },
+                  ),
+                ],
+              ),
+            ),
+            RadioButtonGroup(
+              label: '성별',
+              options: ['남성', '여성'],
+              groupValue: _gender,
+              onChanged: (value) {
+                setState(() {
+                  _gender = value;
+                  _validateForm();
+                });
+              },
+            ),
+            RadioButtonGroup(
+              label: '가입 유형',
+              options: ['노인', '청년'],
+              groupValue: _type,
+              onChanged: (value) {
+                setState(() {
+                  _type = value;
+                  _validateForm();
+                });
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('연락처', style: TextStyle(fontSize: 15)),
+                  TextField(
+                    controller: _contactController,
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                    onChanged: (text) {
+                      _validateForm();
+                    },
+                  ),
+                ],
+              ),
+            ),
+            DropdownWithLabel(
+              label: '주소_1',
+              value: _dong,
+              items: [
+                '구서1동',
+                '구서2동',
+                '금사회동동',
+                '금성동',
+                '남산동',
+                '부곡1동',
+                '부곡2동',
+                '부곡3동',
+                '부곡4동',
+                '서1동',
+                '서2동',
+                '서3동',
+                '선두구동',
+                '장전1동',
+                '장전2동',
+                '청룡노포동',
+              ],
+              onChanged: (String? value) {
+                setState(() {
+                  _dong = value!;
+                  _validateForm();
+                });
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('주소_2', style: TextStyle(fontSize: 15)),
+                  TextField(
+                    controller: _address2Controller,
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                    onChanged: (text) {
+                      _validateForm();
+                    },
+                  ),
+                ],
+              ),
+            ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/register2');
-              },
+              onPressed: _isFormValid
+                  ? () async {
+                      await _saveData();
+                      if (_type == '청년') {
+                        Navigator.pushNamed(context, '/register2_1');
+                      } else if (_type == '노인') {
+                        Navigator.pushNamed(context, '/register2_2');
+                      }
+                    }
+                  : null,
               child: Text('다음'),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildTextField(String label, TextEditingController controller,
-      {bool enabled = true}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: TextStyle(fontSize: 15)),
-          TextField(
-            controller: controller,
-            enabled: enabled,
-            decoration: InputDecoration(
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRadioGroup(String label, List<String> options, String groupValue,
-      Function(String) onChanged) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: TextStyle(fontSize: 15)),
-          Wrap(
-            children: options.map((option) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Radio<String>(
-                      value: option,
-                      groupValue: groupValue,
-                      onChanged: (value) {
-                        onChanged(value!);
-                      },
-                    ),
-                    Text(option),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDropdown(String label, List<String> options,
-      String selectedValue, Function(String) onChanged) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: TextStyle(fontSize: 15)),
-          DropdownButton<String>(
-            value: selectedValue,
-            isExpanded: true,
-            onChanged: (String? newValue) {
-              setState(() {
-                onChanged(newValue!);
-              });
-            },
-            items: options.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          ),
-        ],
       ),
     );
   }
