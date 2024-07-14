@@ -33,9 +33,15 @@ class ExchangeSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // 교환 페이지의 검색 중인 동안의 제안 사항을 보여주는 로직
+    // 매칭 페이지의 검색 중인 동안의 제안 사항을 보여주는 로직
     return Center(
-      child: Text('교환페이지 검색 제안: $query'),
-    );
+        // child: Text('매칭 페이지 검색 제안: $query'),
+        );
+  }
+
+  @override
+  void close(BuildContext context, String result) {
+    // 리소스 정리 코드
+    super.close(context, result);
   }
 }

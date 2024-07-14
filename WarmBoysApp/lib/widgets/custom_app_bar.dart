@@ -19,14 +19,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           icon: Icon(Icons.search),
-          onPressed: () {
-            showSearch(context: context, delegate: searchDelegate);
+          onPressed: () async {
+            await showSearch(context: context, delegate: searchDelegate);
           },
         ),
         IconButton(
           icon: Icon(Icons.notifications),
-          onPressed: () {
-            showDialog(
+          onPressed: () async {
+            await showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(

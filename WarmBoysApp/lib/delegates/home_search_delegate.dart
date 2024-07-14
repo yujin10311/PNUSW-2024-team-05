@@ -35,7 +35,13 @@ class HomeSearchDelegate extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     // 홈 페이지의 검색 중인 동안의 제안 사항을 보여주는 로직
     return Center(
-      child: Text('홈페이지 검색 제안: $query'),
-    );
+        // child: Text('홈페이지 검색 제안: $query'),
+        );
+  }
+
+  @override
+  void close(BuildContext context, String result) {
+    // 리소스 정리 코드
+    super.close(context, result);
   }
 }
