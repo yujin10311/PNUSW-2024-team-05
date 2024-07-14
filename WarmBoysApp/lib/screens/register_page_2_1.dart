@@ -9,13 +9,29 @@ class RegisterPage2_1 extends StatefulWidget {
 
 class _RegisterPage2_1State extends State<RegisterPage2_1> {
   final List<String> universityList = [
-    '서울대학교',
-    '연세대학교',
-    '고려대학교',
-    '성균관대학교',
-    '한양대학교',
+    '경성대학교',
+    '고신대학교',
+    '경남정보대학교',
+    '대동대학교',
+    '동명대학교',
+    '동서대학교',
+    '동아대학교',
+    '동의대학교',
+    '부산대학교',
+    '부산가톨릭대학교',
+    '부산경상대학교',
+    '부산교육대학교',
+    '부산과학기술대학교',
+    '부산보건대학교',
+    '부산여자대학교',
+    '부산예술대학교',
+    '부산외국어대학교',
+    '신라대학교',
+    '영산대학교',
+    '인제대학교',
+    '한국폴리텍7대학',
   ];
-  String _university = '서울대학교';
+  String _university = '경성대학교';
 
   @override
   void initState() {
