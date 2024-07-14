@@ -21,7 +21,10 @@ class _ExchangePageState extends State<ExchangePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: '교환 페이지'),
+      appBar: CustomAppBar(
+        title: '교환 페이지',
+        leading: null,
+      ),
       body: Column(
         children: [
           SortButton(onSortChanged: _onSortChanged),

@@ -22,7 +22,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: '홈페이지'),
+      appBar: CustomAppBar(
+        title: '홈페이지',
+        leading: null, // '뒤로 가기 버튼' 제거
+      ),
       body: Column(
         children: [
           SortButton(onSortChanged: _onSortChanged),

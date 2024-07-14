@@ -21,7 +21,10 @@ class _CommunityPageState extends State<CommunityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: '커뮤니티'),
+      appBar: CustomAppBar(
+        title: '커뮤니티',
+        leading: null,
+      ),
       body: Column(
         children: [
           SortButton(onSortChanged: _onSortChanged),

@@ -21,7 +21,10 @@ class _MatchingPageState extends State<MatchingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: '매칭 페이지'),
+      appBar: CustomAppBar(
+        title: '매칭 페이지',
+        leading: null,
+      ),
       body: Column(
         children: [
           SortButton(onSortChanged: _onSortChanged),
