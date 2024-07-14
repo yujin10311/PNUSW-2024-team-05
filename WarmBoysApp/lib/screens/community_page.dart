@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_end_drawer.dart';
 import '../widgets/sort_button.dart';
+import '../delegates/community_search_delegate.dart';
 
 class CommunityPage extends StatefulWidget {
   @override
@@ -24,6 +25,7 @@ class _CommunityPageState extends State<CommunityPage> {
       appBar: CustomAppBar(
         title: '커뮤니티',
         leading: null,
+        searchDelegate: CommunitySearchDelegate(),
       ),
       body: Column(
         children: [

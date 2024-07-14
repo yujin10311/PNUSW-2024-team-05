@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_end_drawer.dart';
 import '../widgets/sort_button.dart';
+import '../delegates/exchange_search_delegate.dart';
 
 class ExchangePage extends StatefulWidget {
   @override
@@ -24,6 +25,7 @@ class _ExchangePageState extends State<ExchangePage> {
       appBar: CustomAppBar(
         title: '교환 페이지',
         leading: null,
+        searchDelegate: ExchangeSearchDelegate(),
       ),
       body: Column(
         children: [

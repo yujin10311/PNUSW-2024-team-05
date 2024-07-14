@@ -3,6 +3,7 @@ import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_end_drawer.dart';
 import '../widgets/image_card.dart';
 import '../widgets/sort_button.dart';
+import '../delegates/home_search_delegate.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage> {
       appBar: CustomAppBar(
         title: '홈페이지',
         leading: null, // '뒤로 가기 버튼' 제거
+        searchDelegate: HomeSearchDelegate(),
       ),
       body: Column(
         children: [
