@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/shared_preferences_helper.dart';
-import '../widgets/dropdown_with_label.dart';
+import '../widgets/dropdown.dart';
 
 class RegisterPage2_1 extends StatefulWidget {
   @override
@@ -69,15 +69,28 @@ class _RegisterPage2_1State extends State<RegisterPage2_1> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            DropdownWithLabel(
-              label: '소재 대학',
-              value: _university,
-              items: universityList,
-              onChanged: (String? value) {
-                setState(() {
-                  _university = value!;
-                });
-              },
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('소재 대학', style: TextStyle(fontSize: 15)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Dropdown(
+                        value: _university,
+                        items: universityList,
+                        onChanged: (String? value) {
+                          setState(() {
+                            _university = value!;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: 20),
             ElevatedButton(

@@ -52,7 +52,9 @@ class _RegisterPage3State extends State<RegisterPage3> {
 
   Future<void> _printAndResetFields() async {
     final name = await SharedPreferencesHelper.getData('name');
-    final age = await SharedPreferencesHelper.getData('age');
+    final birthYear = await SharedPreferencesHelper.getData('BirthYear');
+    final birthMonth = await SharedPreferencesHelper.getData('BirthMonth');
+    final birthDay = await SharedPreferencesHelper.getData('BirthDay');
     final contact = await SharedPreferencesHelper.getData('contact');
     final address2 = await SharedPreferencesHelper.getData('address2');
     final gender = await SharedPreferencesHelper.getData('gender');
@@ -70,20 +72,22 @@ class _RegisterPage3State extends State<RegisterPage3> {
     final email = await SharedPreferencesHelper.getData('email');
 
     print('Saved Data:');
-    print('Name: $name');
-    print('Age: $age');
-    print('Contact: $contact');
-    print('Address2: $address2');
-    print('Gender: $gender');
-    print('Type: $type');
-    print('Dong: $dong');
-    print('University: $university');
-    print('GuardianContact1: $guardianContact1');
-    print('GuardianContact2: $guardianContact2');
-    print('ID: $id');
-    print('Password: $password');
-    print('ConfirmPassword: $confirmPassword');
-    print('Email: $email');
+    print('name: $name');
+    print('birthYear: $birthYear');
+    print('birthMonth: $birthMonth');
+    print('birthDay: $birthDay');
+    print('contact: $contact');
+    print('address2: $address2');
+    print('gender: $gender');
+    print('type: $type');
+    print('dong: $dong');
+    print('university: $university');
+    print('guardianContact1: $guardianContact1');
+    print('guardianContact2: $guardianContact2');
+    print('id: $id');
+    print('password: $password');
+    print('confirmPassword: $confirmPassword');
+    print('email: $email');
 
     await SharedPreferencesHelper.clearData();
     _idController.clear();
