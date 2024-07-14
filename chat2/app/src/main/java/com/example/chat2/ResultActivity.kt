@@ -25,6 +25,22 @@ class ResultActivity : AppCompatActivity() {
 
         //점수 보여주기
         binding.scoreText.text = getString(R.string.count_label, score, totalSize)
+        if (score in 0..4) {
+            binding.resultText.text = getString(R.string.result1)
+        }
+
+        if (score in 5..9) {
+            binding.resultText.text = getString(R.string.result2)
+        }
+
+        if (score in 10..19) {
+            binding.resultText.text = getString(R.string.result3)
+        }
+
+        if (score in 20..27) {
+            binding.resultText.text = getString(R.string.result4)
+        }
+
 
         //다시하기 버튼
         binding.resetBtn.setOnClickListener {
