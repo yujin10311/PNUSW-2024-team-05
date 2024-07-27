@@ -67,7 +67,7 @@ class ChatActivity : AppCompatActivity() {
         receiverRoom = senderUid + receiverUid
 
 
-        // 액션바에 상대방 이름 보여주기기
+        // 액션바에 상대방 이름 보여주기기기기
 //        supportActionBar?.title = receiverName
 
         // 메세지 전송 버튼 이벤트
