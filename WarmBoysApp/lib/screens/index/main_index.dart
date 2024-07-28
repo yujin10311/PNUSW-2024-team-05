@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart';
-import 'matching_page.dart';
-import 'community_page.dart';
-import 'exchange_page.dart';
+import '../main/home_screen.dart';
+import '../main/matching_page.dart';
+import '../main/chating_screen.dart';
+import '../main/exchange_screen.dart';
 
-class MainScreen extends StatefulWidget {
+class MainIndex extends StatefulWidget {
   @override
-  _MainScreenState createState() => _MainScreenState();
+  _MainIndexState createState() => _MainIndexState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainIndexState extends State<MainIndex> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
-    HomePage(),
-    MatchingPage(),
-    CommunityPage(),
-    ExchangePage(),
+    HomeScreen(),
+    MatchingScreen(),
+    ChatingScreen(),
+    ExchangeScreen(),
   ];
 
   @override

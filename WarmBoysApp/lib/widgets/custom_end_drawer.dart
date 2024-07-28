@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/custom_auth_provider.dart'; // CustomAuthProvider 경로를 맞춰주세요
 
 class CustomEndDrawer extends StatelessWidget {
   @override
@@ -42,7 +44,10 @@ class CustomEndDrawer extends StatelessWidget {
             leading: Icon(Icons.logout),
             title: Text('로그아웃'),
             onTap: () {
-              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+              // CustomAuthProvider의 logOut 메서드를 호출하고 로그인 페이지로 이동
+              Provider.of<CustomAuthProvider>(context, listen: false).logOut();
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/login', (route) => false);
             },
           ),
         ],
