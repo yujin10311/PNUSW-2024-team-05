@@ -90,7 +90,7 @@ class ChatActivity : AppCompatActivity() {
             val messageObject = Message(message, senderUid)
 
             // 데이터 저장
-            CoroutineScope(Dispatchers.IO).launch() {
+            CoroutineScope(Dispatchers.Main).launch() {
                 var response = chat.sendMessage("다음 텍스트에 대해 3줄 이내로 채팅하듯이 심리상담을 해줘 텍스트:$message")
                 mDbRef.child("chats").child(senderRoom).child("message").push()
                     .setValue(messageObject)//.addOnSuccessListener {
