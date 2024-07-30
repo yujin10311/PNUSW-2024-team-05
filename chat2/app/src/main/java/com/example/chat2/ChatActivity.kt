@@ -1,6 +1,7 @@
 package com.example.chat2
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -19,7 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
+// 너무 어렵고
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var receiverName: String
@@ -100,7 +101,7 @@ class ChatActivity : AppCompatActivity() {
 //                    }
                 // 입력값 초기화
                 mDbRef.child("chats").child(senderRoom).child("message").push()
-                    .setValue(Message(response.text, senderUid))
+                    .setValue(Message(response.text.toString(), senderUid+"a"))
                 binding.messageEdit.setText("")
             }
         }
