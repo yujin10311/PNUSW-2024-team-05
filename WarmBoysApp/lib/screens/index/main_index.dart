@@ -40,9 +40,8 @@ class _MainIndexState extends State<MainIndex> {
             label: '매칭',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/community.png',
-                width: 24, height: 24),
-            label: '커뮤니티',
+            icon: Image.asset('assets/icons/chat.png',width: 24, height: 24),
+            label: '채팅',
           ),
           BottomNavigationBarItem(
             icon:

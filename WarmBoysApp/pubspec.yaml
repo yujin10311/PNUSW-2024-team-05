@@ -41,6 +41,7 @@ dependencies:
   firebase_auth: ^5.1.2
   cloud_firestore: ^5.1.0
   provider: ^6.0.0
+  youtube_player_flutter: ^8.0.0
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,7 @@ flutter:
     - assets/icons/matching.png
     - assets/icons/community.png
     - assets/icons/exchange.png
+    - assets/icons/chat.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -85,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Color(0xFFF8C2BD), // 배경색 설정
       body: Center(
-        child: Padding(
+        child: SingleChildScrollView( // 스크롤 기능 추가
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
