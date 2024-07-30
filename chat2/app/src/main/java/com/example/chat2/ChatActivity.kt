@@ -13,6 +13,12 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.Content
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ChatActivity : AppCompatActivity() {
 
@@ -29,6 +35,13 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var senderRoom: String // 보낸 대화방
 
     private lateinit var messageList: ArrayList<Message>
+
+    private val model = GenerativeModel(
+        "gemini-1.5-flash",
+        apiKey = "AIzaSyAFUNgEWOFYm4FNk-GkBssKdrsKpCcf5Tw",
+    )
+    private val chatHistory = mutableListOf<Content>()
+    private val chat = model.startChat(chatHistory)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,8 +64,8 @@ class ChatActivity : AppCompatActivity() {
         binding.chatRecyclerView.adapter = messageAdapter
 
         // 넘어온 데이터 변수에 담기
-        receiverName = intent.getStringExtra("name").toString()
-        receiverUid = intent.getStringExtra("uId").toString()
+        receiverName = "gemini"//intent.getStringExtra("name").toString()
+        receiverUid = "gemini"//intent.getStringExtra("uId").toString()
 
         mAuth = FirebaseAuth.getInstance()
         mDbRef = FirebaseDatabase.getInstance().reference
@@ -77,14 +90,19 @@ class ChatActivity : AppCompatActivity() {
             val messageObject = Message(message, senderUid)
 
             // 데이터 저장
-            mDbRef.child("chats").child(senderRoom).child("message").push()
-                .setValue(messageObject).addOnSuccessListener {
-                    // 저장 성공하면(상대방 화면에 -> 이거는 굳이 필요 없을듯)
-                    mDbRef.child("chats").child(receiverRoom).child("message").push()
-                        .setValue(messageObject)
-                }
-            // 입력값 초기화
-            binding.messageEdit.setText("")
+            CoroutineScope(Dispatchers.Main).launch() {
+                var response = chat.sendMessage("다음 텍스트에 대해 3줄 이내로 채팅하듯이 심리상담을 해줘 텍스트:$message")
+                mDbRef.child("chats").child(senderRoom).child("message").push()
+                    .setValue(messageObject)//.addOnSuccessListener {
+                // 저장 성공하면(상대방 화면에 -> 이거는 굳이 필요 없을듯)
+//                        mDbRef.child("chats").child(receiverRoom).child("message").push()
+//                            .setValue(Message(response.text, receiverUid))
+//                    }
+                // 입력값 초기화
+                mDbRef.child("chats").child(senderRoom).child("message").push()
+                    .setValue(Message(response.text, senderUid))
+                binding.messageEdit.setText("")
+            }
         }
 
         // 메시지 가져오기
