@@ -31,10 +31,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _checkFields() {
-    setState(() {
-      _isButtonDisabled =
-          _emailController.text.isEmpty || _passwordController.text.isEmpty;
-    });
+    if (mounted) {
+      setState(() {
+        _isButtonDisabled =
+            _emailController.text.isEmpty || _passwordController.text.isEmpty;
+      });
+    }
   }
 
   Future<void> _login(BuildContext context) async {
@@ -57,15 +59,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!isVerified) {
         print("교육 영상 시청 스크린으로 이동합니다.");
-        Navigator.pushReplacementNamed(context, '/education');
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, '/education');
+        }
       } else {
         print("홈 스크린으로 이동합니다.");
-        Navigator.pushReplacementNamed(context, '/main');
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, '/main');
+        }
       }
     } catch (e) {
-      setState(() {
-        _errorMessage = '아이디 또는 비밀번호가 잘못되었습니다.';
-      });
+      if (mounted) {
+        setState(() {
+          _errorMessage = '아이디 또는 비밀번호가 잘못되었습니다.';
+        });
+      }
     }
   }
 
@@ -85,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Color(0xFFF8C2BD), // 배경색 설정
       body: Center(
-        child: SingleChildScrollView( // 스크롤 기능 추가
+        child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

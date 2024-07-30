@@ -17,7 +17,7 @@ class _EducationScreenState extends State<EducationScreen> {
   void initState() {
     super.initState();
     _controller = YoutubePlayerController(
-      initialVideoId: '4AMuoHea5_4', // 유튜브 영상 ID
+      initialVideoId: 'iGMnftJNs3A', // 유튜브 영상 ID
       flags: YoutubePlayerFlags(
         hideControls: true,
         autoPlay: true,
@@ -28,7 +28,8 @@ class _EducationScreenState extends State<EducationScreen> {
     )..addListener(_listener);
   }
 
-  void _listener() { // 영상이 끝나는 시점을 감지하는 리스너
+  void _listener() {
+    // 영상이 끝나는 시점을 감지하는 리스너
     if (_controller.value.playerState == PlayerState.ended) {
       setState(() {
         _isVideoCompleted = true;
@@ -43,7 +44,8 @@ class _EducationScreenState extends State<EducationScreen> {
   }
 
   Future<void> _updateIsVerified() async {
-    final customAuthProvider = Provider.of<CustomAuthProvider>(context, listen: false);
+    final customAuthProvider =
+        Provider.of<CustomAuthProvider>(context, listen: false);
     final userCredential = customAuthProvider.userCredential;
 
     if (userCredential != null) {
@@ -69,7 +71,8 @@ class _EducationScreenState extends State<EducationScreen> {
   }
 
   void _logOut() {
-    final customAuthProvider = Provider.of<CustomAuthProvider>(context, listen: false);
+    final customAuthProvider =
+        Provider.of<CustomAuthProvider>(context, listen: false);
     customAuthProvider.logOut();
     Navigator.pushReplacementNamed(context, '/login');
   }
