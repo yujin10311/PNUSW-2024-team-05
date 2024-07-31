@@ -42,11 +42,12 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_selectedDateRange == null) return;
 
     List<Map<String, dynamic>> fetchedPostcards =
-        await FirebaseHelper.queryPostcardsByDurAndLoc(
+        await FirebaseHelper.queryPostcardsByDurLocStat(
       _selectedDateRange!.start,
       _selectedDateRange!.end,
       _selectedDong,
       _selectedSort,
+      'posted',
     );
 
     setState(() {

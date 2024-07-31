@@ -78,9 +78,13 @@ class FirebaseHelper {
     await firestore.collection('user').doc(uid).set(userData);
   }
 
-  // 특정 조건에 따라 포스트카드 쿼리하기
-  static Future<List<Map<String, dynamic>>> queryPostcardsByDurAndLoc(
-      DateTime startTime, DateTime endTime, String dong, String sortBy) async {
+  // 기간과 지역에 따라 포스트카드 쿼리(홍 화면 전용)
+  static Future<List<Map<String, dynamic>>> queryPostcardsByDurLocStat(
+      DateTime startTime,
+      DateTime endTime,
+      String dong,
+      String sortBy,
+      String status) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     // 날짜의 시간을 0으로 설정하여 날짜만 비교하도록 함
@@ -95,7 +99,8 @@ class FirebaseHelper {
         .where('startTime',
             isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
         .where('startTime', isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
-        .where('dong', isEqualTo: dong);
+        .where('dong', isEqualTo: dong)
+        .where('status', isEqualTo: status);
 
     // 쿼리 실행
     QuerySnapshot postsSnapshot = await postsQuery.get();
@@ -115,15 +120,15 @@ class FirebaseHelper {
       if (userSnapshot.exists) {
         var userData = userSnapshot.data() as Map<String, dynamic>;
 
-        // 필요한 데이터 구성
+        // 데이터 구성: 홈 화면의 공고 카드에 보내주는 정보들
         results.add({
           'postId': postDoc.id,
-          'postDong': postData['dong'],
-          'postStatus': postData['status'],
-          'seniorUid': seniorUid,
+          'seniorUid': seniorUid, // 작성자 uid(노인)
+          'city': userData['city'], // 시
+          'gu': userData['gu'], // 구
+          'postDong': postData['dong'], // 동
+          'postStatus': postData['status'], // posted
           'username': userData['username'],
-          'city': userData['city'],
-          'gu': userData['gu'],
           'startTime': postData['startTime'],
           'endTime': postData['endTime'],
           'dong': userData['dong'],
