@@ -9,6 +9,9 @@ import 'screens/index/register_senior_index.dart';
 import 'screens/login_screen.dart';
 import 'screens/main/education_screen.dart';
 import 'screens/index/main_index.dart';
+import 'screens/post/post_senior_my_screen.dart'; // 시니어 자신의 포스트
+import 'screens/post/post_senior_screen.dart'; // 시니어 다른 사람의 포스트
+import 'screens/post/post_mate_screen.dart'; // 메이트 포스트
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +35,11 @@ class MyApp extends StatelessWidget {
           '/login': (context) => LoginScreen(), // 로그인 스크린
           '/education': (context) => EducationScreen(), // 교육 영상 스크린
           '/main': (context) => MainIndex(), // 메인(홈, 매칭, 채팅, 교환)
+          '/post_senior_my_screen': (context) =>
+              PostSeniorMyScreen(), // 시니어 자신의 포스트
+          '/post_senior_screen': (context) =>
+              PostSeniorScreen(), // 시니어 다른 사람의 포스트
+          '/post_mate_screen': (context) => PostMateScreen(), // 메이트 포스트
         },
       ),
     );
