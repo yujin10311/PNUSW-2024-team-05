@@ -9,9 +9,7 @@ import 'screens/index/register_senior_index.dart';
 import 'screens/login_screen.dart';
 import 'screens/main/education_screen.dart';
 import 'screens/index/main_index.dart';
-import 'screens/post/post_senior_my_screen.dart'; // 시니어 자신의 포스트
-import 'screens/post/post_senior_screen.dart'; // 시니어 다른 사람의 포스트
-import 'screens/post/post_mate_screen.dart'; // 메이트 포스트
+import 'screens/post/post_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,20 +24,43 @@ class MyApp extends StatelessWidget {
       create: (context) => CustomAuthProvider(),
       child: MaterialApp(
         initialRoute: '/login',
+        onGenerateRoute: (settings) {
+          if (settings.name == '/post_screen') {
+            final args = settings.arguments as Map<String, dynamic>;
+            return MaterialPageRoute(
+              builder: (context) => PostScreen(
+                memberType: args['memberType'],
+                myUid: args['myUid'],
+                postId: args['postId'],
+                seniorUid: args['seniorUid'],
+                seniorName: args['seniorName'],
+                city: args['city'],
+                gu: args['gu'],
+                dong: args['dong'],
+                dependentType: args['dependentType'],
+                withPet: args['withPet'],
+                withCam: args['withCam'],
+                symptom: args['symptom'],
+                petInfo: args['petInfo'],
+                symptomInfo: args['symptomInfo'],
+                walkingType: args['walkingType'],
+                rating: args['rating'],
+                ratingCount: args['ratingCount'],
+                activityType: args['activityType'],
+                startTime: args['startTime'],
+                endTime: args['endTime'],
+              ),
+            );
+          }
+          return null;
+        },
         routes: {
-          '/register': (context) =>
-              RegisterSelectScreen0(), // 회원가입 스크린(회원 유형 선택)
-          '/registerMate': (context) => RegisterMateIndex(), // 회원가입 스크린(메이트)
-          '/registerSenior': (context) =>
-              RegisterSeniorIndex(), // 회원가입 스크린(시니어)
-          '/login': (context) => LoginScreen(), // 로그인 스크린
-          '/education': (context) => EducationScreen(), // 교육 영상 스크린
-          '/main': (context) => MainIndex(), // 메인(홈, 매칭, 채팅, 교환)
-          '/post_senior_my_screen': (context) =>
-              PostSeniorMyScreen(), // 시니어 자신의 포스트
-          '/post_senior_screen': (context) =>
-              PostSeniorScreen(), // 시니어 다른 사람의 포스트
-          '/post_mate_screen': (context) => PostMateScreen(), // 메이트 포스트
+          '/register': (context) => RegisterSelectScreen0(),
+          '/registerMate': (context) => RegisterMateIndex(),
+          '/registerSenior': (context) => RegisterSeniorIndex(),
+          '/login': (context) => LoginScreen(),
+          '/education': (context) => EducationScreen(),
+          '/main': (context) => MainIndex(),
         },
       ),
     );

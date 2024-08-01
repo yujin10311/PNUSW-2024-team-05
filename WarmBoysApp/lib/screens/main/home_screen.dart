@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // cloud_firestore 패키지 임포트 추가
+// import 'package:cloud_firestore/cloud_firestore.dart'; // cloud_firestore 패키지 임포트 추가
 import 'package:provider/provider.dart';
 import '../../providers/custom_auth_provider.dart';
 import '../../widgets/custom_app_bar.dart';
@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 ElevatedButton(
                   onPressed: () => _selectDateRange(context),
-                  child: Text('날짜 범위 선택'),
+                  child: Text('기간 선택'),
                 ),
                 SizedBox(width: 10),
                 DropdownButton<String>(
@@ -144,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Icon(Icons.person, size: 30),
                     ),
                     title: Text(
-                      postcard['username'],
+                      postcard['seniorName'],
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
@@ -160,35 +160,59 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(fontSize: 16),
                         ),
                         Text(
-                          "${formatDate((postcard['startTime'] as Timestamp).toDate())} / ${formatTime((postcard['startTime'] as Timestamp).toDate())} ~ ${formatTime((postcard['endTime'] as Timestamp).toDate())}",
+                          "${formatDate(postcard['startTime'])} / ${formatTime(postcard['startTime'])} ~ ${formatTime(postcard['endTime'])}",
                           style: TextStyle(fontSize: 16),
                         ),
                       ],
                     ),
                     onTap: () {
-                      String seniorUid = postcard['seniorUid'];
+                      // 앱 사용자 정보
                       String myUid = uid ?? '';
                       String memberType = userInfo?['memberType'] ?? '';
+                      // 공고 작성자 정보
+                      String seniorUid = postcard['seniorUid'];
+                      String seniorName = postcard['seniorName'];
+                      double rating = postcard['rating'];
+                      int ratingCount = postcard['ratingCount'];
+                      String dependentType = postcard['dependentType'];
+                      bool withPet = postcard['withPet'];
+                      List<String> symptom = postcard['symptom'];
+                      String walkingType = postcard['walkingType'];
+                      String petInfo = postcard['petInfo'] ?? '';
+                      String symptomInfo = postcard['symptomInfo'];
+                      // 공고 정보
                       String postId = postcard['postId'];
+                      String city = postcard['city'];
+                      String gu = postcard['gu'];
+                      String dong = postcard['dong'];
+                      String status = postcard['status'];
+                      String activityType = postcard['activityType'];
+                      DateTime startTime = postcard['startTime'];
+                      DateTime endTime = postcard['endTime'];
 
-                      print("myUid: ${myUid}\nseniorUid: ${seniorUid}");
-
-                      if (seniorUid == myUid) {
-                        Navigator.pushNamed(context, '/post_senior_my_screen',
-                            arguments: postId);
-                      } else if (memberType == '시니어') {
-                        Navigator.pushNamed(context, '/post_senior_screen',
-                            arguments: {
-                              'postId': postId,
-                              'seniorUid': seniorUid
-                            });
-                      } else if (memberType == '메이트') {
-                        Navigator.pushNamed(context, '/post_mate_screen',
-                            arguments: {
-                              'postId': postId,
-                              'seniorUid': seniorUid
-                            });
-                      }
+                      // PostScreen으로 라우트
+                      Navigator.pushNamed(context, '/post_screen', arguments: {
+                        'memberType': memberType,
+                        'postId': postId,
+                        'myUid': myUid,
+                        'seniorUid': seniorUid,
+                        'seniorName': seniorName,
+                        'city': city,
+                        'gu': gu,
+                        'dong': dong,
+                        'dependentType': dependentType,
+                        'withPet': withPet,
+                        'withCam': postcard['withCam'],
+                        'symptom': symptom,
+                        'petInfo': petInfo,
+                        'symptomInfo': symptomInfo,
+                        'walkingType': walkingType,
+                        'rating': rating,
+                        'ratingCount': ratingCount,
+                        'activityType': activityType,
+                        'startTime': startTime,
+                        'endTime': endTime,
+                      });
                     },
                   ),
                 );
