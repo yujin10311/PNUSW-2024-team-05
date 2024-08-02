@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart'; // cloud_firestore 패키지 임포트 추가
 import 'package:provider/provider.dart';
 import '../../providers/custom_auth_provider.dart';
 import '../../widgets/custom_app_bar.dart';
@@ -79,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final customAuthProvider = Provider.of<CustomAuthProvider>(context);
     final userInfo = customAuthProvider.userInfo;
     final uid = customAuthProvider.uid;
+    final memberType = userInfo?['memberType'];
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -88,10 +88,82 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          if (memberType == '시니어')
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // 앱 사용자 정보
+                        String myUid = uid ?? '';
+                        String memberType = userInfo?['memberType'] ?? '';
+                        // 공고 작성자 정보
+                        String seniorUid = uid ?? '';
+                        String seniorName = userInfo?['username'] ?? '';
+                        double rating = userInfo?['rating'] ?? 0.0;
+                        int ratingCount = userInfo?['ratingCount'] ?? 0;
+                        String dependentType = userInfo?['dependentType'] ?? '';
+                        bool withPet = userInfo?['withPet'] ?? false;
+                        bool withCam = userInfo?['withCam'] ?? false;
+                        List<String> symptom =
+                            List<String>.from(userInfo?['symptom'] ?? []);
+                        String walkingType = userInfo?['walkingType'] ?? '';
+                        String petInfo = userInfo?['petInfo'] ?? '';
+                        String symptomInfo = userInfo?['symptomInfo'] ?? '';
+                        // 공고 정보
+                        String postId = '';
+                        String city = userInfo?['city'] ?? '';
+                        String gu = userInfo?['gu'] ?? '';
+                        String dong = userInfo?['dong'] ?? '';
+                        String status = '';
+                        String activityType = '';
+                        DateTime startTime = DateTime.now();
+                        DateTime endTime = DateTime.now();
+
+                        // PostScreen으로 라우트
+                        Navigator.pushNamed(context, '/post_screen',
+                            arguments: {
+                              'memberType': memberType,
+                              'postId': postId,
+                              'myUid': myUid,
+                              'seniorUid': seniorUid,
+                              'seniorName': seniorName,
+                              'city': city,
+                              'gu': gu,
+                              'dong': dong,
+                              'dependentType': dependentType,
+                              'withPet': withPet,
+                              'withCam': withCam,
+                              'symptom': symptom,
+                              'petInfo': petInfo,
+                              'symptomInfo': symptomInfo,
+                              'walkingType': walkingType,
+                              'rating': rating,
+                              'ratingCount': ratingCount,
+                              'activityType': activityType,
+                              'startTime': startTime,
+                              'endTime': endTime,
+                            });
+
+                        // + 내 공고 작성하기 버튼 클릭 시의 동작을 여기에 추가
+                      },
+                      child: Text(
+                        '+ 내 공고 작성하기',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
                   onPressed: () => _selectDateRange(context),
@@ -178,7 +250,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       int ratingCount = postcard['ratingCount'];
                       String dependentType = postcard['dependentType'];
                       bool withPet = postcard['withPet'];
-                      List<String> symptom = postcard['symptom'];
+                      bool withCam = postcard['withCam'];
+                      List<String> symptom =
+                          List<String>.from(postcard['symptom']);
                       String walkingType = postcard['walkingType'];
                       String petInfo = postcard['petInfo'] ?? '';
                       String symptomInfo = postcard['symptomInfo'];
@@ -204,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         'dong': dong,
                         'dependentType': dependentType,
                         'withPet': withPet,
-                        'withCam': postcard['withCam'],
+                        'withCam': withCam,
                         'symptom': symptom,
                         'petInfo': petInfo,
                         'symptomInfo': symptomInfo,
