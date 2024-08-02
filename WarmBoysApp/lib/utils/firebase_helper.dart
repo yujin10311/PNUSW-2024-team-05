@@ -2,6 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'shared_preferences_helper.dart';
 
 class FirebaseHelper {
+  // 이메일이 등록되어 있는지 확인
+  static Future<bool> checkEmail(String email) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    try {
+      QuerySnapshot result = await firestore
+          .collection('user')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+
+      return result.docs.isEmpty;
+    } catch (e) {
+      print('Error checking email: $e');
+      return false;
+    }
+  }
+
   // '시니어' 회원 정보 저장
   static Future<void> saveSenior(String uid) async {
     final prefs = await SharedPreferencesHelper.getAll();
@@ -19,15 +37,17 @@ class FirebaseHelper {
       'isVerified': false,
       'age': prefs['_age'] ?? '',
       'gender': prefs['_gender'] ?? '',
+      'imgUrl': '',
+      'imgEmbd': '',
       'phoneNum': prefs['_phoneNum'] ?? '',
       'phoneNum2': prefs['_phoneNum2'] ?? '',
       'city': prefs['_city'] ?? '',
       'gu': prefs['_gu'] ?? '',
       'dong': prefs['_dong'] ?? '',
+      'activityType': prefs['_activityType'] ?? '',
       'symptom': prefs['_symptom'] ?? '',
       'withPet': withPet,
       'withCam': withCam,
-      'activityType': prefs['_activityType'] ?? '',
       'dependentType': prefs['_dependentType'] ?? '',
       'walkingType': prefs['_walkingType'] ?? '',
       'symptomInfo': prefs['_symptomInfo'] ?? '',
@@ -52,9 +72,11 @@ class FirebaseHelper {
       'password': prefs['_password'] ?? '',
       'memberType': prefs['_memberType'] ?? '',
       'isVerified': false,
-      'phoneNum': prefs['_phoneNum'] ?? '',
       'age': prefs['_age'] ?? '',
       'gender': prefs['_gender'] ?? '',
+      'imgUrl': '',
+      'imgEmbd': '',
+      'phoneNum': prefs['_phoneNum'] ?? '',
       'city': prefs['_city'] ?? '',
       'gu': prefs['_gu'] ?? '',
       'dong': prefs['_dong'] ?? '',

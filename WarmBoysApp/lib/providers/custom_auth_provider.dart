@@ -26,7 +26,7 @@ class CustomAuthProvider with ChangeNotifier {
     }
   }
 
-  void logOut() async {
+  Future<void> logOut() async {
     await FirebaseAuth.instance.signOut();
     _userCredential = null;
     _userInfo = null;

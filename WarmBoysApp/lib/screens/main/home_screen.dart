@@ -148,8 +148,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               'startTime': startTime,
                               'endTime': endTime,
                             });
-
-                        // + 내 공고 작성하기 버튼 클릭 시의 동작을 여기에 추가
                       },
                       child: Text(
                         '+ 내 공고 작성하기',
@@ -223,92 +221,96 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: _postcards.length,
-              itemBuilder: (context, index) {
-                final postcard = _postcards[index];
-                return Card(
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 30,
-                      child: Icon(Icons.person, size: 30),
-                    ),
-                    title: Text(
-                      postcard['seniorName'],
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${postcard['city']} > ${postcard['gu']} > ${postcard['dong']}",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          "${postcard['rating'].toStringAsFixed(2)} (${postcard['ratingCount']})",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          "${formatDate(postcard['startTime'])} / ${formatTime(postcard['startTime'])} ~ ${formatTime(postcard['endTime'])}",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      // 앱 사용자 정보
-                      String myUid = uid ?? '';
-                      String memberType = userInfo?['memberType'] ?? '';
-                      // 공고 작성자 정보
-                      String seniorUid = postcard['seniorUid'];
-                      String seniorName = postcard['seniorName'];
-                      double rating = postcard['rating'];
-                      int ratingCount = postcard['ratingCount'];
-                      String dependentType = postcard['dependentType'];
-                      bool withPet = postcard['withPet'];
-                      bool withCam = postcard['withCam'];
-                      List<String> symptom =
-                          List<String>.from(postcard['symptom']);
-                      String walkingType = postcard['walkingType'];
-                      String petInfo = postcard['petInfo'] ?? '';
-                      String symptomInfo = postcard['symptomInfo'];
-                      // 공고 정보
-                      String postId = postcard['postId'];
-                      String city = postcard['city'];
-                      String gu = postcard['gu'];
-                      String dong = postcard['dong'];
-                      String status = postcard['status'];
-                      String activityType = postcard['activityType'];
-                      DateTime startTime = postcard['startTime'];
-                      DateTime endTime = postcard['endTime'];
+            child: RefreshIndicator(
+              onRefresh: _fetchPostcards,
+              child: ListView.builder(
+                itemCount: _postcards.length,
+                itemBuilder: (context, index) {
+                  final postcard = _postcards[index];
+                  return Card(
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 30,
+                        child: Icon(Icons.person, size: 30),
+                      ),
+                      title: Text(
+                        postcard['seniorName'],
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${postcard['city']} > ${postcard['gu']} > ${postcard['dong']}",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Text(
+                            "${postcard['rating'].toStringAsFixed(2)} (${postcard['ratingCount']})",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Text(
+                            "${formatDate(postcard['startTime'])} / ${formatTime(postcard['startTime'])} ~ ${formatTime(postcard['endTime'])}",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        // 앱 사용자 정보
+                        String myUid = uid ?? '';
+                        String memberType = userInfo?['memberType'] ?? '';
+                        // 공고 작성자 정보
+                        String seniorUid = postcard['seniorUid'];
+                        String seniorName = postcard['seniorName'];
+                        double rating = postcard['rating'];
+                        int ratingCount = postcard['ratingCount'];
+                        String dependentType = postcard['dependentType'];
+                        bool withPet = postcard['withPet'];
+                        bool withCam = postcard['withCam'];
+                        List<String> symptom =
+                            List<String>.from(postcard['symptom']);
+                        String walkingType = postcard['walkingType'];
+                        String petInfo = postcard['petInfo'] ?? '';
+                        String symptomInfo = postcard['symptomInfo'];
+                        // 공고 정보
+                        String postId = postcard['postId'];
+                        String city = postcard['city'];
+                        String gu = postcard['gu'];
+                        String dong = postcard['dong'];
+                        String status = postcard['status'];
+                        String activityType = postcard['activityType'];
+                        DateTime startTime = postcard['startTime'];
+                        DateTime endTime = postcard['endTime'];
 
-                      // PostScreen으로 라우트
-                      Navigator.pushNamed(context, '/post_screen', arguments: {
-                        'memberType': memberType,
-                        'postId': postId,
-                        'myUid': myUid,
-                        'seniorUid': seniorUid,
-                        'seniorName': seniorName,
-                        'city': city,
-                        'gu': gu,
-                        'dong': dong,
-                        'dependentType': dependentType,
-                        'withPet': withPet,
-                        'withCam': withCam,
-                        'symptom': symptom,
-                        'petInfo': petInfo,
-                        'symptomInfo': symptomInfo,
-                        'walkingType': walkingType,
-                        'rating': rating,
-                        'ratingCount': ratingCount,
-                        'activityType': activityType,
-                        'startTime': startTime,
-                        'endTime': endTime,
-                      });
-                    },
-                  ),
-                );
-              },
+                        // PostScreen으로 라우트
+                        Navigator.pushNamed(context, '/post_screen',
+                            arguments: {
+                              'memberType': memberType,
+                              'postId': postId,
+                              'myUid': myUid,
+                              'seniorUid': seniorUid,
+                              'seniorName': seniorName,
+                              'city': city,
+                              'gu': gu,
+                              'dong': dong,
+                              'dependentType': dependentType,
+                              'withPet': withPet,
+                              'withCam': withCam,
+                              'symptom': symptom,
+                              'petInfo': petInfo,
+                              'symptomInfo': symptomInfo,
+                              'walkingType': walkingType,
+                              'rating': rating,
+                              'ratingCount': ratingCount,
+                              'activityType': activityType,
+                              'startTime': startTime,
+                              'endTime': endTime,
+                            });
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],

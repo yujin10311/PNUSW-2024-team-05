@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/custom_auth_provider.dart'; // CustomAuthProvider 경로를 맞춰주세요
+import '../screens/login_screen.dart'; // LoginScreen 경로를 맞춰주세요
 
 class CustomEndDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final userInfo = Provider.of<CustomAuthProvider>(context).userInfo;
+    final username = userInfo?['username'] ?? '사용자 이름';
+
     return Drawer(
       child: ListView(
         children: [
@@ -21,7 +25,7 @@ class CustomEndDrawer extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  '사용자 이름',
+                  username,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -45,9 +49,16 @@ class CustomEndDrawer extends StatelessWidget {
             title: Text('로그아웃'),
             onTap: () {
               // CustomAuthProvider의 logOut 메서드를 호출하고 로그인 페이지로 이동
-              Provider.of<CustomAuthProvider>(context, listen: false).logOut();
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/login', (route) => false);
+              Provider.of<CustomAuthProvider>(context, listen: false)
+                  .logOut()
+                  .then((_) {
+                Navigator.of(context).pushReplacement(PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) =>
+                      LoginScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ));
+              });
             },
           ),
         ],
