@@ -20,7 +20,7 @@ class MemberSymptomScrollview extends StatelessWidget {
                 border: Border.all(color: Colors.grey),
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              child: Text(symptom, style: TextStyle(fontSize: 14)),
+              child: Text(symptom, style: TextStyle(fontSize: 18)),
             );
           }).toList(),
         ),

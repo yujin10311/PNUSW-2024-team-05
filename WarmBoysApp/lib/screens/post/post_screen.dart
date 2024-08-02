@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
 import '../../widgets/member_symptom_scrollview.dart';
 import '../../widgets/member_details_scrollview.dart';
 import '../../widgets/autowrap_text_box.dart';
+import '../../utils/firebase_helper.dart';
 
 class PostScreen extends StatefulWidget {
   final String memberType;
@@ -57,6 +59,111 @@ class _PostScreenState extends State<PostScreen> {
   String? selectedActivityType;
   String? selectedStartTime;
   String? selectedEndTime;
+
+  List<Map<String, dynamic>> myPosts = [];
+  Map<DateTime, List<Map<String, dynamic>>> events = {};
+  DateTime? _selectedDay;
+  DateTime _focusedDay = DateTime.now();
+
+  final Map<String, DateTime> stringToDate = {
+    '오전 9시': DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 9),
+    '오전 10시': DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 10),
+    '오전 11시': DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 11),
+    '정오': DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 12),
+    '오후 1시': DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 13),
+    '오후 2시': DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 14),
+    '오후 3시': DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 15),
+    '오후 4시': DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 16),
+    '오후 5시': DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 17),
+    '오후 6시': DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 18),
+    '오후 7시': DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 19),
+    '오후 8시': DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 20),
+    '오후 9시': DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 21),
+  };
+
+  final Map<DateTime, String> dateToString = {
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 9):
+        '오전 9시',
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 10):
+        '오전 10시',
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 11):
+        '오전 11시',
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 12):
+        '정오',
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 13):
+        '오후 1시',
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 14):
+        '오후 2시',
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 15):
+        '오후 3시',
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 16):
+        '오후 4시',
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 17):
+        '오후 5시',
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 18):
+        '오후 6시',
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 19):
+        '오후 7시',
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 20):
+        '오후 8시',
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 21):
+        '오후 9시',
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.memberType == '시니어' && widget.myUid == widget.seniorUid) {
+      _fetchMyPosts();
+    }
+  }
+
+  Future<void> _fetchMyPosts() async {
+    List<Map<String, dynamic>> fetchedPosts =
+        await FirebaseHelper.queryMyPost(widget.myUid);
+    setState(() {
+      myPosts = fetchedPosts;
+      _createEventList();
+    });
+  }
+
+  void _createEventList() {
+    Map<DateTime, List<Map<String, dynamic>>> tempEvents = {};
+    for (var post in myPosts) {
+      DateTime startTime = DateTime(post['startTime'].year,
+          post['startTime'].month, post['startTime'].day);
+      if (tempEvents[startTime] == null) {
+        tempEvents[startTime] = [];
+      }
+      tempEvents[startTime]!.add(post);
+    }
+    setState(() {
+      events = tempEvents;
+    });
+  }
+
+  List<Map<String, dynamic>> _getEventsForDay(DateTime day) {
+    return events[DateTime(day.year, day.month, day.day)] ?? [];
+  }
+
+  bool get isPostButtonEnabled {
+    return selectedActivityType != null &&
+        selectedStartTime != null &&
+        selectedEndTime != null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,8 +281,8 @@ class _PostScreenState extends State<PostScreen> {
     return _buildInfoBox([
       '활동 종류: ${widget.activityType}',
       '날짜: ${DateFormat('yy.M.d').format(widget.startTime)}',
-      '시작 시간: ${DateFormat('HH:mm').format(widget.startTime)}',
-      '종료 시간: ${DateFormat('HH:mm').format(widget.endTime)}',
+      '시작 시간: ${_formatTime(widget.startTime)}',
+      '종료 시간: ${_formatTime(widget.endTime)}',
     ]);
   }
 
@@ -183,45 +290,167 @@ class _PostScreenState extends State<PostScreen> {
     return _buildInfoBox([
       '활동 종류: ${widget.activityType}',
       '날짜: ${DateFormat('yy.M.d').format(widget.startTime)}',
-      '시작 시간: ${DateFormat('HH:mm').format(widget.startTime)}',
-      '종료 시간: ${DateFormat('HH:mm').format(widget.endTime)}',
+      '시작 시간: ${_formatTime(widget.startTime)}',
+      '종료 시간: ${_formatTime(widget.endTime)}',
     ], hasButton: true);
   }
 
   Widget _buildSeniorSelfSection() {
     return Column(
       children: [
-        CalendarDatePicker(
-          initialDate: widget.startTime,
-          firstDate: DateTime(2020),
-          lastDate: DateTime(2100),
-          onDateChanged: (date) {
+        TableCalendar(
+          focusedDay: _focusedDay,
+          firstDay: DateTime(2020),
+          lastDay: DateTime(2100),
+          eventLoader: _getEventsForDay,
+          calendarFormat: CalendarFormat.month,
+          startingDayOfWeek: StartingDayOfWeek.monday,
+          selectedDayPredicate: (day) {
+            return isSameDay(_selectedDay, day);
+          },
+          enabledDayPredicate: (day) {
+            DateTime today = DateTime.now();
+            DateTime onlyTodayDate =
+                DateTime(today.year, today.month, today.day);
+            return !day.isBefore(onlyTodayDate);
+          },
+          onDaySelected: (selectedDay, focusedDay) {
             setState(() {
-              widget.startTime;
+              _selectedDay = selectedDay;
+              _focusedDay = focusedDay;
             });
           },
+          calendarStyle: CalendarStyle(
+            todayDecoration: BoxDecoration(
+              color: Color.fromARGB(255, 183, 183, 183),
+              shape: BoxShape.circle,
+            ),
+            selectedDecoration: BoxDecoration(
+              color: Color.fromARGB(255, 13, 0, 255),
+              shape: BoxShape.circle,
+            ),
+            markerDecoration: BoxDecoration(
+              color: Color.fromARGB(255, 255, 0, 0),
+              shape: BoxShape.circle,
+            ),
+          ),
         ),
-        _buildInfoBox([
-          '활동 종류',
-          '시작 시간',
-          '종료 시간',
-        ], isSelf: true),
+        SizedBox(height: 8.0),
+        _buildSelectedDayInfo(),
       ],
     );
+  }
+
+  Widget _buildSelectedDayInfo() {
+    final eventList = _getEventsForDay(_selectedDay ?? DateTime.now());
+    if (eventList.isNotEmpty) {
+      final event = eventList.first;
+      return _buildEventInfoBox(event);
+    } else {
+      return _buildNewEventBox();
+    }
+  }
+
+  Widget _buildEventInfoBox(Map<String, dynamic> event) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '활동 종류:',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Text(
+                  '${event['activityType']}',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
+            SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '활동 날짜:',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Text(
+                  '${DateFormat('yy.M.d').format(event['startTime'])}',
+                  style: TextStyle(fontSize: 18),
+                )
+              ],
+            ),
+            SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '시작 시간:',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Text(
+                  '${_formatTime(event['startTime'])}',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
+            SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '종료 시간:',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Text(
+                  '${_formatTime(event['endTime'])}',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                // Call delete function from FirebaseHelper
+                // FirebaseHelper.deletePost(event['postId']);
+                // Refresh the screen
+                _fetchMyPosts();
+              },
+              child: Text('삭제'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNewEventBox() {
+    return _buildInfoBox([
+      '활동 종류',
+      '시작 시간',
+      '종료 시간',
+    ], isSelf: true);
   }
 
   Widget _buildInfoBox(List<String> lines,
       {bool hasButton = false, bool isSelf = false}) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             for (var line in lines)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: isSelf ? _buildSelfLine(line) : Text(line),
+                padding: const EdgeInsets.symmetric(vertical: 0.0),
+                child: isSelf
+                    ? _buildSelfLine(line)
+                    : Text(line, style: TextStyle(fontSize: 18)),
               ),
             if (hasButton)
               ElevatedButton(
@@ -230,8 +459,39 @@ class _PostScreenState extends State<PostScreen> {
               ),
             if (isSelf)
               ElevatedButton(
-                onPressed: () {},
-                child: Text('등록'),
+                onPressed: isPostButtonEnabled
+                    ? () {
+                        DateTime startTime = stringToDate[selectedStartTime!]!;
+                        DateTime endTime = stringToDate[selectedEndTime!]!;
+
+                        // 선택한 날짜의 연, 월, 일을 시작 시간과 종료 시간에 적용
+                        startTime = DateTime(
+                            _selectedDay!.year,
+                            _selectedDay!.month,
+                            _selectedDay!.day,
+                            startTime.hour,
+                            startTime.minute);
+                        endTime = DateTime(
+                            _selectedDay!.year,
+                            _selectedDay!.month,
+                            _selectedDay!.day,
+                            endTime.hour,
+                            endTime.minute);
+
+                        Map<String, dynamic> postInfo = {
+                          'seniorUid': widget.myUid,
+                          'city': widget.city,
+                          'gu': widget.gu,
+                          'dong': widget.dong,
+                          'activityType': selectedActivityType,
+                          'startTime': startTime,
+                          'endTime': endTime,
+                          'mateUid': null
+                        };
+                        FirebaseHelper.postMyPost(postInfo);
+                      }
+                    : null,
+                child: Text('공고 올리기'),
               ),
           ],
         ),
@@ -242,14 +502,15 @@ class _PostScreenState extends State<PostScreen> {
   Widget _buildSelfLine(String label) {
     if (label == '활동 종류') {
       return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('$label: '),
+          Text('$label: ', style: TextStyle(fontSize: 18)),
           DropdownButton<String>(
             value: selectedActivityType,
             items: ['실내활동', '실외활동', '밥 챙겨주기', '책 읽기', '재능기부']
                 .map((type) => DropdownMenuItem<String>(
                       value: type,
-                      child: Text(type),
+                      child: Text(type, style: TextStyle(fontSize: 18)),
                     ))
                 .toList(),
             onChanged: (value) {
@@ -262,20 +523,17 @@ class _PostScreenState extends State<PostScreen> {
       );
     } else if (label == '시작 시간') {
       return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('$label: '),
+          Text('$label: ', style: TextStyle(fontSize: 18)),
           DropdownButton<String>(
             value: selectedStartTime,
-            items: List.generate(24, (index) {
-              final hour = index < 12 ? index : index - 12;
-              final period = index < 12 ? '오전' : '오후';
-              final displayHour =
-                  hour == 0 ? (period == '오전' ? '정오' : '자정') : '$period $hour시';
+            items: stringToDate.keys.map((String key) {
               return DropdownMenuItem<String>(
-                value: displayHour,
-                child: Text(displayHour),
+                value: key,
+                child: Text(key, style: TextStyle(fontSize: 18)),
               );
-            }),
+            }).toList(),
             onChanged: (value) {
               setState(() {
                 selectedStartTime = value;
@@ -286,28 +544,23 @@ class _PostScreenState extends State<PostScreen> {
         ],
       );
     } else if (label == '종료 시간') {
-      final startHour = int.tryParse(
-              selectedStartTime?.split(' ')[1].replaceAll('시', '') ?? '0') ??
-          0;
-      final startPeriod = selectedStartTime?.split(' ')[0] ?? '오전';
-      final startIndex = startPeriod == '오전' ? startHour : startHour + 12;
+      final DateTime startTime = selectedStartTime == null
+          ? DateTime.now()
+          : stringToDate[selectedStartTime!]!;
       return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('$label: '),
+          Text('$label: ', style: TextStyle(fontSize: 18)),
           DropdownButton<String>(
             value: selectedEndTime,
-            items: List.generate(24 - startIndex, (index) {
-              final hour = (startIndex + index) < 12
-                  ? (startIndex + index)
-                  : (startIndex + index) - 12;
-              final period = (startIndex + index) < 12 ? '오전' : '오후';
-              final displayHour =
-                  hour == 0 ? (period == '오전' ? '정오' : '자정') : '$period $hour시';
+            items: stringToDate.entries
+                .where((entry) => entry.value.isAfter(startTime))
+                .map((entry) {
               return DropdownMenuItem<String>(
-                value: displayHour,
-                child: Text(displayHour),
+                value: entry.key,
+                child: Text(entry.key, style: TextStyle(fontSize: 18)),
               );
-            }),
+            }).toList(),
             onChanged: (value) {
               setState(() {
                 selectedEndTime = value;
@@ -317,7 +570,11 @@ class _PostScreenState extends State<PostScreen> {
         ],
       );
     } else {
-      return Text(label);
+      return Text(label, style: TextStyle(fontSize: 18));
     }
+  }
+
+  String _formatTime(DateTime time) {
+    return dateToString[time] ?? '';
   }
 }

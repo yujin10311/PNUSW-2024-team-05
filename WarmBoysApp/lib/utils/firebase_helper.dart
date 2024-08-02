@@ -147,4 +147,64 @@ class FirebaseHelper {
 
     return results;
   }
+
+  static Future<List<Map<String, dynamic>>> queryMyPost(String myUid) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    Query postsQuery =
+        firestore.collection('posts').where('seniorUid', isEqualTo: myUid);
+
+    QuerySnapshot postsSnapshot = await postsQuery.get();
+
+    List<Map<String, dynamic>> results = [];
+
+    for (var postDoc in postsSnapshot.docs) {
+      var postData = postDoc.data() as Map<String, dynamic>;
+      results.add({
+        'postId': postDoc.id,
+        'status': postData['status'] ??
+            '', // posted, notMatched, matched, activated, finished, failed
+        'mateUid': postData['mateUid'] ?? '',
+        'activityType': postData['activityType'] ?? '',
+        'startTime': (postData['startTime'] as Timestamp).toDate(),
+        'endTime': (postData['endTime'] as Timestamp).toDate(),
+      });
+    }
+
+    results.sort((a, b) => a['startTime'].compareTo(b['startTime']));
+
+    print('Fetched ${results.length} posts:');
+    for (var result in results) {
+      print('--- MyPost ---');
+      result.forEach((key, value) {
+        print('$key: $value\n');
+      });
+    }
+    return results;
+  }
+
+  static void postMyPost(Map<String, dynamic> postInfo) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    print('seniorUid: ${postInfo['seniorUid']}');
+    print('city: ${postInfo['city']}');
+    print('gu: ${postInfo['gu']}');
+    print('dong: ${postInfo['dong']}');
+    print('activityType: ${postInfo['activityType']}');
+    print('startTime: ${postInfo['startTime']}');
+    print('endTime: ${postInfo['endTime']}');
+    // try {
+    //   await firestore.collection('posts').add({
+    //     'activityType': postInfo['activityType'],
+    //     'city': postInfo['city'],
+    //     'gu': postInfo['gu'],
+    //     'dong': postInfo['dong'],
+    //     'seniorUid': postInfo['seniorUid'],
+    //     'startTime': Timestamp.fromDate(postInfo['startTime']),
+    //     'endTime': Timestamp.fromDate(postInfo['endTime']),
+    //   });
+    //   print('Post added successfully');
+    // } catch (e) {
+    //   print('Failed to add post: $e');
+    // }
+  }
 }
