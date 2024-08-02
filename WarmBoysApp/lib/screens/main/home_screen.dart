@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (userInfo != null && userInfo['dong'] != null) {
       _selectedDong = userInfo['dong'];
     }
-    _fetchPostcards();
+    _fetchPostcards(); // 기본 설정된 DateTimeRange를 기반으로 _fetchPostcards 호출
   }
 
   Future<void> _selectDateRange(BuildContext context) async {
@@ -195,8 +195,24 @@ class _HomeScreenState extends State<HomeScreen> {
                       _fetchPostcards();
                     });
                   },
-                  items: <String>['부곡1동', '남산동', '서2동']
-                      .map<DropdownMenuItem<String>>((String value) {
+                  items: <String>[
+                    '구서1동',
+                    '구서2동',
+                    '금사회동동',
+                    '금성동',
+                    '남산동',
+                    '부곡1동',
+                    '부곡2동',
+                    '부곡3동',
+                    '부곡4동',
+                    '서1동',
+                    '서2동',
+                    '서3동',
+                    '선두구동',
+                    '장전1동',
+                    '장전2동',
+                    '청룡노포동',
+                  ].map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
