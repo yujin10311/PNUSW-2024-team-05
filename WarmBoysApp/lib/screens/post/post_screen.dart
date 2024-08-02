@@ -152,9 +152,9 @@ class _PostScreenState extends State<PostScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildProfileCard(),
-              SizedBox(height: 20),
+              SizedBox(height: 30),
               _buildConditionalSection(),
-              SizedBox(height: 20),
+              SizedBox(height: 30),
               Text(
                 '회원 상세 정보',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -252,26 +252,59 @@ class _PostScreenState extends State<PostScreen> {
   }
 
   Widget _buildSeniorOtherSection() {
-    return _buildInfoBox([
-      '활동 종류: ${widget.activityType}',
-      '날짜: ${DateFormat('yy.M.d').format(widget.startTime)}',
-      '시작 시간: ${_formatTime(widget.startTime)}',
-      '종료 시간: ${_formatTime(widget.endTime)}',
-    ]);
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text("공고 상세 정보",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          ],
+        ),
+        SizedBox(height: 10),
+        _buildInfoBox([
+          '활동 종류: ${widget.activityType}',
+          '날짜: ${DateFormat('yy.M.d').format(widget.startTime)}',
+          '시작 시간: ${_formatTime(widget.startTime)}',
+          '종료 시간: ${_formatTime(widget.endTime)}',
+        ])
+      ],
+    );
   }
 
   Widget _buildMateSection() {
-    return _buildInfoBox([
-      '활동 종류: ${widget.activityType}',
-      '날짜: ${DateFormat('yy.M.d').format(widget.startTime)}',
-      '시작 시간: ${_formatTime(widget.startTime)}',
-      '종료 시간: ${_formatTime(widget.endTime)}',
-    ], hasButton: true);
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text("공고 상세 정보",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          ],
+        ),
+        SizedBox(height: 10),
+        _buildInfoBox([
+          '활동 종류: ${widget.activityType}',
+          '날짜: ${DateFormat('yy.M.d').format(widget.startTime)}',
+          '시작 시간: ${_formatTime(widget.startTime)}',
+          '종료 시간: ${_formatTime(widget.endTime)}',
+        ], hasButton: true)
+      ],
+    );
   }
 
   Widget _buildSeniorSelfSection() {
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              "공고 게시 캘린더",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
         TableCalendar(
           focusedDay: _focusedDay,
           firstDay: DateTime(2020),
@@ -309,7 +342,7 @@ class _PostScreenState extends State<PostScreen> {
             ),
           ),
         ),
-        SizedBox(height: 8.0),
+        SizedBox(height: 10.0),
         _buildSelectedDayInfo(),
       ],
     );
