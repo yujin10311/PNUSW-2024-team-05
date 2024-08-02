@@ -151,8 +151,10 @@ class FirebaseHelper {
   static Future<List<Map<String, dynamic>>> queryMyPost(String myUid) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    Query postsQuery =
-        firestore.collection('posts').where('seniorUid', isEqualTo: myUid);
+    Query postsQuery = firestore
+        .collection('posts')
+        .where('seniorUid', isEqualTo: myUid)
+        .where('status', whereIn: ['posted', 'notMatched']); // 조건 추가
 
     QuerySnapshot postsSnapshot = await postsQuery.get();
 
@@ -173,13 +175,6 @@ class FirebaseHelper {
 
     results.sort((a, b) => a['startTime'].compareTo(b['startTime']));
 
-    // print('Fetched ${results.length} posts:');
-    // for (var result in results) {
-    //   print('--- MyPost ---');
-    //   result.forEach((key, value) {
-    //     print('$key: $value\n');
-    //   });
-    // }
     return results;
   }
 
