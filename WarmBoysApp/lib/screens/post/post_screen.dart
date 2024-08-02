@@ -389,11 +389,48 @@ class _PostScreenState extends State<PostScreen> {
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 // Call delete function from FirebaseHelper
                 // FirebaseHelper.deletePost(event['postId']);
                 // Refresh the screen
-                _fetchMyPosts();
+                print('선택한 포스트id: ${event['postId']}');
+                bool success =
+                    await FirebaseHelper.deleteMyPost(event['postId']);
+                // 페이지 다시 라우트 (애니메이션 제거)
+                if (success) {
+                  Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) =>
+                          PostScreen(
+                        memberType: widget.memberType,
+                        myUid: widget.myUid,
+                        postId: widget.postId,
+                        seniorUid: widget.seniorUid,
+                        seniorName: widget.seniorName,
+                        city: widget.city,
+                        gu: widget.gu,
+                        dong: widget.dong,
+                        dependentType: widget.dependentType,
+                        withPet: widget.withPet,
+                        withCam: widget.withCam,
+                        symptom: widget.symptom,
+                        petInfo: widget.petInfo,
+                        symptomInfo: widget.symptomInfo,
+                        walkingType: widget.walkingType,
+                        rating: widget.rating,
+                        ratingCount: widget.ratingCount,
+                        activityType: widget.activityType,
+                        startTime: widget.startTime,
+                        endTime: widget.endTime,
+                      ),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
+                  );
+                } else {
+                  print("공고 삭제에 실패했습니다.");
+                }
               },
               child: Text('삭제'),
             ),
@@ -434,7 +471,7 @@ class _PostScreenState extends State<PostScreen> {
             if (isSelf)
               ElevatedButton(
                 onPressed: isPostButtonEnabled
-                    ? () {
+                    ? () async {
                         DateTime startTime = stringToDate[selectedStartTime!]!;
                         DateTime endTime = stringToDate[selectedEndTime!]!;
 
@@ -462,7 +499,43 @@ class _PostScreenState extends State<PostScreen> {
                           'endTime': endTime,
                           'mateUid': null
                         };
-                        FirebaseHelper.postMyPost(postInfo);
+                        bool success =
+                            await FirebaseHelper.postMyPost(postInfo);
+                        // 페이지 다시 라우트 (애니메이션 제거)
+                        if (success) {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  PostScreen(
+                                memberType: widget.memberType,
+                                myUid: widget.myUid,
+                                postId: widget.postId,
+                                seniorUid: widget.seniorUid,
+                                seniorName: widget.seniorName,
+                                city: widget.city,
+                                gu: widget.gu,
+                                dong: widget.dong,
+                                dependentType: widget.dependentType,
+                                withPet: widget.withPet,
+                                withCam: widget.withCam,
+                                symptom: widget.symptom,
+                                petInfo: widget.petInfo,
+                                symptomInfo: widget.symptomInfo,
+                                walkingType: widget.walkingType,
+                                rating: widget.rating,
+                                ratingCount: widget.ratingCount,
+                                activityType: widget.activityType,
+                                startTime: widget.startTime,
+                                endTime: widget.endTime,
+                              ),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                          );
+                        } else {
+                          print("공고 올리기에 실패했습니다.");
+                        }
                       }
                     : null,
                 child: Text('공고 올리기'),

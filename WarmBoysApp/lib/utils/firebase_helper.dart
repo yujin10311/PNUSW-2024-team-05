@@ -131,13 +131,13 @@ class FirebaseHelper {
       }
     }
 
-    print('Fetched ${results.length} posts:');
-    for (var result in results) {
-      print('--- Post ---');
-      result.forEach((key, value) {
-        print('$key: $value\n');
-      });
-    }
+    // print('Fetched ${results.length} posts:');
+    // for (var result in results) {
+    //   print('--- Post ---');
+    //   result.forEach((key, value) {
+    //     print('$key: $value\n');
+    //   });
+    // }
 
     if (sortBy == "오름차순") {
       results.sort((a, b) => a['startTime'].compareTo(b['startTime']));
@@ -173,17 +173,17 @@ class FirebaseHelper {
 
     results.sort((a, b) => a['startTime'].compareTo(b['startTime']));
 
-    print('Fetched ${results.length} posts:');
-    for (var result in results) {
-      print('--- MyPost ---');
-      result.forEach((key, value) {
-        print('$key: $value\n');
-      });
-    }
+    // print('Fetched ${results.length} posts:');
+    // for (var result in results) {
+    //   print('--- MyPost ---');
+    //   result.forEach((key, value) {
+    //     print('$key: $value\n');
+    //   });
+    // }
     return results;
   }
 
-  static void postMyPost(Map<String, dynamic> postInfo) async {
+  static Future<bool> postMyPost(Map<String, dynamic> postInfo) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     print('seniorUid: ${postInfo['seniorUid']}');
     print('city: ${postInfo['city']}');
@@ -192,19 +192,46 @@ class FirebaseHelper {
     print('activityType: ${postInfo['activityType']}');
     print('startTime: ${postInfo['startTime']}');
     print('endTime: ${postInfo['endTime']}');
-    // try {
-    //   await firestore.collection('posts').add({
-    //     'activityType': postInfo['activityType'],
-    //     'city': postInfo['city'],
-    //     'gu': postInfo['gu'],
-    //     'dong': postInfo['dong'],
-    //     'seniorUid': postInfo['seniorUid'],
-    //     'startTime': Timestamp.fromDate(postInfo['startTime']),
-    //     'endTime': Timestamp.fromDate(postInfo['endTime']),
-    //   });
-    //   print('Post added successfully');
-    // } catch (e) {
-    //   print('Failed to add post: $e');
-    // }
+
+    try {
+      await firestore.collection('posts').add({
+        'seniorUid': postInfo['seniorUid'],
+        'city': postInfo['city'],
+        'gu': postInfo['gu'],
+        'dong': postInfo['dong'],
+        'activityType': postInfo['activityType'],
+        'startTime': Timestamp.fromDate(postInfo['startTime']),
+        'endTime': Timestamp.fromDate(postInfo['endTime']),
+        'credit': 5,
+        'status': 'posted',
+        'mateUid': null,
+        'startImgUrl': null,
+        'startReport': null,
+        'endImgUrl': null,
+        'endReport': null,
+        'ratingByMate': null,
+        'reviewByMate': null,
+        'ratingBySenior': null,
+        'reviewBySenior': null,
+      });
+      print('Post added successfully');
+      return true; // 성공 시 true 반환
+    } catch (e) {
+      print('Failed to add post: $e');
+      return false; // 에러 발생 시 false 반환
+    }
+  }
+
+  static Future<bool> deleteMyPost(String postId) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    try {
+      await firestore.collection('posts').doc(postId).delete();
+      print("Post with ID: $postId has been successfully deleted.");
+      return true; // 성공 시 true 반환
+    } catch (e) {
+      print("Error deleting post: $e");
+      return false; // 에러 발생 시 false 반환
+    }
   }
 }
