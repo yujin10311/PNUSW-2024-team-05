@@ -66,61 +66,35 @@ class _PostScreenState extends State<PostScreen> {
   DateTime _focusedDay = DateTime.now();
 
   final Map<String, DateTime> stringToDate = {
-    '오전 9시': DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 9),
-    '오전 10시': DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 10),
-    '오전 11시': DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 11),
-    '정오': DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 12),
-    '오후 1시': DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 13),
-    '오후 2시': DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 14),
-    '오후 3시': DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 15),
-    '오후 4시': DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 16),
-    '오후 5시': DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 17),
-    '오후 6시': DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 18),
-    '오후 7시': DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 19),
-    '오후 8시': DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 20),
-    '오후 9시': DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 21),
+    '오전 9시': DateTime(1, 1, 1, 9),
+    '오전 10시': DateTime(1, 1, 1, 10),
+    '오전 11시': DateTime(1, 1, 1, 11),
+    '정오': DateTime(1, 1, 1, 12),
+    '오후 1시': DateTime(1, 1, 1, 13),
+    '오후 2시': DateTime(1, 1, 1, 14),
+    '오후 3시': DateTime(1, 1, 1, 15),
+    '오후 4시': DateTime(1, 1, 1, 16),
+    '오후 5시': DateTime(1, 1, 1, 17),
+    '오후 6시': DateTime(1, 1, 1, 18),
+    '오후 7시': DateTime(1, 1, 1, 19),
+    '오후 8시': DateTime(1, 1, 1, 20),
+    '오후 9시': DateTime(1, 1, 1, 21),
   };
 
   final Map<DateTime, String> dateToString = {
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 9):
-        '오전 9시',
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 10):
-        '오전 10시',
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 11):
-        '오전 11시',
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 12):
-        '정오',
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 13):
-        '오후 1시',
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 14):
-        '오후 2시',
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 15):
-        '오후 3시',
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 16):
-        '오후 4시',
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 17):
-        '오후 5시',
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 18):
-        '오후 6시',
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 19):
-        '오후 7시',
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 20):
-        '오후 8시',
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 21):
-        '오후 9시',
+    DateTime(1, 1, 1, 9): '오전 9시',
+    DateTime(1, 1, 1, 10): '오전 10시',
+    DateTime(1, 1, 1, 11): '오전 11시',
+    DateTime(1, 1, 1, 12): '정오',
+    DateTime(1, 1, 1, 13): '오후 1시',
+    DateTime(1, 1, 1, 14): '오후 2시',
+    DateTime(1, 1, 1, 15): '오후 3시',
+    DateTime(1, 1, 1, 16): '오후 4시',
+    DateTime(1, 1, 1, 17): '오후 5시',
+    DateTime(1, 1, 1, 18): '오후 6시',
+    DateTime(1, 1, 1, 19): '오후 7시',
+    DateTime(1, 1, 1, 20): '오후 8시',
+    DateTime(1, 1, 1, 21): '오후 9시',
   };
 
   @override
@@ -575,6 +549,13 @@ class _PostScreenState extends State<PostScreen> {
   }
 
   String _formatTime(DateTime time) {
-    return dateToString[time] ?? '';
+    // 나노초와 마이크로초를 0으로 설정하여 비교 정확도를 높임
+    DateTime timeWithoutNanoseconds = DateTime(
+      1,
+      1,
+      1,
+      time.hour,
+    );
+    return dateToString[timeWithoutNanoseconds] ?? '';
   }
 }

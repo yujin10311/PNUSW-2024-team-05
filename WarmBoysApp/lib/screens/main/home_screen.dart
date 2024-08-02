@@ -13,22 +13,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  DateTimeRange? _selectedDateRange;
+  DateTimeRange _selectedDateRange = DateTimeRange(
+      start: DateTime.now(), end: DateTime.now().add(Duration(days: 7)));
   String _selectedSort = "오름차순";
   String _selectedDong = "부곡1동";
   List<Map<String, dynamic>> _postcards = [];
 
+  @override
+  void initState() {
+    super.initState();
+    final customAuthProvider =
+        Provider.of<CustomAuthProvider>(context, listen: false);
+    final userInfo = customAuthProvider.userInfo;
+    if (userInfo != null && userInfo['dong'] != null) {
+      _selectedDong = userInfo['dong'];
+    }
+    _fetchPostcards();
+  }
+
   Future<void> _selectDateRange(BuildContext context) async {
     final DateTimeRange? picked = await showDateRangePicker(
-      context: context,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-      initialDateRange: _selectedDateRange ??
-          DateTimeRange(
-            start: DateTime.now(),
-            end: DateTime.now().add(Duration(days: 7)),
-          ),
-    );
+        context: context,
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2101),
+        initialDateRange: _selectedDateRange);
 
     if (picked != null && picked != _selectedDateRange) {
       setState(() {
@@ -43,8 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     List<Map<String, dynamic>> fetchedPostcards =
         await FirebaseHelper.queryPostcardsByDurLocStat(
-      _selectedDateRange!.start,
-      _selectedDateRange!.end,
+      _selectedDateRange.start,
+      _selectedDateRange.end,
       _selectedDong,
       _selectedSort,
       'posted',
@@ -53,12 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _postcards = fetchedPostcards;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchPostcards();
   }
 
   String formatDate(DateTime date) {
