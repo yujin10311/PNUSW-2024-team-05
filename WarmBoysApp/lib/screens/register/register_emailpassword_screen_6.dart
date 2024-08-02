@@ -58,40 +58,66 @@ class _RegisterEmailpasswordScreen6State
 
     final email = '${_emailController.text}@$_selectedDomain';
     final password = _passwordController.text;
+    bool emailExists = await FirebaseHelper.checkEmail(email);
+    if (emailExists) {
+      try {
+        await SharedPreferencesHelper.saveData('_email', email);
+        await SharedPreferencesHelper.saveData('_password', password);
 
-    try {
-      await SharedPreferencesHelper.saveData('_email', email);
-      await SharedPreferencesHelper.saveData('_password', password);
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
 
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+        // SharedPreferences에서 _memberType 확인
+        final memberType =
+            await SharedPreferencesHelper.getByKey('_memberType');
 
-      // SharedPreferences에서 _memberType 확인
-      final memberType = await SharedPreferencesHelper.getByKey('_memberType');
+        if (memberType == '시니어') {
+          // Firestore에 시니어 데이터 저장
+          await FirebaseHelper.saveSenior(userCredential.user!.uid);
+        } else if (memberType == '메이트') {
+          // Firestore에 메이트 데이터 저장
+          await FirebaseHelper.saveMate(userCredential.user!.uid);
+        }
 
-      if (memberType == '시니어') {
-        // Firestore에 시니어 데이터 저장
-        await FirebaseHelper.saveSenior(userCredential.user!.uid);
-      } else if (memberType == '메이트') {
-        // Firestore에 메이트 데이터 저장
-        await FirebaseHelper.saveMate(userCredential.user!.uid);
+        // 콘솔창에 shared preference 정보 모두 삭제
+        await SharedPreferencesHelper.clearAll();
+
+        widget.onNextPage();
+      } catch (e) {
+        print('Error: $e');
+        // 오류 발생 시 처리 (예: 다이얼로그로 사용자에게 알리기)
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Error'),
+            content: Text(e.toString()),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
-
-      // 콘솔창에 shared preference 정보 모두 삭제
-      await SharedPreferencesHelper.clearAll();
-
-      widget.onNextPage();
-    } catch (e) {
-      print('Error: $e');
-      // 오류 발생 시 처리 (예: 다이얼로그로 사용자에게 알리기)
+    } else {
+      setState(() {
+        _isLoading = false;
+        _isFormValid = false;
+      });
+      print("이메일이 이미 존재합니다.");
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: Text('Error'),
-          content: Text(e.toString()),
+          content: Text('이메일이 이미 존재합니다.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -100,10 +126,6 @@ class _RegisterEmailpasswordScreen6State
           ],
         ),
       );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
