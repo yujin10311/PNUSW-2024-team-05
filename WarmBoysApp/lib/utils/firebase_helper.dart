@@ -471,6 +471,7 @@ class FirebaseHelper {
             'symptomInfo': seniorData['symptomInfo'] ?? '',
             'walkingType': seniorData['walkingType'] ?? '',
             'addInfo': seniorData['addInfo'] ?? '',
+            'uid': postData['seniorUid'] ?? '',
             'postId': postId,
             'city': postData['city'] ?? '',
             'gu': postData['gu'] ?? '',

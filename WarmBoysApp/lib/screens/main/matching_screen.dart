@@ -5,6 +5,10 @@ import '../../widgets/custom_end_drawer.dart';
 import 'package:provider/provider.dart';
 import '../../providers/custom_auth_provider.dart';
 import 'package:intl/intl.dart';
+import '../../widgets/profile_card.dart';
+import '../../widgets/member_details_scrollview.dart';
+import '../../widgets/member_symptom_scrollview.dart';
+import '../../widgets/autowrap_text_box.dart';
 
 class MatchingScreen extends StatefulWidget {
   @override
@@ -44,41 +48,86 @@ class _MatchingScreenState extends State<MatchingScreen>
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(16.0),
-          height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '이름: ${post['username']}',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+        return Scaffold(
+          appBar: AppBar(
+            leading: Container(),
+          ),
+          body: Container(
+            padding: EdgeInsets.all(16.0),
+            height: MediaQuery.of(context).size.height,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text('닫기', style: TextStyle(fontSize: 16)),
+                        SizedBox(width: 2),
+                        Icon(Icons.close),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 8),
-                Text('postId: ${post['postId']}'),
-                SizedBox(height: 8),
-                Text('위치: ${post['city']}'),
-                SizedBox(height: 8),
-                Text('평점: ${post['rating']} (${post['ratingCount']})'),
-                SizedBox(height: 8),
-                Text('돌봄 유형: ${post['dependentType']}'),
-                SizedBox(height: 8),
-                Text('반려동물 여부: ${post['withPet'] ? "있음" : "없음"}'),
-                SizedBox(height: 8),
-                Text('카메라 여부: ${post['withCam'] ? "있음" : "없음"}'),
-                SizedBox(height: 8),
-                Text('반려동물 정보: ${post['petInfo']}'),
-                SizedBox(height: 8),
-                Text('증상: ${post['symptom'].join(", ")}'),
-                SizedBox(height: 8),
-                Text('증상 정보: ${post['symptomInfo']}'),
-                SizedBox(height: 8),
-                Text('걷기 상태: ${post['walkingType']}'),
-              ],
+                  SizedBox(height: 30),
+                  ProfileCard(
+                      imgUrl: post['imgUrl'],
+                      username: post['username'],
+                      uid: post['uid'],
+                      city: post['city'],
+                      gu: post['gu'],
+                      dong: post['dong'],
+                      rating: post['rating'],
+                      ratingCount: post['ratingCount']),
+                  SizedBox(height: 30),
+                  Text(
+                    '회원 상세 정보',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  MemberDetailsScrollview(
+                      dependentType: post['dependentType'],
+                      withPet: post['withPet'],
+                      withCam: post['withCam']),
+                  SizedBox(height: 30),
+                  Text(
+                    '반려동물 상세 설명',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  AutowrapTextBox(text: post['petInfo']),
+                  SizedBox(height: 30),
+                  Text(
+                    '해당되는 증상',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  MemberSymptomScrollview(symptoms: post['symptom']),
+                  SizedBox(height: 30),
+                  Text(
+                    '증상 상세 설명',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  AutowrapTextBox(text: post['symptomInfo']),
+                  SizedBox(height: 30),
+                  Text(
+                    '거동 상태',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  MemberSymptomScrollview(symptoms: [post['walkingType']]),
+                  SizedBox(height: 30),
+                  Text(
+                    '추가 정보',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  AutowrapTextBox(text: post['addInfo']),
+                  SizedBox(height: 8),
+                ],
+              ),
             ),
           ),
         );

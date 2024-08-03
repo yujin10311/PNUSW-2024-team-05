@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/custom_auth_provider.dart'; // CustomAuthProvider 경로를 맞춰주세요
-import '../screens/login_screen.dart'; // LoginScreen 경로를 맞춰주세요
+import '../providers/custom_auth_provider.dart';
+import '../screens/login_screen.dart';
 
 class CustomEndDrawer extends StatelessWidget {
   @override

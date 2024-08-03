@@ -164,9 +164,9 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 ElevatedButton(
                   onPressed: () => _selectDateRange(context),
-                  child: Text('기간 선택'),
+                  child: Text('기간 선택', style: TextStyle(fontSize: 16)),
                 ),
-                SizedBox(width: 10),
+                SizedBox(width: 15),
                 DropdownButton<String>(
                   value: _selectedSort,
                   onChanged: (String? newValue) {
@@ -183,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }).toList(),
                 ),
-                SizedBox(width: 10),
+                SizedBox(width: 15),
                 DropdownButton<String>(
                   value: _selectedDong,
                   onChanged: (String? newValue) {
