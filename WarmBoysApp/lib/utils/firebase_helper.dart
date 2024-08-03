@@ -1,7 +1,39 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'shared_preferences_helper.dart';
+import 'package:intl/intl.dart';
 
 class FirebaseHelper {
+  final Map<String, DateTime> stringToDate = {
+    '오전 9시': DateTime(1, 1, 1, 9),
+    '오전 10시': DateTime(1, 1, 1, 10),
+    '오전 11시': DateTime(1, 1, 1, 11),
+    '정오': DateTime(1, 1, 1, 12),
+    '오후 1시': DateTime(1, 1, 1, 13),
+    '오후 2시': DateTime(1, 1, 1, 14),
+    '오후 3시': DateTime(1, 1, 1, 15),
+    '오후 4시': DateTime(1, 1, 1, 16),
+    '오후 5시': DateTime(1, 1, 1, 17),
+    '오후 6시': DateTime(1, 1, 1, 18),
+    '오후 7시': DateTime(1, 1, 1, 19),
+    '오후 8시': DateTime(1, 1, 1, 20),
+    '오후 9시': DateTime(1, 1, 1, 21),
+  };
+
+  final Map<DateTime, String> dateToString = {
+    DateTime(1, 1, 1, 9): '오전 9시',
+    DateTime(1, 1, 1, 10): '오전 10시',
+    DateTime(1, 1, 1, 11): '오전 11시',
+    DateTime(1, 1, 1, 12): '정오',
+    DateTime(1, 1, 1, 13): '오후 1시',
+    DateTime(1, 1, 1, 14): '오후 2시',
+    DateTime(1, 1, 1, 15): '오후 3시',
+    DateTime(1, 1, 1, 16): '오후 4시',
+    DateTime(1, 1, 1, 17): '오후 5시',
+    DateTime(1, 1, 1, 18): '오후 6시',
+    DateTime(1, 1, 1, 19): '오후 7시',
+    DateTime(1, 1, 1, 20): '오후 8시',
+    DateTime(1, 1, 1, 21): '오후 9시',
+  };
   // 이메일이 등록되어 있는지 확인
   static Future<bool> checkEmail(String email) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -334,6 +366,7 @@ class FirebaseHelper {
     }
   }
 
+  // 지원 취소
   static Future<bool> cancelApply(String postId, String myUid) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
@@ -364,11 +397,97 @@ class FirebaseHelper {
         await mateDoc.reference.delete();
       }
 
+      // 'mates' 서브 컬렉션 내의 문서가 남아있는지 확인
+      QuerySnapshot remainingMatesSnapshot = await firestore
+          .collection('posts')
+          .doc(postId)
+          .collection('mates')
+          .get();
+
+      if (remainingMatesSnapshot.docs.isEmpty) {
+        // mates 서브 컬렉션 내의 문서가 남아있지 않으면 'status' 필드를 'posted'로 변경
+        await firestore
+            .collection('posts')
+            .doc(postId)
+            .update({'status': 'posted'});
+      }
+
       print("삭제에 성공했습니다. [postId: $postId / myUid: $myUid]");
       return true; // 성공 시 true 반환
     } catch (e) {
       print("Error in cancelApply: $e");
       return false; // 에러 발생 시 false 반환
     }
+  }
+
+  // notMatched 정보를 쿼리: 메이트 시점
+  static Future<List<Map<String, dynamic>>> queryNotMatchedByMate(
+      String myUid) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // 1. status가 'notMatched'인 posts를 검색
+    QuerySnapshot postsSnapshot = await firestore
+        .collection('posts')
+        .where('status', isEqualTo: 'notMatched')
+        .get();
+
+    List<Map<String, dynamic>> results = [];
+
+    // Step 2: posts 순회
+    for (var postDoc in postsSnapshot.docs) {
+      var postData = postDoc.data() as Map<String, dynamic>;
+      String postId = postDoc.id;
+
+      // Step 3: Check mates sub-collection
+      QuerySnapshot matesSnapshot = await firestore
+          .collection('posts')
+          .doc(postId)
+          .collection('mates')
+          .where('mateUid', isEqualTo: myUid)
+          .get();
+
+      // If there are matching mates documents
+      if (matesSnapshot.docs.isNotEmpty) {
+        var mateData = matesSnapshot.docs.first.data() as Map<String, dynamic>;
+
+        // Get senior data
+        DocumentSnapshot seniorSnapshot =
+            await firestore.collection('user').doc(postData['seniorUid']).get();
+
+        if (seniorSnapshot.exists) {
+          var seniorData = seniorSnapshot.data() as Map<String, dynamic>;
+
+          // Compile the result
+          results.add({
+            'imgUrl': seniorData['imgUrl'] ?? '',
+            'username': seniorData['username'] ?? '',
+            'rating': seniorData['rating'] ?? 0.0,
+            'ratingCount': seniorData['ratingCount'] ?? 0,
+            'dependentType': seniorData['dependentType'] ?? '',
+            'withPet': seniorData['withPet'] ?? false,
+            'withCam': seniorData['withCam'] ?? false,
+            'petInfo': seniorData['petInfo'] ?? '',
+            'symptom': List<String>.from(seniorData['symptom'] ?? []),
+            'symptomInfo': seniorData['symptomInfo'] ?? '',
+            'walkingType': seniorData['walkingType'] ?? '',
+            'addInfo': seniorData['addInfo'] ?? '',
+            'postId': postId,
+            'city': postData['city'] ?? '',
+            'gu': postData['gu'] ?? '',
+            'dong': postData['dong'] ?? '',
+            'date':
+                '${DateFormat('yy.M.d').format((postData['startTime'] as Timestamp).toDate())}' ??
+                    '',
+            'startTime': (postData['startTime'] as Timestamp).toDate(),
+            'endTime': (postData['endTime'] as Timestamp).toDate(),
+            'activityType': postData['activityType'] ?? '',
+            'applyTime': (mateData['applyTime'] as Timestamp).toDate(),
+          });
+        }
+      }
+    }
+    results.sort((a, b) => a['startTime'].compareTo(b['startTime']));
+
+    return results;
   }
 }
