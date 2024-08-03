@@ -34,6 +34,28 @@ class FirebaseHelper {
     DateTime(1, 1, 1, 20): '오후 8시',
     DateTime(1, 1, 1, 21): '오후 9시',
   };
+
+  static String dateDifferenceToString(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+
+    if (difference.inMinutes < 1) {
+      return '방금 전';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes}분 전';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours}시간 전';
+    } else if (difference.inDays < 30) {
+      return '${difference.inDays}일 전';
+    } else if (difference.inDays < 365) {
+      final months = (difference.inDays / 30).floor();
+      return '${months}달 전';
+    } else {
+      final years = (difference.inDays / 365).floor();
+      return '${years}년 전';
+    }
+  }
+
   // 이메일이 등록되어 있는지 확인
   static Future<bool> checkEmail(String email) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -483,11 +505,85 @@ class FirebaseHelper {
             'endTime': (postData['endTime'] as Timestamp).toDate(),
             'activityType': postData['activityType'] ?? '',
             'applyTime': (mateData['applyTime'] as Timestamp).toDate(),
+            'applyTimeText': dateDifferenceToString(
+                (mateData['applyTime'] as Timestamp).toDate()),
           });
         }
       }
     }
     results.sort((a, b) => a['startTime'].compareTo(b['startTime']));
+
+    return results;
+  }
+
+  static Future<List<Map<String, dynamic>>> queryNotMatchedBySenior(
+      String myUid) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    List<Map<String, dynamic>> results = [];
+
+    try {
+      // 'posts' 컬렉션에서 'seniorUid'가 myUid와 같고 'status'가 'notMatched'인 문서를 가져옴
+      QuerySnapshot postsSnapshot = await firestore
+          .collection('posts')
+          .where('seniorUid', isEqualTo: myUid)
+          .where('status', isEqualTo: 'notMatched')
+          .get();
+
+      for (var postDoc in postsSnapshot.docs) {
+        var postData = postDoc.data() as Map<String, dynamic>;
+
+        // 'mates' 서브 컬렉션을 순회
+        QuerySnapshot matesSnapshot = await firestore
+            .collection('posts')
+            .doc(postDoc.id)
+            .collection('mates')
+            .get();
+
+        for (var mateDoc in matesSnapshot.docs) {
+          var mateData = mateDoc.data() as Map<String, dynamic>;
+          String mateUid = mateData['mateUid'];
+
+          // 'user' 컬렉션에서 mateUid와 같은 문서를 가져옴
+          DocumentSnapshot userSnapshot =
+              await firestore.collection('user').doc(mateUid).get();
+
+          if (userSnapshot.exists) {
+            var userData = userSnapshot.data() as Map<String, dynamic>;
+
+            results.add({
+              'uid': mateUid ?? '',
+              'username': userData['username'] ?? '',
+              'imgUrl': userData['imgUrl'] ?? '',
+              'rating': userData['rating'] ?? 0.0,
+              'ratingCount': userData['ratingCount'] ?? 0,
+              'city': userData['city'] ?? '',
+              'gu': userData['gu'] ?? '',
+              'dong': userData['dong'] ?? '',
+              'age': userData['age'] ?? '',
+              'gender': userData['gender'] ?? '',
+              'mateActivityType': userData['activityType'] ?? '',
+              'dayTime': userData['dayTime'] ?? '',
+              'addInfo': userData['addInfo'] ?? '',
+              'residentCert': userData['residentCert'] ?? false,
+              'schoolCert': userData['schoolCert'] ?? false,
+              'applyTime': (mateData['applyTime'] as Timestamp).toDate(),
+              'applyTimeText': dateDifferenceToString(
+                  (mateData['applyTime'] as Timestamp).toDate()),
+              'postId': postDoc.id,
+              'date':
+                  '${DateFormat('yy.M.d').format((postData['startTime'] as Timestamp).toDate())}',
+              'startTime': (postData['startTime'] as Timestamp).toDate(),
+              'endTime': (postData['endTime'] as Timestamp).toDate(),
+              'activityType': postData['activityType'] ?? '',
+            });
+          }
+        }
+      }
+    } catch (e) {
+      print("Error in queryNotMatchedBySenior: $e");
+    }
+
+    results.sort((a, b) => b['applyTime'].compareTo(a['applyTime']));
 
     return results;
   }

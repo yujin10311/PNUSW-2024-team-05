@@ -43,6 +43,84 @@ class _MatchingScreenState extends State<MatchingScreen>
     return DateFormat('yy.M.d').format(dateTime);
   }
 
+  void _buildMateInfoDialog(BuildContext context, Map<String, dynamic> post) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: Container(),
+          ),
+          body: Container(
+            padding: EdgeInsets.all(16.0),
+            height: MediaQuery.of(context).size.height,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text('닫기', style: TextStyle(fontSize: 16)),
+                        SizedBox(width: 2),
+                        Icon(Icons.close),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  ProfileCard(
+                      imgUrl: post['imgUrl'],
+                      username: post['username'],
+                      uid: post['uid'],
+                      city: post['city'],
+                      gu: post['gu'],
+                      dong: post['dong'],
+                      rating: post['rating'],
+                      ratingCount: post['ratingCount']),
+                  SizedBox(height: 30),
+                  Text(
+                    '이름',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  MemberSymptomScrollview(symptoms: [post['username']]),
+                  // AutowrapTextBox(text: post['username']),
+                  SizedBox(height: 30),
+                  Text(
+                    '나이',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  MemberSymptomScrollview(symptoms: [post['age']]),
+                  // AutowrapTextBox(text: post['age']),
+                  SizedBox(height: 30),
+                  Text(
+                    '성별',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  MemberSymptomScrollview(symptoms: [post['gender']]),
+                  // AutowrapTextBox(text: post['gender']),
+                  SizedBox(height: 30),
+                  Text(
+                    '추가 정보',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  AutowrapTextBox(text: post['addInfo']),
+                  SizedBox(height: 8),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   void _buildSeniorInfoDialog(BuildContext context, Map<String, dynamic> post) {
     showModalBottomSheet(
       context: context,
@@ -145,7 +223,7 @@ class _MatchingScreenState extends State<MatchingScreen>
     if (memberType == '메이트') {
       return _buildMateScaffold(myUid!);
     } else if (memberType == '시니어') {
-      return _buildSeniorScaffold();
+      return _buildSeniorScaffold(myUid!);
     } else {
       return Scaffold(
         appBar: CustomAppBarWithTab(
@@ -206,12 +284,26 @@ class _MatchingScreenState extends State<MatchingScreen>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          post['username'],
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              post['username'],
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            SizedBox(width: 10),
+                                            Text(
+                                              post['applyTimeText'],
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: const Color.fromARGB(
+                                                    255, 110, 110, 110),
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         SizedBox(height: 4),
                                         Text(
@@ -265,7 +357,7 @@ class _MatchingScreenState extends State<MatchingScreen>
   }
 
   // 시니어가 보는 화면
-  Scaffold _buildSeniorScaffold() {
+  Scaffold _buildSeniorScaffold(String myUid) {
     return Scaffold(
       appBar: CustomAppBarWithTab(
         title: '매칭 페이지 - 시니어',
@@ -280,7 +372,100 @@ class _MatchingScreenState extends State<MatchingScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
-          Center(child: Text('시니어 - 매칭 전 화면')),
+          FutureBuilder<List<Map<String, dynamic>>>(
+            future: FirebaseHelper.queryNotMatchedBySenior(myUid),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('오류가 발생했습니다: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Center(child: Text('매칭 전 공고가 없습니다.'));
+              } else {
+                final posts = snapshot.data!;
+                return ListView.builder(
+                  itemCount: posts.length,
+                  itemBuilder: (context, index) {
+                    final post = posts[index];
+                    return GestureDetector(
+                      onTap: () {
+                        _buildMateInfoDialog(context, post);
+                      },
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              post['username'],
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            SizedBox(width: 10),
+                                            Text(
+                                              post['applyTimeText'],
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: const Color.fromARGB(
+                                                    255, 110, 110, 110),
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 4),
+                                        Text(
+                                            '${post['rating']} (${post['ratingCount']})'),
+                                        SizedBox(height: 4),
+                                        Text(
+                                            '날짜:  ${formatDate(post['startTime'])}'),
+                                        Text(
+                                            "시간:  ${formatTime(post['startTime'])} ~ ${formatTime(post['endTime'])}"),
+                                        Text('활동:  ${post['activityType']}'),
+                                      ],
+                                    ),
+                                  ),
+                                  Column(
+                                    children: [
+                                      Icon(Icons.person, size: 80),
+                                      SizedBox(height: 5),
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          // 페이지 새로 고침
+                                          // setState(() {});
+                                        },
+                                        child: Text('매칭 수락',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            )),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+            },
+          ),
           Center(child: Text('시니어 - 매칭 후 화면')),
         ],
       ),
