@@ -188,67 +188,67 @@ class _MatchingScreenState extends State<MatchingScreen>
                   itemCount: posts.length,
                   itemBuilder: (context, index) {
                     final post = posts[index];
-                    return Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        post['username'],
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                    return GestureDetector(
+                      onTap: () {
+                        _buildSeniorInfoDialog(context, post);
+                      },
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          post['username'],
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
+                                        SizedBox(height: 4),
+                                        Text(
+                                            '${post['rating']} (${post['ratingCount']})'),
+                                        SizedBox(height: 4),
+                                        Text(
+                                            '장소:  ${post['city']} > ${post['gu']} > ${post['dong']}'),
+                                        Text(
+                                            '날짜:  ${formatDate(post['startTime'])}'),
+                                        Text(
+                                            "시간:  ${formatTime(post['startTime'])} ~ ${formatTime(post['endTime'])}"),
+                                        Text('활동:  ${post['activityType']}'),
+                                      ],
+                                    ),
+                                  ),
+                                  Column(
+                                    children: [
+                                      Icon(Icons.person, size: 80),
+                                      SizedBox(height: 5),
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          await FirebaseHelper.cancelApply(
+                                              post['postId'], myUid);
+                                          // 페이지 새로 고침
+                                          setState(() {});
+                                        },
+                                        child: Text('신청 취소',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            )),
                                       ),
-                                      SizedBox(height: 4),
-                                      Text(
-                                          '${post['rating']} (${post['ratingCount']})'),
-                                      SizedBox(height: 4),
-                                      Text(
-                                          '장소:  ${post['city']} > ${post['gu']} > ${post['dong']}'),
-                                      Text(
-                                          '날짜:  ${formatDate(post['startTime'])}'),
-                                      Text(
-                                          "시간:  ${formatTime(post['startTime'])} ~ ${formatTime(post['endTime'])}"),
-                                      Text('활동:  ${post['activityType']}'),
                                     ],
                                   ),
-                                ),
-                                Column(
-                                  children: [
-                                    IconButton(
-                                      icon: Icon(Icons.person, size: 80),
-                                      onPressed: () {
-                                        _buildSeniorInfoDialog(context, post);
-                                      },
-                                    ),
-                                    SizedBox(height: 5),
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        await FirebaseHelper.cancelApply(
-                                            post['postId'], myUid);
-                                        // 페이지 새로 고침
-                                        setState(() {});
-                                      },
-                                      child: Text('신청 취소',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          )),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
