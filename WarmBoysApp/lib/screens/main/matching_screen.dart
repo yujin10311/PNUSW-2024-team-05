@@ -40,7 +40,7 @@ class _MatchingScreenState extends State<MatchingScreen>
   }
 
   String formatDate(DateTime dateTime) {
-    return DateFormat('yy.M.d').format(dateTime);
+    return DateFormat('yy.MM.dd').format(dateTime);
   }
 
   void _buildMateInfoDialog(BuildContext context, Map<String, dynamic> post) {
@@ -262,89 +262,109 @@ class _MatchingScreenState extends State<MatchingScreen>
                 return Center(child: Text('매칭 전 공고가 없습니다.'));
               } else {
                 final posts = snapshot.data!;
-                return ListView.builder(
-                  itemCount: posts.length,
-                  itemBuilder: (context, index) {
-                    final post = posts[index];
-                    return GestureDetector(
-                      onTap: () {
-                        _buildSeniorInfoDialog(context, post);
-                      },
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              post['username'],
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    setState(() {});
+                  },
+                  child: ListView.builder(
+                    itemCount: posts.length,
+                    itemBuilder: (context, index) {
+                      final post = posts[index];
+                      return GestureDetector(
+                        onTap: () {
+                          _buildSeniorInfoDialog(context, post);
+                        },
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                post['username'],
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(width: 10),
-                                            Text(
-                                              post['applyTimeText'],
+                                              SizedBox(width: 10),
+                                              Text(
+                                                post['applyTimeText'],
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: const Color.fromARGB(
+                                                      255, 110, 110, 110),
+                                                  // fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                              '${post['rating']} (${post['ratingCount']})',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                              )),
+                                          SizedBox(height: 4),
+                                          Text(
+                                              '장소:  ${post['city']} > ${post['gu']} > ${post['dong']}',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                              )),
+                                          Text(
+                                              '날짜:  ${formatDate(post['startTime'])}',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                              )),
+                                          Text(
+                                              '시간:  ${formatTime(post['startTime'])} ~ ${formatTime(post['endTime'])}',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                              )),
+                                          Text('활동:  ${post['activityType']}',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                    Column(
+                                      children: [
+                                        Icon(Icons.person, size: 80),
+                                        SizedBox(height: 5),
+                                        ElevatedButton(
+                                          onPressed: () async {
+                                            await FirebaseHelper.cancelApply(
+                                                post['postId'], myUid);
+                                            // 페이지 새로 고침
+                                            setState(() {});
+                                          },
+                                          child: Text('신청 취소',
                                               style: TextStyle(
                                                 fontSize: 16,
-                                                color: const Color.fromARGB(
-                                                    255, 110, 110, 110),
-                                                // fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
+                                              )),
                                         ),
-                                        SizedBox(height: 4),
-                                        Text(
-                                            '${post['rating']} (${post['ratingCount']})'),
-                                        SizedBox(height: 4),
-                                        Text(
-                                            '장소:  ${post['city']} > ${post['gu']} > ${post['dong']}'),
-                                        Text(
-                                            '날짜:  ${formatDate(post['startTime'])}'),
-                                        Text(
-                                            "시간:  ${formatTime(post['startTime'])} ~ ${formatTime(post['endTime'])}"),
-                                        Text('활동:  ${post['activityType']}'),
                                       ],
                                     ),
-                                  ),
-                                  Column(
-                                    children: [
-                                      Icon(Icons.person, size: 80),
-                                      SizedBox(height: 5),
-                                      ElevatedButton(
-                                        onPressed: () async {
-                                          await FirebaseHelper.cancelApply(
-                                              post['postId'], myUid);
-                                          // 페이지 새로 고침
-                                          setState(() {});
-                                        },
-                                        child: Text('신청 취소',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            )),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 );
               }
             },
@@ -383,85 +403,102 @@ class _MatchingScreenState extends State<MatchingScreen>
                 return Center(child: Text('매칭 전 공고가 없습니다.'));
               } else {
                 final posts = snapshot.data!;
-                return ListView.builder(
-                  itemCount: posts.length,
-                  itemBuilder: (context, index) {
-                    final post = posts[index];
-                    return GestureDetector(
-                      onTap: () {
-                        _buildMateInfoDialog(context, post);
-                      },
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              post['username'],
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    setState(() {});
+                  },
+                  child: ListView.builder(
+                    itemCount: posts.length,
+                    itemBuilder: (context, index) {
+                      final post = posts[index];
+                      return GestureDetector(
+                        onTap: () {
+                          _buildMateInfoDialog(context, post);
+                        },
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                post['username'],
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(width: 10),
-                                            Text(
-                                              post['applyTimeText'],
+                                              SizedBox(width: 10),
+                                              Text(
+                                                post['applyTimeText'],
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: const Color.fromARGB(
+                                                      255, 110, 110, 110),
+                                                  // fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                              '${post['rating']} (${post['ratingCount']})',
                                               style: TextStyle(
                                                 fontSize: 16,
-                                                color: const Color.fromARGB(
-                                                    255, 110, 110, 110),
-                                                // fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
+                                              )),
+                                          SizedBox(height: 4),
+                                          Text(
+                                              '날짜:  ${formatDate(post['startTime'])}',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              )),
+                                          Text(
+                                              "시간:  ${formatTime(post['startTime'])} ~ ${formatTime(post['endTime'])}",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              )),
+                                          Text('활동:  ${post['activityType']}',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                    Column(
+                                      children: [
+                                        Icon(Icons.person, size: 80),
+                                        SizedBox(height: 5),
+                                        ElevatedButton(
+                                          onPressed: () async {
+                                            // 페이지 새로 고침
+                                            // setState(() {});
+                                          },
+                                          child: Text('매칭 수락',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              )),
                                         ),
-                                        SizedBox(height: 4),
-                                        Text(
-                                            '${post['rating']} (${post['ratingCount']})'),
-                                        SizedBox(height: 4),
-                                        Text(
-                                            '날짜:  ${formatDate(post['startTime'])}'),
-                                        Text(
-                                            "시간:  ${formatTime(post['startTime'])} ~ ${formatTime(post['endTime'])}"),
-                                        Text('활동:  ${post['activityType']}'),
                                       ],
                                     ),
-                                  ),
-                                  Column(
-                                    children: [
-                                      Icon(Icons.person, size: 80),
-                                      SizedBox(height: 5),
-                                      ElevatedButton(
-                                        onPressed: () async {
-                                          // 페이지 새로 고침
-                                          // setState(() {});
-                                        },
-                                        child: Text('매칭 수락',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            )),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 );
               }
             },
