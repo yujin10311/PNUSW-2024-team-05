@@ -97,11 +97,15 @@ class _PostScreenState extends State<PostScreen> {
     DateTime(1, 1, 1, 21): '오후 9시',
   };
 
+  String checkStat = '';
+
   @override
   void initState() {
     super.initState();
     if (widget.memberType == '시니어' && widget.myUid == widget.seniorUid) {
       _fetchMyPosts();
+    } else if (widget.memberType == '메이트') {
+      _fetchCheckApply();
     }
   }
 
@@ -111,6 +115,14 @@ class _PostScreenState extends State<PostScreen> {
     setState(() {
       myPosts = fetchedPosts;
       _createEventList();
+    });
+  }
+
+  Future<void> _fetchCheckApply() async {
+    String status =
+        await FirebaseHelper.checkApply(widget.postId, widget.myUid);
+    setState(() {
+      checkStat = status;
     });
   }
 
@@ -496,11 +508,7 @@ class _PostScreenState extends State<PostScreen> {
                     ? _buildSelfLine(line)
                     : Text(line, style: TextStyle(fontSize: 18)),
               ),
-            if (hasButton)
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('매칭 신청'),
-              ),
+            if (hasButton) _buildMateApplyButton(), // '매칭 신청' 버튼
             if (isSelf)
               ElevatedButton(
                 onPressed: isPostButtonEnabled
@@ -530,7 +538,6 @@ class _PostScreenState extends State<PostScreen> {
                           'activityType': selectedActivityType,
                           'startTime': startTime,
                           'endTime': endTime,
-                          'mateUid': null
                         };
                         bool success =
                             await FirebaseHelper.postMyPost(postInfo);
@@ -663,5 +670,93 @@ class _PostScreenState extends State<PostScreen> {
       time.hour,
     );
     return dateToString[timeWithoutNanoseconds] ?? '';
+  }
+
+  Widget _buildMateApplyButton() {
+    if (checkStat == 'postNotExists') {
+      return Text('공고가 존재하지 않습니다.');
+    } else if (checkStat == 'canApply') {
+      return ElevatedButton(
+        onPressed: () async {
+          bool success =
+              await FirebaseHelper.applyMatching(widget.postId, widget.myUid);
+          if (success) {
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) => PostScreen(
+                  memberType: widget.memberType,
+                  myUid: widget.myUid,
+                  postId: widget.postId,
+                  seniorUid: widget.seniorUid,
+                  seniorName: widget.seniorName,
+                  city: widget.city,
+                  gu: widget.gu,
+                  dong: widget.dong,
+                  dependentType: widget.dependentType,
+                  withPet: widget.withPet,
+                  withCam: widget.withCam,
+                  symptom: widget.symptom,
+                  petInfo: widget.petInfo,
+                  symptomInfo: widget.symptomInfo,
+                  walkingType: widget.walkingType,
+                  rating: widget.rating,
+                  ratingCount: widget.ratingCount,
+                  activityType: widget.activityType,
+                  startTime: widget.startTime,
+                  endTime: widget.endTime,
+                ),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            );
+          }
+        },
+        child: Text('매칭 신청'),
+      );
+    } else if (checkStat == 'alreadyApplied') {
+      return ElevatedButton(
+        onPressed: () async {
+          bool success =
+              await FirebaseHelper.cancelApply(widget.postId, widget.myUid);
+          if (success) {
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) => PostScreen(
+                  memberType: widget.memberType,
+                  myUid: widget.myUid,
+                  postId: widget.postId,
+                  seniorUid: widget.seniorUid,
+                  seniorName: widget.seniorName,
+                  city: widget.city,
+                  gu: widget.gu,
+                  dong: widget.dong,
+                  dependentType: widget.dependentType,
+                  withPet: widget.withPet,
+                  withCam: widget.withCam,
+                  symptom: widget.symptom,
+                  petInfo: widget.petInfo,
+                  symptomInfo: widget.symptomInfo,
+                  walkingType: widget.walkingType,
+                  rating: widget.rating,
+                  ratingCount: widget.ratingCount,
+                  activityType: widget.activityType,
+                  startTime: widget.startTime,
+                  endTime: widget.endTime,
+                ),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            );
+          }
+        },
+        child: Text('신청 취소'),
+      );
+    } else if (checkStat == 'error') {
+      return Text('에러');
+    } else {
+      return Container();
+    }
   }
 }

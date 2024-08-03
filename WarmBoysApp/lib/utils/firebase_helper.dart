@@ -95,11 +95,7 @@ class FirebaseHelper {
 
   // 기간과 지역에 따라 포스트카드 쿼리(홍 화면 전용)
   static Future<List<Map<String, dynamic>>> queryPostcardsByDurLocStat(
-      DateTime startTime,
-      DateTime endTime,
-      String dong,
-      String sortBy,
-      String status) async {
+      DateTime startTime, DateTime endTime, String dong, String sortBy) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     DateTime startOfDay =
@@ -113,7 +109,7 @@ class FirebaseHelper {
             isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
         .where('startTime', isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
         .where('dong', isEqualTo: dong)
-        .where('status', isEqualTo: status);
+        .where('status', whereIn: ['posted', 'notMatched']);
 
     QuerySnapshot postsSnapshot = await postsQuery.get();
 
@@ -221,7 +217,6 @@ class FirebaseHelper {
         'endTime': Timestamp.fromDate(postInfo['endTime']),
         'credit': 5,
         'status': 'posted',
-        'mateUid': null,
         'startImgUrl': null,
         'startReport': null,
         'endImgUrl': null,
@@ -248,6 +243,131 @@ class FirebaseHelper {
       return true; // 성공 시 true 반환
     } catch (e) {
       print("Error deleting post: $e");
+      return false; // 에러 발생 시 false 반환
+    }
+  }
+
+  static Future<String> checkApply(String postId, String myUid) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    try {
+      // 'posts' 컬렉션 내의 doc id가 postId와 일치하는 문서를 찾음
+      DocumentSnapshot postSnapshot =
+          await firestore.collection('posts').doc(postId).get();
+
+      if (!postSnapshot.exists) {
+        // postId에 해당하는 문서가 존재하지 않으면 true를 반환
+        return 'postNotExists';
+      }
+
+      // 'mates' 서브 컬렉션을 체크
+      CollectionReference matesCollection =
+          firestore.collection('posts').doc(postId).collection('mates');
+      QuerySnapshot matesSnapshot = await matesCollection.get();
+
+      if (matesSnapshot.docs.isEmpty) {
+        // 'mates' 서브 컬렉션이 존재하지 않으면 true를 반환
+        return 'canApply';
+      }
+
+      // 'mates' 서브 컬렉션 내의 모든 문서를 검사
+      for (var mateDoc in matesSnapshot.docs) {
+        var mateData = mateDoc.data() as Map<String, dynamic>;
+        if (mateData['mateUid'] == myUid) {
+          // 'mateUid' 필드가 myUid와 동일한 문서가 존재하면 false를 반환
+          return 'alreadyApplied';
+        }
+      }
+
+      // 'mateUid' 필드가 myUid와 동일한 문서가 존재하지 않으면 true를 반환
+      return 'canApply';
+    } catch (e) {
+      print("Error in checkApply: $e");
+      return 'error'; // 에러 발생 시 false 반환
+    }
+  }
+
+  static Future<bool> applyMatching(String postId, String myUid) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    DocumentReference postRef = firestore.collection('posts').doc(postId);
+
+    try {
+      DocumentSnapshot postSnapshot = await postRef.get();
+
+      if (!postSnapshot.exists) {
+        print('공고가 존재하지 않습니다.');
+        return false;
+      }
+
+      var postData = postSnapshot.data() as Map<String, dynamic>;
+      String status = postData['status'];
+      print("-------applyInfo--------");
+      print("postId: ${postId}");
+      print("myUid: ${myUid}");
+      print("status: ${status}");
+
+      if (status == 'posted') {
+        await postRef.update({'status': 'notMatched'});
+
+        CollectionReference matesRef = postRef.collection('mates');
+        await matesRef.add({
+          'mateUid': myUid,
+          'applyTime': Timestamp.now(),
+        });
+        print("신청이 완료되었습니다.");
+        return true;
+      } else if (status == 'notMatched') {
+        CollectionReference matesRef = postRef.collection('mates');
+        await matesRef.add({
+          'mateUid': myUid,
+          'applyTime': Timestamp.now(),
+        });
+        print("신청이 완료되었습니다.");
+        return true;
+      } else {
+        print("신청할 수 없습니다.");
+        return false;
+      }
+    } catch (e) {
+      print('Error applying for matching: $e');
+      return false;
+    }
+  }
+
+  static Future<bool> cancelApply(String postId, String myUid) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    try {
+      // 'posts' 컬렉션 내의 doc id가 postId와 일치하는 문서를 찾음
+      DocumentSnapshot postSnapshot =
+          await firestore.collection('posts').doc(postId).get();
+
+      if (!postSnapshot.exists) {
+        // postId에 해당하는 문서가 존재하지 않으면 false 반환
+        return false;
+      }
+
+      // 'mates' 서브 컬렉션 내의 mateUid가 myUid와 동일한 문서를 찾음
+      QuerySnapshot matesSnapshot = await firestore
+          .collection('posts')
+          .doc(postId)
+          .collection('mates')
+          .where('mateUid', isEqualTo: myUid)
+          .get();
+
+      if (matesSnapshot.docs.isEmpty) {
+        // mateUid가 myUid와 동일한 문서가 존재하지 않으면 false 반환
+        return false;
+      }
+
+      // mateUid가 myUid와 동일한 문서를 삭제
+      for (var mateDoc in matesSnapshot.docs) {
+        await mateDoc.reference.delete();
+      }
+
+      print("삭제에 성공했습니다. [postId: $postId / myUid: $myUid]");
+      return true; // 성공 시 true 반환
+    } catch (e) {
+      print("Error in cancelApply: $e");
       return false; // 에러 발생 시 false 반환
     }
   }

@@ -3,12 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'providers/custom_auth_provider.dart';
 
-import 'screens/register/register_select_screen_0.dart';
 import 'screens/index/register_mate_index.dart';
 import 'screens/index/register_senior_index.dart';
+import 'screens/index/main_index.dart';
+import 'screens/register/register_select_screen_0.dart';
 import 'screens/login_screen.dart';
 import 'screens/main/education_screen.dart';
-import 'screens/index/main_index.dart';
 import 'screens/post/post_screen.dart';
 
 void main() async {

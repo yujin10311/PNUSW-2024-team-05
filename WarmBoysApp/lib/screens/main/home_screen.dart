@@ -54,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _selectedDateRange.end,
       _selectedDong,
       _selectedSort,
-      'posted',
     );
 
     setState(() {

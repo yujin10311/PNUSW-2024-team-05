@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../main/home_screen.dart';
-import '../main/matching_page.dart';
+import '../main/matching_screen.dart';
 import '../main/chating_screen.dart';
 import '../main/exchange_screen.dart';
 
@@ -40,7 +40,7 @@ class _MainIndexState extends State<MainIndex> {
             label: '매칭',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/chat.png',width: 24, height: 24),
+            icon: Image.asset('assets/icons/chat.png', width: 24, height: 24),
             label: '채팅',
           ),
           BottomNavigationBarItem(
