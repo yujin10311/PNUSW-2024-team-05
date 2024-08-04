@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:async';
 import 'package:provider/provider.dart';
 import 'package:warm_boys/providers/custom_auth_provider.dart';
 import 'package:intl/intl.dart';
@@ -12,80 +11,70 @@ class CustomAlarmButton extends StatefulWidget {
 
 class _CustomAlarmButtonState extends State<CustomAlarmButton> {
   bool hasNewAlarms = false;
-  late StreamSubscription _alarmSubscription;
 
   @override
   void initState() {
     super.initState();
-    _listenForAlarms();
+    _checkForAlarms();
   }
 
-  @override
-  void dispose() {
-    _alarmSubscription.cancel();
-    super.dispose();
-  }
-
-  void _listenForAlarms() {
+  Future<void> _checkForAlarms() async {
     final userId = Provider.of<CustomAuthProvider>(context, listen: false).uid;
     if (userId != null) {
-      _alarmSubscription = FirebaseFirestore.instance
+      // Check for new alarms
+      final alarmSnapshot = await FirebaseFirestore.instance
           .collection('alarms')
           .doc(userId)
-          .snapshots()
-          .listen((snapshot) {
-        if (snapshot.exists && snapshot.data()?['hasNewAlarms'] == true) {
-          setState(() {
-            hasNewAlarms = true;
-          });
-        }
-      });
+          .get();
+      if (alarmSnapshot.exists && alarmSnapshot.data()?['hasNewAlarms'] == true) {
+        setState(() {
+          hasNewAlarms = true;
+        });
+      }
 
-      FirebaseFirestore.instance
+      // Check posts where user is a senior
+      final seniorPostsSnapshot = await FirebaseFirestore.instance
           .collection('posts')
           .where('seniorUid', isEqualTo: userId)
-          .snapshots()
-          .listen((snapshot) {
-        for (var docChange in snapshot.docChanges) {
-          if (docChange.type == DocumentChangeType.modified) {
-            FirebaseFirestore.instance.collection('alarms').doc(userId).set({
-              'hasNewAlarms': true,
-            }, SetOptions(merge: true));
-            FirebaseFirestore.instance
-                .collection('alarms')
-                .doc(userId)
-                .collection('userAlarms')
-                .add({
-              'postId': docChange.doc.id,
-              'message': '공고 상태가 변경되었습니다.',
-              'timestamp': Timestamp.now(),
-            });
-          }
+          .get();
+      for (var docChange in seniorPostsSnapshot.docChanges) {
+        if (docChange.type == DocumentChangeType.modified) {
+          await FirebaseFirestore.instance.collection('alarms').doc(userId).set({
+            'hasNewAlarms': true,
+          }, SetOptions(merge: true));
+          await FirebaseFirestore.instance
+              .collection('alarms')
+              .doc(userId)
+              .collection('userAlarms')
+              .add({
+            'postId': docChange.doc.id,
+            'message': '공고 상태가 변경되었습니다.',
+            'timestamp': Timestamp.now(),
+          });
         }
-      });
+      }
 
-      FirebaseFirestore.instance
+      // Check posts where user is a mate
+      final matePostsSnapshot = await FirebaseFirestore.instance
           .collection('posts')
           .where('mateUid', isEqualTo: userId)
-          .snapshots()
-          .listen((snapshot) {
-        for (var docChange in snapshot.docChanges) {
-          if (docChange.type == DocumentChangeType.modified) {
-            FirebaseFirestore.instance.collection('alarms').doc(userId).set({
-              'hasNewAlarms': true,
-            }, SetOptions(merge: true));
-            FirebaseFirestore.instance
-                .collection('alarms')
-                .doc(userId)
-                .collection('userAlarms')
-                .add({
-              'postId': docChange.doc.id,
-              'message': 'A post you applied to has been updated.',
-              'timestamp': Timestamp.now(),
-            });
-          }
+          .get();
+      for (var docChange in matePostsSnapshot.docChanges) {
+        if (docChange.type == DocumentChangeType.modified) {
+          await FirebaseFirestore.instance.collection('alarms').doc(userId).set({
+            'hasNewAlarms': true,
+          }, SetOptions(merge: true));
+          await FirebaseFirestore.instance
+              .collection('alarms')
+              .doc(userId)
+              .collection('userAlarms')
+              .add({
+            'postId': docChange.doc.id,
+            'message': 'A post you applied to has been updated.',
+            'timestamp': Timestamp.now(),
+          });
         }
-      });
+      }
     }
   }
 
@@ -114,13 +103,13 @@ class _CustomAlarmButtonState extends State<CustomAlarmButton> {
                       width: double.maxFinite,
                       child: ConstrainedBox(
                         constraints: BoxConstraints(maxHeight: 300),
-                        child: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
+                        child: FutureBuilder<QuerySnapshot>(
+                          future: FirebaseFirestore.instance
                               .collection('alarms')
                               .doc(userId)
                               .collection('userAlarms')
                               .orderBy('timestamp', descending: true)
-                              .snapshots(),
+                              .get(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return Center(child: CircularProgressIndicator());

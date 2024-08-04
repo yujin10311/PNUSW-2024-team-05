@@ -24,42 +24,33 @@ class _MainIndexState extends State<MainIndex> {
   bool _hasNewMessages = false;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String _currentUserId = FirebaseAuth.instance.currentUser!.uid;
-  late StreamSubscription<QuerySnapshot> _chatSubscription;
 
   @override
   void initState() {
     super.initState();
-    _listenForNewMessages();
+    _checkForNewMessages();
   }
 
-  @override
-  void dispose() {
-    _chatSubscription.cancel();
-    super.dispose();
-  }
-
-  void _listenForNewMessages() {
-    _chatSubscription = _firestore
+  Future<void> _checkForNewMessages() async {
+    final snapshot = await _firestore
         .collection('chats')
         .where('participants', arrayContains: _currentUserId)
-        .snapshots()
-        .listen((snapshot) {
-      bool hasNewMessages = false;
-      for (var doc in snapshot.docs) {
-        var data = doc.data() as Map<String, dynamic>;
-        var lastMessageReadBy = data['lastMessageReadBy'] as List<dynamic>?;
-        var lastMessageSender = data['lastMessageSender'] as String?;
-        if (lastMessageSender != _currentUserId && (lastMessageReadBy == null || !lastMessageReadBy.contains(_currentUserId))) {
-          hasNewMessages = true;
-          break;
-        }
+        .get();
+    bool hasNewMessages = false;
+    for (var doc in snapshot.docs) {
+      var data = doc.data() as Map<String, dynamic>;
+      var lastMessageReadBy = data['lastMessageReadBy'] as List<dynamic>?;
+      var lastMessageSender = data['lastMessageSender'] as String?;
+      if (lastMessageSender != _currentUserId && (lastMessageReadBy == null || !lastMessageReadBy.contains(_currentUserId))) {
+        hasNewMessages = true;
+        break;
       }
-      if (mounted) {
-        setState(() {
-          _hasNewMessages = hasNewMessages;
-        });
-      }
-    });
+    }
+    if (mounted) {
+      setState(() {
+        _hasNewMessages = hasNewMessages;
+      });
+    }
   }
 
   @override

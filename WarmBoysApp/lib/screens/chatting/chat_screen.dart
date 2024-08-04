@@ -88,10 +88,7 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         title: Text(otherUsername ?? 'Loading...'),
       ),
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
+      body: SafeArea(
         child: Column(
           children: [
             Expanded(
