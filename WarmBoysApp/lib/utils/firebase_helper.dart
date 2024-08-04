@@ -819,7 +819,6 @@ class FirebaseHelper {
       throw e;
     }
   }
-<<<<<<< HEAD
   // 채팅 목록 가져오기
   static Stream<QuerySnapshot> getChatsStream(String userId) {
     return FirebaseFirestore.instance
@@ -865,6 +864,4 @@ class FirebaseHelper {
       return DateFormat('yyyy-MM-dd').format(dateTime);
     }
   }
-=======
->>>>>>> origin/dev_sub
 }
