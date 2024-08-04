@@ -71,10 +71,10 @@ flutter:
   assets:
     - assets/logos/apptitle.png
     - assets/logos/company.png
+    - assets/images/default_profile.png
     - assets/icons/profile_blank.png
     - assets/icons/home.png
     - assets/icons/matching.png
-    - assets/icons/community.png
     - assets/icons/exchange.png
     - assets/icons/chat.png
 

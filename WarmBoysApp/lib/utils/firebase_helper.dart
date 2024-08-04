@@ -841,6 +841,7 @@ class FirebaseHelper {
       'lastMessage': text,
       'lastMessageTime': Timestamp.now(),
       'lastMessageSender': senderId,
+      'lastMessageReadBy': [senderId], // 메시지를 보낸 사용자로 초기화
     });
   }
   
@@ -864,4 +865,25 @@ class FirebaseHelper {
       return DateFormat('yyyy-MM-dd').format(dateTime);
     }
   }
+  
+  // 채팅방 시간 포맷
+  static String formatTime(DateTime dateTime) {
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(dateTime);
+
+    if (difference.inMinutes < 1) {
+      return '방금 전';
+    } else if (difference.inHours < 1) {
+      return '${difference.inMinutes}분 전';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours}시간 전';
+    } else if (difference.inDays == 1) {
+      return '어제';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays}일 전';
+    } else {
+      return DateFormat('yyyy-MM-dd').format(dateTime);
+    }
+  }
 }
+
