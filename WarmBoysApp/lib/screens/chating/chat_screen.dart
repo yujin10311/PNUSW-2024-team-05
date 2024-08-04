@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
+import '/utils/firebase_helper.dart';
 
 class ChatScreen extends StatefulWidget {
   final String chatId;
@@ -15,42 +15,46 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? otherUserProfileUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadOtherUserProfile();
+  }
+
+  Future<void> _loadOtherUserProfile() async {
+    var chatData = await FirebaseFirestore.instance.collection('chats').doc(widget.chatId).get();
+    var participants = chatData.data()?['participants'] as List<dynamic>;
+    var otherUserId = participants.firstWhere((id) => id != _auth.currentUser!.uid, orElse: () => null);
+
+    if (otherUserId != null) {
+      otherUserProfileUrl = await _getUserProfileUrl(otherUserId);
+      setState(() {});
+    }
+  }
+
+  Future<String?> _getUserProfileUrl(String userId) async {
+    final doc = await FirebaseFirestore.instance.collection('user').doc(userId).get();
+    if (doc.exists) {
+      return doc['imgUrl'];
+    }
+    return 'assets/images/default_profile.png'; // 기본 이미지 경로
+  }
 
   Future<void> _sendMessage() async {
     if (_controller.text.isNotEmpty) {
-      await FirebaseFirestore.instance.collection('chats').doc(widget.chatId).collection('messages').add({
-        'text': _controller.text,
-        'createdAt': Timestamp.now(),
-        'senderId': _auth.currentUser!.uid,
-      });
-      await FirebaseFirestore.instance.collection('chats').doc(widget.chatId).update({
-        'lastMessage': _controller.text,
-        'lastMessageTime': Timestamp.now(),
-        'lastMessageSender': _auth.currentUser!.uid,
-      });
+      await FirebaseHelper.sendMessage(
+        chatId: widget.chatId,
+        text: _controller.text,
+        senderId: _auth.currentUser!.uid,
+      );
       _controller.clear();
     }
   }
 
   String formatDate(Timestamp timestamp) {
-    DateTime dateTime = timestamp.toDate();
-    DateTime now = DateTime.now();
-    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
-    String formattedDate = dateFormat.format(dateTime);
-    String todayFormatted = dateFormat.format(now);
-    String yesterdayFormatted = dateFormat.format(now.subtract(Duration(days: 1)));
-
-    if (formattedDate == todayFormatted) {
-      return '오늘';
-    } else if (formattedDate == yesterdayFormatted) {
-      return '어제';
-    } else if (now.difference(dateTime).inDays < 7) {
-      return DateFormat('EEEE', 'ko_KR').format(dateTime);
-    } else if (now.difference(dateTime).inDays < 14) {
-      return '지난주 ' + DateFormat('EEEE', 'ko_KR').format(dateTime);
-    } else {
-      return DateFormat('yyyy-MM-dd').format(dateTime);
-    }
+    return FirebaseHelper.formatDate(timestamp.toDate());
   }
 
   @override
@@ -63,7 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
             }
-            var chatData = snapshot.data!.data() as Map<String, dynamic>?;
+            var chatData = snapshot.data?.data() as Map<String, dynamic>?;
             if (chatData == null) {
               return Text('Loading...');
             }
@@ -96,39 +100,95 @@ class _ChatScreenState extends State<ChatScreen> {
                   .collection('chats')
                   .doc(widget.chatId)
                   .collection('messages')
-                  .orderBy('createdAt', descending: true)
+                  .orderBy('createdAt', descending: false)
                   .snapshots(),
               builder: (ctx, AsyncSnapshot<QuerySnapshot> chatSnapshot) {
                 if (chatSnapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 }
-                final chatDocs = chatSnapshot.data!.docs;
+                final chatDocs = chatSnapshot.data?.docs ?? [];
+                DateTime? previousDate;
+
                 return ListView.builder(
-                  reverse: true,
                   itemCount: chatDocs.length,
                   itemBuilder: (ctx, index) {
                     var message = chatDocs[index].data() as Map<String, dynamic>;
                     bool isMe = message['senderId'] == _auth.currentUser!.uid;
-                    return Align(
-                      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: isMe ? Colors.orange[300] : Colors.blue[100],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                          children: [
-                            Text(message['text']),
-                            Text(
-                              message['createdAt'].toDate().toString().substring(11, 16), // 시간:분까지만 표시
-                              style: TextStyle(fontSize: 10, color: Colors.grey),
+                    DateTime messageDate = (message['createdAt'] as Timestamp).toDate();
+                    bool showDateSeparator = false;
+
+                    if (previousDate == null || previousDate!.day != messageDate.day) {
+                      showDateSeparator = true;
+                      previousDate = messageDate;
+                    }
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (showDateSeparator)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                                    child: Divider(
+                                      color: Colors.grey,
+                                      thickness: 1,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  formatDate(Timestamp.fromDate(messageDate)),
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                                    child: Divider(
+                                      color: Colors.grey,
+                                      thickness: 1,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
+                        Align(
+                          alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                          child: Row(
+                            mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+                            children: [
+                              if (!isMe)
+                                CircleAvatar(
+                                  radius: 22,
+                                  backgroundImage: otherUserProfileUrl != null && otherUserProfileUrl!.isNotEmpty
+                                      ? NetworkImage(otherUserProfileUrl!)
+                                      : const AssetImage('assets/images/default_profile.png') as ImageProvider,
+                                ),
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: isMe ? Colors.green[300] : Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                                  children: [
+                                    Text(message['text']),
+                                    Text(
+                                      message['createdAt'].toDate().toString().substring(11, 16),
+                                      style: TextStyle(fontSize: 10, color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+                      ],
                     );
                   },
                 );

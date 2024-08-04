@@ -220,6 +220,7 @@ class FirebaseHelper {
     return results;
   }
 
+  // 내 공고 쿼리(시니어)
   static Future<List<Map<String, dynamic>>> queryMyPost(String myUid) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -250,6 +251,7 @@ class FirebaseHelper {
     return results;
   }
 
+  // 공고 화면: 내 공고 올리기(시니어)
   static Future<bool> postMyPost(Map<String, dynamic> postInfo) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     print('seniorUid: ${postInfo['seniorUid']}');
@@ -301,6 +303,7 @@ class FirebaseHelper {
     }
   }
 
+  // 지원 가능 여부 확인 (메이트)
   static Future<String> checkApply(String postId, String myUid) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
@@ -340,6 +343,7 @@ class FirebaseHelper {
     }
   }
 
+  // 지원하기 (메이트)
   static Future<bool> applyMatching(String postId, String myUid) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -388,7 +392,7 @@ class FirebaseHelper {
     }
   }
 
-  // 지원 취소
+  // 지원 취소 (메이트)
   static Future<bool> cancelApply(String postId, String myUid) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
@@ -442,7 +446,7 @@ class FirebaseHelper {
     }
   }
 
-  // notMatched 정보를 쿼리: 메이트 시점
+  // 매칭화면의 '매칭 전' 텝 정보 쿼리 (메이트)
   static Future<List<Map<String, dynamic>>> queryNotMatchedByMate(
       String myUid) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -516,6 +520,7 @@ class FirebaseHelper {
     return results;
   }
 
+  // 매칭화면의 '매칭 전' 텝 정보 쿼리 (시니어)
   static Future<List<Map<String, dynamic>>> queryNotMatchedBySenior(
       String myUid) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -586,5 +591,277 @@ class FirebaseHelper {
     results.sort((a, b) => b['applyTime'].compareTo(a['applyTime']));
 
     return results;
+  }
+
+  // 매칭화면의 '매칭 후' 텝 정보 쿼리 (메이트)
+  static Future<List<Map<String, dynamic>>> queryMatchedByMate(
+      String myUid) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // 1. status가 'matched', 'activated', 'finished', 'failed'인 posts를 검색
+    QuerySnapshot postsSnapshot =
+        await firestore.collection('posts').where('status', whereIn: [
+      'matched',
+      'activated',
+      'finished',
+      'failed',
+    ]).get();
+
+    List<Map<String, dynamic>> results = [];
+
+    // Step 2: posts 순회
+    for (var postDoc in postsSnapshot.docs) {
+      var postData = postDoc.data() as Map<String, dynamic>;
+      String postId = postDoc.id;
+
+      // Step 3: Check mates sub-collection
+      QuerySnapshot matesSnapshot = await firestore
+          .collection('posts')
+          .doc(postId)
+          .collection('mates')
+          .where('mateUid', isEqualTo: myUid)
+          .get();
+
+      // If there are matching mates documents
+      if (matesSnapshot.docs.isNotEmpty) {
+        var mateData = matesSnapshot.docs.first.data() as Map<String, dynamic>;
+
+        // Get senior data
+        DocumentSnapshot seniorSnapshot =
+            await firestore.collection('user').doc(postData['seniorUid']).get();
+
+        if (seniorSnapshot.exists) {
+          var seniorData = seniorSnapshot.data() as Map<String, dynamic>;
+
+          // Compile the result
+          results.add({
+            'imgUrl': seniorData['imgUrl'] ?? '',
+            'username': seniorData['username'] ?? '',
+            'rating': seniorData['rating'] ?? 0.0,
+            'ratingCount': seniorData['ratingCount'] ?? 0,
+            'dependentType': seniorData['dependentType'] ?? '',
+            'withPet': seniorData['withPet'] ?? false,
+            'withCam': seniorData['withCam'] ?? false,
+            'petInfo': seniorData['petInfo'] ?? '',
+            'symptom': List<String>.from(seniorData['symptom'] ?? []),
+            'symptomInfo': seniorData['symptomInfo'] ?? '',
+            'walkingType': seniorData['walkingType'] ?? '',
+            'addInfo': seniorData['addInfo'] ?? '',
+            'uid': postData['seniorUid'] ?? '',
+            'postId': postId,
+            'city': postData['city'] ?? '',
+            'gu': postData['gu'] ?? '',
+            'dong': postData['dong'] ?? '',
+            'date':
+                '${DateFormat('yy.MM.dd').format((postData['startTime'] as Timestamp).toDate())}' ??
+                    '',
+            'startTime': (postData['startTime'] as Timestamp).toDate(),
+            'endTime': (postData['endTime'] as Timestamp).toDate(),
+            'activityType': postData['activityType'] ?? '',
+            'acceptTime': (mateData['acceptTime'] as Timestamp).toDate(),
+            'acceptTimeText': dateDifferenceToString(
+                (mateData['acceptTime'] as Timestamp).toDate()),
+            'status': postData['status'],
+          });
+        }
+      }
+    }
+    results.sort((a, b) => a['acceptTime'].compareTo(b['acceptTime']));
+
+    return results;
+  }
+
+  // 매칭화면의 '매칭 후' 텝 정보 쿼리 (시니어)
+  static Future<List<Map<String, dynamic>>> queryMatchedBySenior(
+      String myUid) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    List<Map<String, dynamic>> results = [];
+
+    try {
+      // 'posts' 컬렉션에서 'seniorUid'가 myUid와 같고 'status'가 'matched', 'activated', 'finished', 'failed'인 문서를 가져옴
+      QuerySnapshot postsSnapshot = await firestore
+          .collection('posts')
+          .where('seniorUid', isEqualTo: myUid)
+          .where('status', whereIn: [
+        'matched',
+        'activated',
+        'finished',
+        'failed',
+      ]).get();
+
+      for (var postDoc in postsSnapshot.docs) {
+        var postData = postDoc.data() as Map<String, dynamic>;
+
+        // 'mates' 서브 컬렉션을 순회
+        QuerySnapshot matesSnapshot = await firestore
+            .collection('posts')
+            .doc(postDoc.id)
+            .collection('mates')
+            .get();
+
+        for (var mateDoc in matesSnapshot.docs) {
+          var mateData = mateDoc.data() as Map<String, dynamic>;
+          String mateUid = mateData['mateUid'];
+
+          // 'user' 컬렉션에서 mateUid와 같은 문서를 가져옴
+          DocumentSnapshot userSnapshot =
+              await firestore.collection('user').doc(mateUid).get();
+
+          if (userSnapshot.exists) {
+            var userData = userSnapshot.data() as Map<String, dynamic>;
+
+            results.add({
+              'uid': mateUid ?? '',
+              'username': userData['username'] ?? '',
+              'imgUrl': userData['imgUrl'] ?? '',
+              'rating': userData['rating'] ?? 0.0,
+              'ratingCount': userData['ratingCount'] ?? 0,
+              'city': userData['city'] ?? '',
+              'gu': userData['gu'] ?? '',
+              'dong': userData['dong'] ?? '',
+              'age': userData['age'] ?? '',
+              'gender': userData['gender'] ?? '',
+              'mateActivityType': userData['activityType'] ?? '',
+              'dayTime': userData['dayTime'] ?? '',
+              'addInfo': userData['addInfo'] ?? '',
+              'residentCert': userData['residentCert'] ?? false,
+              'schoolCert': userData['schoolCert'] ?? false,
+              'acceptTime': (mateData['acceptTime'] as Timestamp).toDate(),
+              'acceptTimeText': dateDifferenceToString(
+                  (mateData['acceptTime'] as Timestamp).toDate()),
+              'postId': postDoc.id,
+              'date':
+                  '${DateFormat('yy.MM.dd').format((postData['startTime'] as Timestamp).toDate())}',
+              'startTime': (postData['startTime'] as Timestamp).toDate(),
+              'endTime': (postData['endTime'] as Timestamp).toDate(),
+              'activityType': postData['activityType'] ?? '',
+            });
+          }
+        }
+      }
+    } catch (e) {
+      print("Error in queryNotMatchedBySenior: $e");
+    }
+
+    results.sort((a, b) => b['acceptTime'].compareTo(a['acceptTime']));
+
+    return results;
+  }
+
+  // 매칭 승인 (시니어)
+  static Future<void> acceptMatching(String mateUid, String postId) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    try {
+      // 1. posts 컬렉션 내의 doc id 중 postUid와 같은 것을 찾아 가져옴
+      DocumentSnapshot postSnapshot =
+          await firestore.collection('posts').doc(postId).get();
+
+      if (!postSnapshot.exists) {
+        throw Exception("Post with ID $postId does not exist.");
+      }
+
+      // 2. 문서 내의 'mates' 서브 컬렉션의 문서들의 'mateUid' 필드와 mateUid 인자가 일치하는 mates 문서를 찾음
+      QuerySnapshot matesSnapshot = await firestore
+          .collection('posts')
+          .doc(postId)
+          .collection('mates')
+          .where('mateUid', isEqualTo: mateUid)
+          .get();
+
+      if (matesSnapshot.docs.isEmpty) {
+        throw Exception(
+            "메이트 Uid $mateUid 가 해당 포스트의 mates 서브 컬렉션 내에 존재하지 않습니다.");
+      }
+
+      // 3. mateUid가 user 컬렉션 내의 문서 uid 중 존재하는지 찾음
+      DocumentSnapshot userSnapshot =
+          await firestore.collection('user').doc(mateUid).get();
+
+      if (!userSnapshot.exists) {
+        throw Exception("메이트 유저 $mateUid 가 존재하지 않습니다.");
+      }
+
+      // 4. WriteBatch를 사용하여 일괄 작업 수행
+      WriteBatch batch = firestore.batch();
+
+      // mateUid와 일치하는 mates 문서를 찾아 acceptTime 추가
+      var targetMateDocRef;
+      for (var doc in matesSnapshot.docs) {
+        if (doc['mateUid'] == mateUid) {
+          targetMateDocRef = doc.reference;
+          batch.update(targetMateDocRef,
+              {'acceptTime': Timestamp.fromDate(DateTime.now())});
+        }
+      }
+
+      // mateUid와 일치하지 않는 나머지 mates 문서 삭제
+      QuerySnapshot allMatesSnapshot = await firestore
+          .collection('posts')
+          .doc(postId)
+          .collection('mates')
+          .get();
+
+      for (var doc in allMatesSnapshot.docs) {
+        if (doc.reference != targetMateDocRef) {
+          batch.delete(doc.reference);
+        }
+      }
+
+      // 5. posts 문서의 'status' 필드를 'matched'로 변경
+      batch.update(postSnapshot.reference, {'status': 'matched'});
+
+      await batch.commit();
+
+      print("매칭 수락 성공. [메이트 Uid: $mateUid , 포스트 Id: $postId]");
+    } catch (e) {
+      print("Error in acceptMatching: $e");
+      throw e;
+    }
+  }
+  // 채팅 목록 가져오기
+  static Stream<QuerySnapshot> getChatsStream(String userId) {
+    return FirebaseFirestore.instance
+        .collection('chats')
+        .where('participants', arrayContains: userId)
+        .snapshots();
+  }
+  // 채팅보내기
+  static Future<void> sendMessage({
+    required String chatId,
+    required String text,
+    required String senderId,
+  }) async {
+    await FirebaseFirestore.instance.collection('chats').doc(chatId).collection('messages').add({
+      'text': text,
+      'createdAt': Timestamp.now(),
+      'senderId': senderId,
+    });
+    await FirebaseFirestore.instance.collection('chats').doc(chatId).update({
+      'lastMessage': text,
+      'lastMessageTime': Timestamp.now(),
+      'lastMessageSender': senderId,
+    });
+  }
+  
+  // 채팅방 날짜 포맷
+  static String formatDate(DateTime dateTime) {
+    DateTime now = DateTime.now();
+    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+    String formattedDate = dateFormat.format(dateTime);
+    String todayFormatted = dateFormat.format(now);
+    String yesterdayFormatted = dateFormat.format(now.subtract(Duration(days: 1)));
+
+    if (formattedDate == todayFormatted) {
+      return '오늘';
+    } else if (formattedDate == yesterdayFormatted) {
+      return '어제';
+    } else if (now.difference(dateTime).inDays < 7) {
+      return DateFormat('EEEE', 'ko_KR').format(dateTime);
+    } else if (now.difference(dateTime).inDays < 14) {
+      return '지난주 ' + DateFormat('EEEE', 'ko_KR').format(dateTime);
+    } else {
+      return DateFormat('yyyy-MM-dd').format(dateTime);
+    }
   }
 }

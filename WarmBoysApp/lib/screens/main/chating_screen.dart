@@ -4,7 +4,7 @@ import '../../widgets/custom_end_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../chating/chat_screen.dart';
-import 'package:intl/intl.dart';
+import '/utils/firebase_helper.dart';
 
 class ChatingScreen extends StatefulWidget {
   @override
@@ -13,26 +13,7 @@ class ChatingScreen extends StatefulWidget {
 
 class _ChatingScreenState extends State<ChatingScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  String formatDate(Timestamp timestamp) {
-    DateTime dateTime = timestamp.toDate();
-    DateTime now = DateTime.now();
-    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
-    String formattedDate = dateFormat.format(dateTime);
-    String todayFormatted = dateFormat.format(now);
-    String yesterdayFormatted = dateFormat.format(now.subtract(Duration(days: 1)));
-    if (formattedDate == todayFormatted) {
-      return '오늘';
-    } else if (formattedDate == yesterdayFormatted) {
-      return '어제';
-    } else if (now.difference(dateTime).inDays < 7) {
-      return DateFormat('EEEE', 'ko_KR').format(dateTime);
-    } else if (now.difference(dateTime).inDays < 14) {
-      return '지난주 ' + DateFormat('EEEE', 'ko_KR').format(dateTime);
-    } else {
-      return DateFormat('yyyy-MM-dd').format(dateTime);
-    }
-  }
+  Map<String, String?> userProfileUrls = {};
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +23,7 @@ class _ChatingScreenState extends State<ChatingScreen> {
         leading: null,
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('chats')
-            .where('participants', arrayContains: _auth.currentUser!.uid)
-            .snapshots(),
+        stream: FirebaseHelper.getChatsStream(_auth.currentUser!.uid),
         builder: (ctx, AsyncSnapshot<QuerySnapshot> chatSnapshot) {
           if (chatSnapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -55,25 +33,48 @@ class _ChatingScreenState extends State<ChatingScreen> {
             itemCount: chatDocs.length,
             itemBuilder: (ctx, index) {
               var chatData = chatDocs[index];
+              var participants = chatData['participants'] as List<dynamic>;
+              var otherUserId = participants.firstWhere((id) => id != _auth.currentUser!.uid, orElse: () => null);
               var lastMessageSender = chatData['lastMessageSender'] == _auth.currentUser!.uid ? '나' : '상대';
-              return Column(
-                children: [
-                  ListTile(
-                    title: Text(lastMessageSender + ': ' +chatData['lastMessage'] ?? ''),
-                    subtitle: Text((chatData['lastMessageTime'] != null
-                        ? formatDate(chatData['lastMessageTime'])
-                        : '')),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChatScreen(chatId: chatData.id),
+
+              return FutureBuilder<String?>(
+                future: _getUserProfileUrl(otherUserId),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return ListTile(
+                      title: Text('$lastMessageSender: ${chatData['lastMessage']}'),
+                      subtitle: Text(chatData['lastMessageTime'] != null
+                          ? FirebaseHelper.formatDate(chatData['lastMessageTime'].toDate())
+                          : ''),
+                    );
+                  }
+                  var userProfileUrl = snapshot.data;
+                  return Column(
+                    children: [
+                      ListTile(
+                        leading: CircleAvatar(
+                          radius: 22,
+                          backgroundImage: userProfileUrl != null && userProfileUrl.isNotEmpty
+                              ? NetworkImage(userProfileUrl)
+                              : const AssetImage('assets/images/default_profile.png') as ImageProvider,
                         ),
-                      );
-                    },
-                  ),
-                  Divider(), // 리스트 항목 구분선
-                ],
+                        title: Text('$lastMessageSender: ${chatData['lastMessage']}'),
+                        subtitle: Text(chatData['lastMessageTime'] != null
+                            ? FirebaseHelper.formatDate(chatData['lastMessageTime'].toDate())
+                            : ''),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatScreen(chatId: chatData.id),
+                            ),
+                          );
+                        },
+                      ),
+                      Divider(), // 리스트 항목 구분선
+                    ],
+                  );
+                },
               );
             },
           );
@@ -81,5 +82,21 @@ class _ChatingScreenState extends State<ChatingScreen> {
       ),
       endDrawer: CustomEndDrawer(),
     );
+  }
+
+  Future<String?> _getUserProfileUrl(String? userId) async {
+    if (userId == null) return null;
+
+    if (userProfileUrls.containsKey(userId)) {
+      return userProfileUrls[userId];
+    } else {
+      final doc = await FirebaseFirestore.instance.collection('user').doc(userId).get();
+      if (doc.exists) {
+        String? imgUrl = doc['imgUrl'];
+        userProfileUrls[userId] = imgUrl;
+        return imgUrl;
+      }
+      return null;
+    }
   }
 }
