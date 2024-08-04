@@ -463,13 +463,8 @@ class _MatchingScreenState extends State<MatchingScreen>
                                         Icon(Icons.person, size: 80),
                                         SizedBox(height: 5),
                                         ElevatedButton(
-                                          onPressed: () async {
-                                            // await FirebaseHelper.cancelApply(
-                                            //     post['postId'], myUid);
-                                            // 페이지 새로 고침
-                                            setState(() {});
-                                          },
-                                          child: Text('신청 취소',
+                                          onPressed: null,
+                                          child: Text('활동 전',
                                               style: TextStyle(
                                                 fontSize: 16,
                                               )),
@@ -714,13 +709,8 @@ class _MatchingScreenState extends State<MatchingScreen>
                                         Icon(Icons.person, size: 80),
                                         SizedBox(height: 5),
                                         ElevatedButton(
-                                          onPressed: () async {
-                                            // await FirebaseHelper.acceptMatching(
-                                            //     post['uid'], post['postId']);
-                                            // 페이지 새로 고침
-                                            setState(() {});
-                                          },
-                                          child: Text('매칭 수락',
+                                          onPressed: null,
+                                          child: Text('활동 전',
                                               style: TextStyle(
                                                 fontSize: 16,
                                               )),
