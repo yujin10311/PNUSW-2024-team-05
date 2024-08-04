@@ -251,6 +251,7 @@ class _MatchingScreenState extends State<MatchingScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
+          // 매칭 전 화면(메이트)
           FutureBuilder<List<Map<String, dynamic>>>(
             future: FirebaseHelper.queryNotMatchedByMate(myUid),
             builder: (context, snapshot) {
@@ -369,7 +370,120 @@ class _MatchingScreenState extends State<MatchingScreen>
               }
             },
           ),
-          Center(child: Text('메이트 - 매칭 후 화면')),
+          // 매칭 후 화면(메이트)
+          FutureBuilder<List<Map<String, dynamic>>>(
+            future: FirebaseHelper.queryMatchedByMate(myUid),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('오류가 발생했습니다: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Center(child: Text('매칭 전 공고가 없습니다.'));
+              } else {
+                final posts = snapshot.data!;
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    setState(() {});
+                  },
+                  child: ListView.builder(
+                    itemCount: posts.length,
+                    itemBuilder: (context, index) {
+                      final post = posts[index];
+                      return GestureDetector(
+                        onTap: () {
+                          _buildSeniorInfoDialog(context, post);
+                        },
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                post['username'],
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              SizedBox(width: 10),
+                                              Text(
+                                                post['acceptTimeText'],
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: const Color.fromARGB(
+                                                      255, 110, 110, 110),
+                                                  // fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                              '${post['rating']} (${post['ratingCount']})',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                              )),
+                                          SizedBox(height: 4),
+                                          Text(
+                                              '장소:  ${post['city']} > ${post['gu']} > ${post['dong']}',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                              )),
+                                          Text(
+                                              '날짜:  ${formatDate(post['startTime'])}',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                              )),
+                                          Text(
+                                              '시간:  ${formatTime(post['startTime'])} ~ ${formatTime(post['endTime'])}',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                              )),
+                                          Text('활동:  ${post['activityType']}',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                    Column(
+                                      children: [
+                                        Icon(Icons.person, size: 80),
+                                        SizedBox(height: 5),
+                                        ElevatedButton(
+                                          onPressed: null,
+                                          child: Text('활동 전',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              )),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+            },
+          ),
         ],
       ),
       endDrawer: CustomEndDrawer(),
@@ -392,6 +506,7 @@ class _MatchingScreenState extends State<MatchingScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
+          // 매칭 전 화면(시니어)
           FutureBuilder<List<Map<String, dynamic>>>(
             future: FirebaseHelper.queryNotMatchedBySenior(myUid),
             builder: (context, snapshot) {
@@ -480,8 +595,10 @@ class _MatchingScreenState extends State<MatchingScreen>
                                         SizedBox(height: 5),
                                         ElevatedButton(
                                           onPressed: () async {
+                                            await FirebaseHelper.acceptMatching(
+                                                post['uid'], post['postId']);
                                             // 페이지 새로 고침
-                                            // setState(() {});
+                                            setState(() {});
                                           },
                                           child: Text('매칭 수락',
                                               style: TextStyle(
@@ -503,7 +620,116 @@ class _MatchingScreenState extends State<MatchingScreen>
               }
             },
           ),
-          Center(child: Text('시니어 - 매칭 후 화면')),
+
+          // 매칭 후 화면(시니어)
+          FutureBuilder<List<Map<String, dynamic>>>(
+            future: FirebaseHelper.queryMatchedBySenior(myUid),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('오류가 발생했습니다: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Center(child: Text('매칭 전 공고가 없습니다.'));
+              } else {
+                final posts = snapshot.data!;
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    setState(() {});
+                  },
+                  child: ListView.builder(
+                    itemCount: posts.length,
+                    itemBuilder: (context, index) {
+                      final post = posts[index];
+                      return GestureDetector(
+                        onTap: () {
+                          _buildMateInfoDialog(context, post);
+                        },
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                post['username'],
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              SizedBox(width: 10),
+                                              Text(
+                                                post['acceptTimeText'],
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: const Color.fromARGB(
+                                                      255, 110, 110, 110),
+                                                  // fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                              '${post['rating']} (${post['ratingCount']})',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              )),
+                                          SizedBox(height: 4),
+                                          Text(
+                                              '날짜:  ${formatDate(post['startTime'])}',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              )),
+                                          Text(
+                                              "시간:  ${formatTime(post['startTime'])} ~ ${formatTime(post['endTime'])}",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              )),
+                                          Text('활동:  ${post['activityType']}',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                    Column(
+                                      children: [
+                                        Icon(Icons.person, size: 80),
+                                        SizedBox(height: 5),
+                                        ElevatedButton(
+                                          onPressed: null,
+                                          child: Text('활동 전',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              )),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+            },
+          ),
         ],
       ),
       endDrawer: CustomEndDrawer(),
