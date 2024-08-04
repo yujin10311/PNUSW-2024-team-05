@@ -3,15 +3,15 @@ import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_end_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../chating/chat_screen.dart';
+import '../chatting/chat_screen.dart';
 import '/utils/firebase_helper.dart';
 
-class ChatingScreen extends StatefulWidget {
+class ChattingScreen extends StatefulWidget {
   @override
-  _ChatingScreenState createState() => _ChatingScreenState();
+  _ChattingScreenState createState() => _ChattingScreenState();
 }
 
-class _ChatingScreenState extends State<ChatingScreen> {
+class _ChattingScreenState extends State<ChattingScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   Map<String, String?> userProfileUrls = {};
   Map<String, String?> userNames = {};

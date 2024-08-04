@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:warm_boys/widgets/custum_alarm.dart'; 
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -15,25 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: leading,
       title: Text(title),
       actions: [
-        IconButton(
-          icon: Icon(Icons.notifications),
-          onPressed: () async {
-            await showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text('알림 버튼이 눌렸습니다.'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text('확인'),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        ),
+        CustomAlarmButton(),
         IconButton(
           icon: Icon(Icons.account_circle),
           onPressed: () {

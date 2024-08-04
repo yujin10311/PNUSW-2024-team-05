@@ -885,5 +885,42 @@ class FirebaseHelper {
       return DateFormat('yyyy-MM-dd').format(dateTime);
     }
   }
+  //알림 기능 메소드
+  static void listenForStatusChanges(String userId) {
+    FirebaseFirestore.instance
+        .collection('posts')
+        .where('seniorUid', isEqualTo: userId)
+        .snapshots()
+        .listen((snapshot) {
+      for (var docChange in snapshot.docChanges) {
+        if (docChange.type == DocumentChangeType.modified) {
+          var postData = docChange.doc.data() as Map<String, dynamic>;
+          _saveAlarm(userId, postData['status'], postData['activityType'], postData['startTime']);
+        }
+      }
+    });
+
+    FirebaseFirestore.instance
+        .collection('posts')
+        .where('mates', arrayContains: userId)
+        .snapshots()
+        .listen((snapshot) {
+      for (var docChange in snapshot.docChanges) {
+        if (docChange.type == DocumentChangeType.modified) {
+          var postData = docChange.doc.data() as Map<String, dynamic>;
+          _saveAlarm(userId, postData['status'], postData['activityType'], postData['startTime']);
+        }
+      }
+    });
+  }
+
+  static Future<void> _saveAlarm(String userId, String status, String activityType, Timestamp startTime) async {
+    await FirebaseFirestore.instance.collection('alarms').doc(userId).collection('userAlarms').add({
+      'status': status,
+      'activityType': activityType,
+      'startTime': startTime,
+      'timestamp': Timestamp.now(),
+    });
+  }
 }
 

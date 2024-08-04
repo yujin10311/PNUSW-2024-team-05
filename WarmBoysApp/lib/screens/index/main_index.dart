@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../main/home_screen.dart';
 import '../main/matching_screen.dart';
-import '../main/chating_screen.dart';
+import '../main/chatting_screen.dart';
 import '../main/exchange_screen.dart';
 
 class MainIndex extends StatefulWidget {
@@ -17,7 +17,7 @@ class _MainIndexState extends State<MainIndex> {
   final List<Widget> _pages = [
     HomeScreen(),
     MatchingScreen(),
-    ChatingScreen(),
+    ChattingScreen(),
     ExchangeScreen(),
   ];
 

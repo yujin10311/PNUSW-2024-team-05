@@ -205,7 +205,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: TextField(
                       controller: _controller,
                       decoration: InputDecoration(
-                        labelText: '메시지 입력...',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
