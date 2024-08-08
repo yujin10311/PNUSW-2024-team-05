@@ -28,13 +28,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> _loadOtherUserProfile() async {
     var chatData = await FirebaseFirestore.instance.collection('chats').doc(widget.chatId).get();
-    var participants = chatData.data()?['participants'] as List<dynamic>;
-    var otherUserId = participants.firstWhere((id) => id != _auth.currentUser!.uid, orElse: () => null);
+    var participants = chatData.data()?['participants'] as List<dynamic>?;
+    if (participants != null) {
+      var otherUserId = participants.firstWhere((id) => id != _auth.currentUser?.uid, orElse: () => null);
 
-    if (otherUserId != null) {
-      otherUserProfileUrl = await _getUserProfileUrl(otherUserId);
-      otherUsername = await _getUsername(otherUserId);
-      setState(() {});
+      if (otherUserId != null) {
+        otherUserProfileUrl = await _getUserProfileUrl(otherUserId);
+        otherUsername = await _getUsername(otherUserId);
+        setState(() {});
+      }
     }
   }
 
@@ -103,7 +105,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   if (chatSnapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
                   }
-                  final chatDocs = chatSnapshot.data?.docs ?? [];
+                  if (!chatSnapshot.hasData || chatSnapshot.data!.docs.isEmpty) {
+                    return Center(child: Text('No messages found.'));
+                  }
+                  final chatDocs = chatSnapshot.data!.docs;
                   DateTime? previousDate;
 
                   return ListView.builder(

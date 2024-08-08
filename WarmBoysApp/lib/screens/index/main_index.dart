@@ -24,33 +24,32 @@ class _MainIndexState extends State<MainIndex> {
   bool _hasNewMessages = false;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String _currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  late StreamSubscription<DocumentSnapshot> _subscription;
 
   @override
   void initState() {
     super.initState();
-    _checkForNewMessages();
+    _subscribeToNewMessages();
   }
 
-  Future<void> _checkForNewMessages() async {
-    final snapshot = await _firestore
-        .collection('chats')
-        .where('participants', arrayContains: _currentUserId)
-        .get();
-    bool hasNewMessages = false;
-    for (var doc in snapshot.docs) {
-      var data = doc.data() as Map<String, dynamic>;
-      var lastMessageReadBy = data['lastMessageReadBy'] as List<dynamic>?;
-      var lastMessageSender = data['lastMessageSender'] as String?;
-      if (lastMessageSender != _currentUserId && (lastMessageReadBy == null || !lastMessageReadBy.contains(_currentUserId))) {
-        hasNewMessages = true;
-        break;
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+
+  void _subscribeToNewMessages() {
+    _subscription = _firestore
+        .collection('alarms')
+        .doc(_currentUserId)
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.exists) {
+        setState(() {
+          _hasNewMessages = snapshot.data()?['hasNewChat'] ?? false;
+        });
       }
-    }
-    if (mounted) {
-      setState(() {
-        _hasNewMessages = hasNewMessages;
-      });
-    }
+    });
   }
 
   @override
@@ -62,9 +61,6 @@ class _MainIndexState extends State<MainIndex> {
         onTap: (index) {
           setState(() {
             _currentIndex = index;
-            if (index == 2) {
-              _markMessagesAsRead();
-            }
           });
         },
         items: [
@@ -109,27 +105,5 @@ class _MainIndexState extends State<MainIndex> {
         showUnselectedLabels: true,
       ),
     );
-  }
-
-  void _markMessagesAsRead() {
-    _firestore
-        .collection('chats')
-        .where('participants', arrayContains: _currentUserId)
-        .get()
-        .then((snapshot) {
-      for (var doc in snapshot.docs) {
-        var data = doc.data() as Map<String, dynamic>;
-        var lastMessageReadBy = (data['lastMessageReadBy'] as List<dynamic>?) ?? [];
-        if (!lastMessageReadBy.contains(_currentUserId)) {
-          lastMessageReadBy.add(_currentUserId);
-          doc.reference.update({'lastMessageReadBy': lastMessageReadBy});
-        }
-      }
-      if (mounted) {
-        setState(() {
-          _hasNewMessages = false;
-        });
-      }
-    });
   }
 }

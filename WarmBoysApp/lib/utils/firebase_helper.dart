@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:warm_boys/providers/custom_auth_provider.dart';
 import 'shared_preferences_helper.dart';
@@ -845,6 +846,58 @@ class FirebaseHelper {
         .collection('chats')
         .where('participants', arrayContains: userId)
         .snapshots();
+  }
+
+  // 채팅방 메시지 확인 여부 업데이트
+  static Future<void> markMessageAsRead(String chatId, String userId) async {
+    final chatDoc =
+        await FirebaseFirestore.instance.collection('chats').doc(chatId).get();
+    final List<dynamic> lastMessageReadBy = chatDoc['lastMessageReadBy'] ?? [];
+
+    if (!lastMessageReadBy.contains(userId)) {
+      lastMessageReadBy.add(userId);
+      await FirebaseFirestore.instance.collection('chats').doc(chatId).update({
+        'lastMessageReadBy': lastMessageReadBy,
+      });
+    }
+  }
+
+//이메일을 통한 채팅방 생성
+  static Future<String?> createChatWithEmail(String email) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    try {
+      // 상대방 사용자 정보를 이메일로 찾기
+      QuerySnapshot userSnapshot = await _firestore
+          .collection('user')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+
+      if (userSnapshot.docs.isEmpty) {
+        return null; // 상대방 사용자를 찾을 수 없음
+      }
+
+      String otherUserId = userSnapshot.docs.first.id;
+
+      // 현재 사용자 ID
+      String currentUserId = _auth.currentUser!.uid;
+
+      // 채팅방 생성
+      DocumentReference chatDocRef = await _firestore.collection('chats').add({
+        'participants': [currentUserId, otherUserId],
+        'lastMessage': '',
+        'lastMessageTime': Timestamp.now(),
+        'lastMessageSender': currentUserId,
+        'lastMessageReadBy': [],
+      });
+
+      return chatDocRef.id;
+    } catch (e) {
+      print('Error creating chat: $e');
+      return null;
+    }
   }
 
   // 채팅보내기
