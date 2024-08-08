@@ -342,13 +342,41 @@ class _MatchingScreenState extends State<MatchingScreen>
                                     Column(
                                       children: [
                                         (post['imgUrl'] != '')
-                                            ? CircleAvatar(
-                                                radius: 40,
-                                                backgroundImage: NetworkImage(
-                                                    post['imgUrl']))
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Dialog(
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(); // 클릭 시 다이얼로그 닫기
+                                                          },
+                                                          child: Center(
+                                                            child: Image
+                                                                .network(post[
+                                                                    'imgUrl']), // 확대된 이미지
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                child: CircleAvatar(
+                                                  radius: 40,
+                                                  backgroundImage: NetworkImage(
+                                                      post['imgUrl']),
+                                                ),
+                                              )
                                             : CircleAvatar(
                                                 radius: 40,
-                                                child: Icon(Icons.person)),
+                                                child: Icon(Icons.person),
+                                              ),
                                         SizedBox(height: 5),
                                         ElevatedButton(
                                           onPressed: () async {
@@ -599,13 +627,41 @@ class _MatchingScreenState extends State<MatchingScreen>
                                     Column(
                                       children: [
                                         (post['imgUrl'] != '')
-                                            ? CircleAvatar(
-                                                radius: 40,
-                                                backgroundImage: NetworkImage(
-                                                    post['imgUrl']))
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Dialog(
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(); // 클릭 시 다이얼로그 닫기
+                                                          },
+                                                          child: Center(
+                                                            child: Image
+                                                                .network(post[
+                                                                    'imgUrl']), // 확대된 이미지
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                child: CircleAvatar(
+                                                  radius: 40,
+                                                  backgroundImage: NetworkImage(
+                                                      post['imgUrl']),
+                                                ),
+                                              )
                                             : CircleAvatar(
                                                 radius: 40,
-                                                child: Icon(Icons.person)),
+                                                child: Icon(Icons.person),
+                                              ),
                                         SizedBox(height: 5),
                                         ElevatedButton(
                                           onPressed: () async {

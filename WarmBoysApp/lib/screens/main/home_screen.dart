@@ -230,11 +230,38 @@ class _HomeScreenState extends State<HomeScreen> {
                   final postcard = _postcards[index];
                   return Card(
                     child: ListTile(
-                      leading: CircleAvatar(
-                          radius: 30,
-                          backgroundImage: postcard['imgUrl'] != ''
-                              ? NetworkImage(postcard['imgUrl'])
-                              : null),
+                      leading: (postcard['imgUrl'] != '')
+                          ? GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog(
+                                      backgroundColor: Colors.transparent,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context)
+                                              .pop(); // 클릭 시 다이얼로그 닫기
+                                        },
+                                        child: Center(
+                                          child: Image.network(
+                                              postcard['imgUrl']), // 확대된 이미지
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundImage:
+                                    NetworkImage(postcard['imgUrl']),
+                              ),
+                            )
+                          : CircleAvatar(
+                              radius: 40,
+                              child: Icon(Icons.person),
+                            ),
                       title: Text(
                         postcard['seniorName'],
                         style: TextStyle(
