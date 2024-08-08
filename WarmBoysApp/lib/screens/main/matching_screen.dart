@@ -341,7 +341,14 @@ class _MatchingScreenState extends State<MatchingScreen>
                                     ),
                                     Column(
                                       children: [
-                                        Icon(Icons.person, size: 80),
+                                        (post['imgUrl'] != '')
+                                            ? CircleAvatar(
+                                                radius: 40,
+                                                backgroundImage: NetworkImage(
+                                                    post['imgUrl']))
+                                            : CircleAvatar(
+                                                radius: 40,
+                                                child: Icon(Icons.person)),
                                         SizedBox(height: 5),
                                         ElevatedButton(
                                           onPressed: () async {
@@ -591,7 +598,14 @@ class _MatchingScreenState extends State<MatchingScreen>
                                     ),
                                     Column(
                                       children: [
-                                        Icon(Icons.person, size: 80),
+                                        (post['imgUrl'] != '')
+                                            ? CircleAvatar(
+                                                radius: 40,
+                                                backgroundImage: NetworkImage(
+                                                    post['imgUrl']))
+                                            : CircleAvatar(
+                                                radius: 40,
+                                                child: Icon(Icons.person)),
                                         SizedBox(height: 5),
                                         ElevatedButton(
                                           onPressed: () async {

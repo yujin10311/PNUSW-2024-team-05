@@ -103,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         // 공고 작성자 정보
                         String seniorUid = uid ?? '';
                         String seniorName = userInfo?['username'] ?? '';
+                        String imgUrl = userInfo?['imgUrl'] ?? '';
                         double rating = userInfo?['rating'] ?? 0.0;
                         int ratingCount = userInfo?['ratingCount'] ?? 0;
                         String dependentType = userInfo?['dependentType'] ?? '';
@@ -131,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               'myUid': myUid,
                               'seniorUid': seniorUid,
                               'seniorName': seniorName,
+                              'imgUrl': imgUrl,
                               'city': city,
                               'gu': gu,
                               'dong': dong,
@@ -229,9 +231,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Card(
                     child: ListTile(
                       leading: CircleAvatar(
-                        radius: 30,
-                        child: Icon(Icons.person, size: 30),
-                      ),
+                          radius: 30,
+                          backgroundImage: postcard['imgUrl'] != ''
+                              ? NetworkImage(postcard['imgUrl'])
+                              : null),
                       title: Text(
                         postcard['seniorName'],
                         style: TextStyle(
@@ -261,6 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         // 공고 작성자 정보
                         String seniorUid = postcard['seniorUid'];
                         String seniorName = postcard['seniorName'];
+                        String imgUrl = postcard['imgUrl'] ?? '';
                         double rating = postcard['rating'];
                         int ratingCount = postcard['ratingCount'];
                         String dependentType = postcard['dependentType'];
@@ -289,6 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               'myUid': myUid,
                               'seniorUid': seniorUid,
                               'seniorName': seniorName,
+                              'imgUrl': imgUrl,
                               'city': city,
                               'gu': gu,
                               'dong': dong,

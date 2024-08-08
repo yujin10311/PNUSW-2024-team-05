@@ -12,6 +12,7 @@ class PostScreen extends StatefulWidget {
   final String postId;
   final String seniorUid;
   final String seniorName;
+  final String imgUrl;
   final String city;
   final String gu;
   final String dong;
@@ -34,6 +35,7 @@ class PostScreen extends StatefulWidget {
     required this.postId,
     required this.seniorUid,
     required this.seniorName,
+    required this.imgUrl,
     required this.city,
     required this.gu,
     required this.dong,
@@ -220,7 +222,8 @@ class _PostScreenState extends State<PostScreen> {
           children: [
             CircleAvatar(
               radius: 40,
-              child: Icon(Icons.person, size: 40),
+              backgroundImage:
+                  (widget.imgUrl != null) ? NetworkImage(widget.imgUrl) : null,
             ),
             SizedBox(width: 20),
             Expanded(
@@ -453,6 +456,7 @@ class _PostScreenState extends State<PostScreen> {
                         postId: widget.postId,
                         seniorUid: widget.seniorUid,
                         seniorName: widget.seniorName,
+                        imgUrl: widget.imgUrl,
                         city: widget.city,
                         gu: widget.gu,
                         dong: widget.dong,
@@ -553,6 +557,7 @@ class _PostScreenState extends State<PostScreen> {
                                 postId: widget.postId,
                                 seniorUid: widget.seniorUid,
                                 seniorName: widget.seniorName,
+                                imgUrl: widget.imgUrl,
                                 city: widget.city,
                                 gu: widget.gu,
                                 dong: widget.dong,
@@ -690,6 +695,7 @@ class _PostScreenState extends State<PostScreen> {
                   postId: widget.postId,
                   seniorUid: widget.seniorUid,
                   seniorName: widget.seniorName,
+                  imgUrl: widget.imgUrl,
                   city: widget.city,
                   gu: widget.gu,
                   dong: widget.dong,
@@ -729,6 +735,7 @@ class _PostScreenState extends State<PostScreen> {
                   postId: widget.postId,
                   seniorUid: widget.seniorUid,
                   seniorName: widget.seniorName,
+                  imgUrl: widget.imgUrl,
                   city: widget.city,
                   gu: widget.gu,
                   dong: widget.dong,

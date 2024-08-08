@@ -28,10 +28,10 @@ class ProfileCard extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
-            CircleAvatar(
-              radius: 40,
-              child: Icon(Icons.person, size: 40),
-            ),
+            (imgUrl != '')
+                ? CircleAvatar(
+                    radius: 40, backgroundImage: NetworkImage(imgUrl))
+                : CircleAvatar(radius: 40, child: Icon(Icons.person)),
             SizedBox(width: 20),
             Expanded(
               child: Column(

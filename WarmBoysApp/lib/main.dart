@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
                 postId: args['postId'],
                 seniorUid: args['seniorUid'],
                 seniorName: args['seniorName'],
+                imgUrl: args['imgUrl'],
                 city: args['city'],
                 gu: args['gu'],
                 dong: args['dong'],

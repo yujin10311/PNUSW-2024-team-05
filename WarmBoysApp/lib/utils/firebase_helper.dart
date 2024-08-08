@@ -202,6 +202,7 @@ class FirebaseHelper {
         results.add({
           'seniorUid': seniorUid,
           'seniorName': userData['username'] ?? '',
+          'imgUrl': userData['imgUrl'] ?? '',
           'rating': userData['rating'] ?? 0.0,
           'ratingCount': userData['ratingCount'] ?? 0,
           'dependentType': userData['dependentType'] ?? '',
