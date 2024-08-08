@@ -1,5 +1,16 @@
+import 'dart:io';
+import 'dart:math';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:warm_boys/providers/custom_auth_provider.dart';
 import '../../utils/shared_preferences_helper.dart';
+import '../../providers/custom_auth_provider.dart';
+import 'package:image/image.dart' as img;
+import 'package:image_picker/image_picker.dart';
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
+import 'package:warm_boys/utils/recognition.dart';
+import 'package:warm_boys/utils/recognizer.dart';
 
 // 회원가입 스크린 3(메이트)
 class RegisterMateScreen3 extends StatefulWidget {
@@ -19,13 +30,132 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
   late TextEditingController _phoneNumberController;
   late TextEditingController _additionalInfoController;
 
+  // 얼굴 등록 관련 변수
+  late ImagePicker imagePicker;
+  File? _image;
+  late FaceDetector faceDetector;
+  late Recognizer recognizer;
+  List<Face> faces = [];
+  var image;
+  String? _imgEmbd;
+
   List<String> _ageOptions = List.generate(
       46, (index) => '${19 + index}세(${DateTime.now().year - (19 + index)}년생)');
 
   bool get _isFormValid {
     return _nameController.text.isNotEmpty &&
         _selectedAge != null &&
-        _phoneNumberController.text.isNotEmpty;
+        _phoneNumberController.text.isNotEmpty &&
+        _image != null &&
+        _imgEmbd != null;
+  }
+
+// 갤러리에서 이미지 선택
+  _imgFromGallery() async {
+    XFile? pickedFile =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+        print(pickedFile.path);
+        doFaceDetection();
+      });
+    }
+  }
+
+  doFaceDetection() async {
+    // _image를 File형에서 InputImage형으로 변환
+    InputImage inputImage = InputImage.fromFile(_image!);
+
+    // InputImage형으로 변환한 _image를 얼굴 검출기에 넣어 '얼굴들의 각 영역'을 검출함.
+    faces = await faceDetector.processImage(inputImage);
+
+    // _image을 Image형으로 가져온 image 변수
+    image = await decodeImageFromList(_image!.readAsBytesSync());
+
+    // 얼굴이 여러 개인 경우 알람을 띄움
+    if (faces.length > 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('이미지에 여러 얼굴이 포함되어 있습니다.')),
+      );
+      _image = null;
+      return;
+    }
+
+    // 인식된 얼굴이 하나인 경우 처리
+    if (faces.isNotEmpty) {
+      Face face = faces.first;
+      final Rect boundingBox = face.boundingBox;
+      print("Rect = " + boundingBox.toString());
+
+      // 바운딩 박스가 화면 밖으로 벗어난 상황, 처리 과정
+      num left = boundingBox.left < 0 ? 0 : boundingBox.left;
+      num top = boundingBox.top < 0 ? 0 : boundingBox.top;
+      num right =
+          boundingBox.right > image.width ? image.width - 1 : boundingBox.right;
+      num bottom = boundingBox.bottom > image.height
+          ? image.height - 1
+          : boundingBox.bottom;
+      num width = right - left;
+      num height = bottom - top;
+
+      final bytes = _image!.readAsBytesSync(); // _image Bytes값(Uint8List)를 기록
+      img.Image? faceImg = img.decodeImage(bytes!);
+      img.Image croppedFace = img.copyCrop(faceImg!,
+          x: left.toInt(),
+          y: top.toInt(),
+          width: width.toInt(),
+          height: height.toInt());
+      Recognition recognition = recognizer.recognize(croppedFace, boundingBox);
+      showFaceRegistrationDialogue(
+          Uint8List.fromList(img.encodeBmp(croppedFace)), recognition);
+    }
+  }
+
+  showFaceRegistrationDialogue(Uint8List croppedFace, Recognition recognition) {
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        final customAuthProvider = Provider.of<CustomAuthProvider>(ctx);
+        return AlertDialog(
+          title: const Text("Face Registration", textAlign: TextAlign.center),
+          alignment: Alignment.center,
+          content: SizedBox(
+            height: 340,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                Image.memory(
+                  croppedFace,
+                  width: 200,
+                  height: 200,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                    onPressed: () async {
+                      customAuthProvider.setImage(_image);
+                      SharedPreferencesHelper.saveData(
+                          '_imgEmbd', recognition.embeddings.join(','));
+                      this._imgEmbd = recognition.embeddings.join(',');
+                      print("saved _imgEmbd: ${_imgEmbd}");
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        minimumSize: const Size(200, 40)),
+                    child: const Text("완료"))
+              ],
+            ),
+          ),
+          contentPadding: EdgeInsets.zero,
+        );
+      },
+    );
   }
 
   @override
@@ -35,6 +165,16 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
     _phoneNumberController = TextEditingController();
     _additionalInfoController = TextEditingController();
     _loadFormData();
+
+    imagePicker = ImagePicker();
+
+    // 얼굴 검출기 초기화
+    final options =
+        FaceDetectorOptions(performanceMode: FaceDetectorMode.accurate);
+    faceDetector = FaceDetector(options: options);
+
+    // 인식기 초기화
+    recognizer = Recognizer();
   }
 
   @override
@@ -96,19 +236,27 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                 ),
               ),
               SizedBox(height: 10),
-              Center(
-                child: Container(
-                  width: 200,
-                  height: 200,
-                  color: Colors.grey[300],
-                  child: Icon(Icons.photo, size: 100, color: Colors.grey[700]),
-                ),
-              ),
+              _image != null
+                  ? Center(
+                      child: Container(
+                      width: 200,
+                      child: Image.file(_image!),
+                    ))
+                  : Center(
+                      child: Container(
+                        width: 200,
+                        height: 200,
+                        color: Colors.grey[300],
+                        child: Icon(Icons.photo,
+                            size: 100, color: Colors.grey[700]),
+                      ),
+                    ),
               SizedBox(height: 10),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    // 사진 등록 기능 추가 필요
+                    // 사진 등록 기능 추가
+                    _imgFromGallery();
                   },
                   child: Text('사진 등록'),
                 ),

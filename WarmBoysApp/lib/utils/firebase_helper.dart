@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:warm_boys/providers/custom_auth_provider.dart';
 import 'shared_preferences_helper.dart';
 import 'package:intl/intl.dart';
+import '../providers/custom_auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class FirebaseHelper {
   final Map<String, DateTime> stringToDate = {
@@ -75,13 +79,20 @@ class FirebaseHelper {
   }
 
   // '시니어' 회원 정보 저장
-  static Future<void> saveSenior(String uid) async {
+  static Future<void> saveSenior(
+      String uid, CustomAuthProvider customAuthProvider) async {
     final prefs = await SharedPreferencesHelper.getAll();
 
     bool withPet = await SharedPreferencesHelper.getBool('_withPet') ?? false;
     bool withCam = await SharedPreferencesHelper.getBool('_withCam') ?? false;
 
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    String imgUrl = "";
+    if (customAuthProvider.image != null) {
+      final ref = FirebaseStorage.instance.ref().child('프로필 사진/$uid.jpg');
+      await ref.putFile(customAuthProvider.image!);
+      imgUrl = await ref.getDownloadURL();
+    }
 
     final Map<String, dynamic> userData = {
       'username': prefs['_username'] ?? '',
@@ -91,8 +102,8 @@ class FirebaseHelper {
       'isVerified': false,
       'age': prefs['_age'] ?? '',
       'gender': prefs['_gender'] ?? '',
-      'imgUrl': '',
-      'imgEmbd': '',
+      'imgUrl': imgUrl,
+      'imgEmbd': prefs['_imgEmbd'],
       'phoneNum': prefs['_phoneNum'] ?? '',
       'phoneNum2': prefs['_phoneNum2'] ?? '',
       'city': prefs['_city'] ?? '',
@@ -115,10 +126,18 @@ class FirebaseHelper {
   }
 
   // '메이트' 회원 정보 저장
-  static Future<void> saveMate(String uid) async {
+  static Future<void> saveMate(
+      String uid, CustomAuthProvider customAuthProvider) async {
     final prefs = await SharedPreferencesHelper.getAll();
 
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    String imgUrl = "";
+    if (customAuthProvider.image != null) {
+      final ref = FirebaseStorage.instance.ref().child('프로필 사진/$uid.jpg');
+      await ref.putFile(customAuthProvider.image!);
+      imgUrl = await ref.getDownloadURL();
+    }
 
     final Map<String, dynamic> userData = {
       'username': prefs['_username'] ?? '',
@@ -128,8 +147,8 @@ class FirebaseHelper {
       'isVerified': false,
       'age': prefs['_age'] ?? '',
       'gender': prefs['_gender'] ?? '',
-      'imgUrl': '',
-      'imgEmbd': '',
+      'imgUrl': imgUrl,
+      'imgEmbd': prefs['_imgEmbd'],
       'phoneNum': prefs['_phoneNum'] ?? '',
       'city': prefs['_city'] ?? '',
       'gu': prefs['_gu'] ?? '',
@@ -819,6 +838,7 @@ class FirebaseHelper {
       throw e;
     }
   }
+
   // 채팅 목록 가져오기
   static Stream<QuerySnapshot> getChatsStream(String userId) {
     return FirebaseFirestore.instance
@@ -826,13 +846,18 @@ class FirebaseHelper {
         .where('participants', arrayContains: userId)
         .snapshots();
   }
+
   // 채팅보내기
   static Future<void> sendMessage({
     required String chatId,
     required String text,
     required String senderId,
   }) async {
-    await FirebaseFirestore.instance.collection('chats').doc(chatId).collection('messages').add({
+    await FirebaseFirestore.instance
+        .collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .add({
       'text': text,
       'createdAt': Timestamp.now(),
       'senderId': senderId,
@@ -844,14 +869,15 @@ class FirebaseHelper {
       'lastMessageReadBy': [senderId], // 메시지를 보낸 사용자로 초기화
     });
   }
-  
+
   // 채팅방 날짜 포맷
   static String formatDate(DateTime dateTime) {
     DateTime now = DateTime.now();
     DateFormat dateFormat = DateFormat('yyyy-MM-dd');
     String formattedDate = dateFormat.format(dateTime);
     String todayFormatted = dateFormat.format(now);
-    String yesterdayFormatted = dateFormat.format(now.subtract(Duration(days: 1)));
+    String yesterdayFormatted =
+        dateFormat.format(now.subtract(Duration(days: 1)));
 
     if (formattedDate == todayFormatted) {
       return '오늘';
@@ -865,7 +891,7 @@ class FirebaseHelper {
       return DateFormat('yyyy-MM-dd').format(dateTime);
     }
   }
-  
+
   // 채팅방 시간 포맷
   static String formatTime(DateTime dateTime) {
     DateTime now = DateTime.now();
@@ -885,6 +911,7 @@ class FirebaseHelper {
       return DateFormat('yyyy-MM-dd').format(dateTime);
     }
   }
+
   //알림 기능 메소드
   static void listenForStatusChanges(String userId) {
     FirebaseFirestore.instance
@@ -895,7 +922,8 @@ class FirebaseHelper {
       for (var docChange in snapshot.docChanges) {
         if (docChange.type == DocumentChangeType.modified) {
           var postData = docChange.doc.data() as Map<String, dynamic>;
-          _saveAlarm(userId, postData['status'], postData['activityType'], postData['startTime']);
+          _saveAlarm(userId, postData['status'], postData['activityType'],
+              postData['startTime']);
         }
       }
     });
@@ -908,14 +936,20 @@ class FirebaseHelper {
       for (var docChange in snapshot.docChanges) {
         if (docChange.type == DocumentChangeType.modified) {
           var postData = docChange.doc.data() as Map<String, dynamic>;
-          _saveAlarm(userId, postData['status'], postData['activityType'], postData['startTime']);
+          _saveAlarm(userId, postData['status'], postData['activityType'],
+              postData['startTime']);
         }
       }
     });
   }
 
-  static Future<void> _saveAlarm(String userId, String status, String activityType, Timestamp startTime) async {
-    await FirebaseFirestore.instance.collection('alarms').doc(userId).collection('userAlarms').add({
+  static Future<void> _saveAlarm(String userId, String status,
+      String activityType, Timestamp startTime) async {
+    await FirebaseFirestore.instance
+        .collection('alarms')
+        .doc(userId)
+        .collection('userAlarms')
+        .add({
       'status': status,
       'activityType': activityType,
       'startTime': startTime,
@@ -923,4 +957,3 @@ class FirebaseHelper {
     });
   }
 }
-

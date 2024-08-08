@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:warm_boys/providers/custom_auth_provider.dart';
 import '../../utils/shared_preferences_helper.dart';
 import '../../utils/firebase_helper.dart';
+import '../../providers/custom_auth_provider.dart';
+import 'package:provider/provider.dart';
 
 // 회원가입 스크린 6(이메일, 비밀번호)
 class RegisterEmailpasswordScreen6 extends StatefulWidget {
@@ -51,7 +54,7 @@ class _RegisterEmailpasswordScreen6State
     super.dispose();
   }
 
-  Future<void> _register() async {
+  Future<void> _register(CustomAuthProvider customAuthProvider) async {
     setState(() {
       _isLoading = true;
     });
@@ -76,10 +79,12 @@ class _RegisterEmailpasswordScreen6State
 
         if (memberType == '시니어') {
           // Firestore에 시니어 데이터 저장
-          await FirebaseHelper.saveSenior(userCredential.user!.uid);
+          await FirebaseHelper.saveSenior(
+              userCredential.user!.uid, customAuthProvider);
         } else if (memberType == '메이트') {
           // Firestore에 메이트 데이터 저장
-          await FirebaseHelper.saveMate(userCredential.user!.uid);
+          await FirebaseHelper.saveMate(
+              userCredential.user!.uid, customAuthProvider);
         }
 
         // 콘솔창에 shared preference 정보 모두 삭제
@@ -131,6 +136,7 @@ class _RegisterEmailpasswordScreen6State
 
   @override
   Widget build(BuildContext context) {
+    final customAuthProvider = Provider.of<CustomAuthProvider>(context);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false, // 기본 뒤로 가기 버튼을 비활성화
@@ -160,7 +166,8 @@ class _RegisterEmailpasswordScreen6State
         child: _isLoading
             ? Center(child: CircularProgressIndicator())
             : ElevatedButton(
-                onPressed: _isFormValid ? _register : null,
+                onPressed:
+                    _isFormValid ? () => _register(customAuthProvider) : null,
                 child: Text('다음'),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
