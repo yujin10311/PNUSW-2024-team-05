@@ -220,11 +220,35 @@ class _PostScreenState extends State<PostScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundImage:
-                  (widget.imgUrl != null) ? NetworkImage(widget.imgUrl) : null,
-            ),
+            (widget.imgUrl != '')
+                ? GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            backgroundColor: Colors.transparent,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pop(); // 클릭 시 다이얼로그 닫기
+                              },
+                              child: Center(
+                                child: Image.network(widget.imgUrl), // 확대된 이미지
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 40,
+                      backgroundImage: NetworkImage(widget.imgUrl),
+                    ),
+                  )
+                : CircleAvatar(
+                    radius: 40,
+                    child: Icon(Icons.person),
+                  ),
             SizedBox(width: 20),
             Expanded(
               child: Column(

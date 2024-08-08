@@ -29,9 +29,34 @@ class ProfileCard extends StatelessWidget {
         child: Row(
           children: [
             (imgUrl != '')
-                ? CircleAvatar(
-                    radius: 40, backgroundImage: NetworkImage(imgUrl))
-                : CircleAvatar(radius: 40, child: Icon(Icons.person)),
+                ? GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            backgroundColor: Colors.transparent,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pop(); // 클릭 시 다이얼로그 닫기
+                              },
+                              child: Center(
+                                child: Image.network(imgUrl), // 확대된 이미지
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 40,
+                      backgroundImage: NetworkImage(imgUrl),
+                    ),
+                  )
+                : CircleAvatar(
+                    radius: 40,
+                    child: Icon(Icons.person),
+                  ),
             SizedBox(width: 20),
             Expanded(
               child: Column(
