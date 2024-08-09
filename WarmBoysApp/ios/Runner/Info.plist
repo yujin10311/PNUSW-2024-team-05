@@ -26,10 +26,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>reason</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>reason</string>
+    <string>사진을 선택하기 위해 사진 라이브러리 접근 권한이 필요합니다.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>사진을 찍기 위해 카메라 접근 권한이 필요합니다.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>사진을 저장하기 위해 사진 라이브러리 접근 권한이 필요합니다.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

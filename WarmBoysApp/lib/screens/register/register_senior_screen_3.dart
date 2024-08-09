@@ -65,10 +65,26 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
   _imgFromCamera() async {
     XFile? pickedFile = await imagePicker.pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
-      setState(() {
+      setState(() async {
         _image = File(pickedFile.path);
+
+        // 이미지 회전 처리
+        await _fixImageOrientation();
+
         doFaceDetection();
       });
+    }
+  }
+
+  // 이미지 회전 처리
+  Future<void> _fixImageOrientation() async {
+    final bytes = await _image!.readAsBytes();
+    img.Image? originalImage = img.decodeImage(bytes);
+
+    if (originalImage != null) {
+      img.Image orientedImage = img.bakeOrientation(originalImage);
+      _image = File(_image!.path)
+        ..writeAsBytesSync(img.encodeJpg(orientedImage));
     }
   }
 
