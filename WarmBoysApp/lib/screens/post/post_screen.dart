@@ -5,6 +5,7 @@ import '../../widgets/member_symptom_scrollview.dart';
 import '../../widgets/member_details_scrollview.dart';
 import '../../widgets/autowrap_text_box.dart';
 import '../../utils/firebase_helper.dart';
+import '../../widgets/profile_card.dart';
 
 class PostScreen extends StatefulWidget {
   final String memberType;
@@ -165,7 +166,16 @@ class _PostScreenState extends State<PostScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildProfileCard(),
+              ProfileCard(
+                imgUrl: widget.imgUrl,
+                username: widget.seniorName,
+                uid: widget.seniorUid,
+                city: widget.city,
+                gu: widget.gu,
+                dong: widget.dong,
+                rating: widget.rating,
+                ratingCount: widget.ratingCount,
+              ),
               SizedBox(height: 30),
               _buildConditionalSection(),
               SizedBox(height: 30),
@@ -209,70 +219,6 @@ class _PostScreenState extends State<PostScreen> {
               MemberSymptomScrollview(symptoms: [widget.walkingType])
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProfileCard() {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            (widget.imgUrl != '')
-                ? GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            backgroundColor: Colors.transparent,
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pop(); // 클릭 시 다이얼로그 닫기
-                              },
-                              child: Center(
-                                child: Image.network(widget.imgUrl), // 확대된 이미지
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: CircleAvatar(
-                      radius: 40,
-                      backgroundImage: NetworkImage(widget.imgUrl),
-                    ),
-                  )
-                : CircleAvatar(
-                    radius: 40,
-                    child: Icon(Icons.person),
-                  ),
-            SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(widget.seniorName,
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  Text('${widget.city} > ${widget.gu} > ${widget.dong}'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                          '${widget.rating.toStringAsFixed(2)} (${widget.ratingCount})'),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text('리뷰'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
       ),
     );

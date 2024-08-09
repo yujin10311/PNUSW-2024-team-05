@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'rating_stars.dart';
 
 class ProfileCard extends StatelessWidget {
   final String imgUrl;
@@ -62,17 +63,25 @@ class ProfileCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(username,
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  Text('${city} > ${gu} > ${dong}'),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('${rating.toStringAsFixed(2)} (${ratingCount})'),
+                      Text(username,
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
                       TextButton(
                         onPressed: () {},
                         child: Text('리뷰'),
+                      ),
+                    ],
+                  ),
+                  Text('${city} > ${gu} > ${dong}'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      RatingStars(rating: rating),
+                      Text(
+                        "${rating.toStringAsFixed(2)} (${ratingCount})",
+                        style: TextStyle(fontSize: 16),
                       ),
                     ],
                   ),
