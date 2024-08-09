@@ -5,6 +5,7 @@ import '../../providers/custom_auth_provider.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_end_drawer.dart';
 import '../../utils/firebase_helper.dart';
+import '../../widgets/rating_stars.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -274,9 +275,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             "${postcard['city']} > ${postcard['gu']} > ${postcard['dong']}",
                             style: TextStyle(fontSize: 16),
                           ),
-                          Text(
-                            "${postcard['rating'].toStringAsFixed(2)} (${postcard['ratingCount']})",
-                            style: TextStyle(fontSize: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              RatingStars(rating: postcard['rating']),
+                              Text(
+                                "${postcard['rating'].toStringAsFixed(2)} (${postcard['ratingCount']})",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
                           ),
                           Text(
                             "${formatDate(postcard['startTime'])} / ${formatTime(postcard['startTime'])} ~ ${formatTime(postcard['endTime'])}",

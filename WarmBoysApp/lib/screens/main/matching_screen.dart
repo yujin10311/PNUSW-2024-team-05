@@ -11,6 +11,7 @@ import '../../widgets/member_symptom_scrollview.dart';
 import '../../widgets/autowrap_text_box.dart';
 import '../activity/activity_start_screen.dart';
 import '../activity/activity_end_screen.dart';
+import '../../widgets/rating_stars.dart';
 
 class MatchingScreen extends StatefulWidget {
   @override
@@ -315,11 +316,18 @@ class _MatchingScreenState extends State<MatchingScreen>
                                             ],
                                           ),
                                           SizedBox(height: 4),
-                                          Text(
-                                              '${post['rating']} (${post['ratingCount']})',
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                              )),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              RatingStars(
+                                                  rating: post['rating']),
+                                              Text(
+                                                "${post['rating'].toStringAsFixed(2)} (${post['ratingCount']})",
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                            ],
+                                          ),
                                           SizedBox(height: 4),
                                           Text(
                                               '장소:  ${post['city']} > ${post['gu']} > ${post['dong']}',
@@ -476,11 +484,18 @@ class _MatchingScreenState extends State<MatchingScreen>
                                             ],
                                           ),
                                           SizedBox(height: 4),
-                                          Text(
-                                              '${post['rating']} (${post['ratingCount']})',
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                              )),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              RatingStars(
+                                                  rating: post['rating']),
+                                              Text(
+                                                "${post['rating'].toStringAsFixed(2)} (${post['ratingCount']})",
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                            ],
+                                          ),
                                           SizedBox(height: 4),
                                           Text(
                                               '장소:  ${post['city']} > ${post['gu']} > ${post['dong']}',
@@ -649,11 +664,18 @@ class _MatchingScreenState extends State<MatchingScreen>
                                             ],
                                           ),
                                           SizedBox(height: 4),
-                                          Text(
-                                              '${post['rating']} (${post['ratingCount']})',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                              )),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              RatingStars(
+                                                  rating: post['rating']),
+                                              Text(
+                                                "${post['rating'].toStringAsFixed(2)} (${post['ratingCount']})",
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                            ],
+                                          ),
                                           SizedBox(height: 4),
                                           Text(
                                               '날짜:  ${formatDate(post['startTime'])}',
@@ -799,11 +821,18 @@ class _MatchingScreenState extends State<MatchingScreen>
                                             ],
                                           ),
                                           SizedBox(height: 4),
-                                          Text(
-                                              '${post['rating']} (${post['ratingCount']})',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                              )),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              RatingStars(
+                                                  rating: post['rating']),
+                                              Text(
+                                                "${post['rating'].toStringAsFixed(2)} (${post['ratingCount']})",
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                            ],
+                                          ),
                                           SizedBox(height: 4),
                                           Text(
                                               '날짜:  ${formatDate(post['startTime'])}',
