@@ -516,6 +516,13 @@ class _MatchingScreenState extends State<MatchingScreen>
                                               style: TextStyle(
                                                 fontSize: 13,
                                               )),
+                                          SizedBox(height: 5),
+                                          Text(
+                                            '크레딧: ${post['credit'].toString()}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -559,9 +566,29 @@ class _MatchingScreenState extends State<MatchingScreen>
                                               ),
                                         SizedBox(height: 10),
                                         ElevatedButton(
-                                          onPressed: null,
+                                          onPressed: post['status'] == 'matched'
+                                              ? () {
+                                                  // '활동 시작' 버튼을 눌렀을 때의 동작
+                                                }
+                                              : post['status'] == 'activated'
+                                                  ? () {
+                                                      // '활동 중' 버튼을 눌렀을 때의 동작
+                                                    }
+                                                  : post['status'] == 'finished'
+                                                      ? () {
+                                                          // '활동 끝' 버튼을 눌렀을 때의 동작
+                                                        }
+                                                      : null, // 기타 상태일 때는 비활성화
+
                                           child: Text(
-                                            '활동 전',
+                                            post['status'] == 'matched'
+                                                ? '활동 시작'
+                                                : post['status'] == 'activated'
+                                                    ? '활동 중'
+                                                    : post['status'] ==
+                                                            'finished'
+                                                        ? '활동 끝'
+                                                        : '활동 전', // 기본값으로 '활동 전'을 표시
                                             style: TextStyle(
                                               fontSize: 16,
                                             ),
@@ -892,10 +919,19 @@ class _MatchingScreenState extends State<MatchingScreen>
                                         SizedBox(height: 5),
                                         ElevatedButton(
                                           onPressed: null,
-                                          child: Text('활동 전',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                              )),
+                                          child: Text(
+                                            post['status'] == 'matched'
+                                                ? '활동 시작'
+                                                : post['status'] == 'activated'
+                                                    ? '활동 중'
+                                                    : post['status'] ==
+                                                            'finished'
+                                                        ? '활동 끝'
+                                                        : '활동 전', // 기본값으로 '활동 전'을 표시
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),

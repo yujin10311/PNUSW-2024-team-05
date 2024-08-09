@@ -698,6 +698,7 @@ class FirebaseHelper {
             'acceptTimeText': dateDifferenceToString(
                 (mateData['acceptTime'] as Timestamp).toDate()),
             'status': postData['status'],
+            'credit': postData['credit'],
           });
         }
       }
