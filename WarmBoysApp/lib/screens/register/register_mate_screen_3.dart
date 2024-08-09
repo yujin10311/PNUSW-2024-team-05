@@ -50,6 +50,17 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
         _imgEmbd != null;
   }
 
+  // 카메라 사진 촬영
+  _imgFromCamera() async {
+    XFile? pickedFile = await imagePicker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+        doFaceDetection();
+      });
+    }
+  }
+
 // 갤러리에서 이미지 선택
   _imgFromGallery() async {
     XFile? pickedFile =
@@ -240,26 +251,76 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                   ? Center(
                       child: Container(
                       width: 200,
+                      height: 300,
                       child: Image.file(_image!),
                     ))
                   : Center(
                       child: Container(
-                        width: 200,
-                        height: 200,
+                        width: 300,
+                        height: 300,
                         color: Colors.grey[300],
                         child: Icon(Icons.photo,
                             size: 100, color: Colors.grey[700]),
                       ),
                     ),
               SizedBox(height: 10),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // 사진 등록 기능 추가
-                    _imgFromGallery();
-                  },
-                  child: Text('사진 등록'),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          // 사진 등록 기능 추가
+                          _imgFromCamera();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(140, 60),
+                        ),
+                        child: Icon(
+                          Icons.camera_alt,
+                          size: 32,
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        "사진 촬영",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: const Color.fromARGB(255, 106, 106, 106),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 15),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          // 사진 등록 기능 추가
+                          _imgFromGallery();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(140, 60),
+                        ),
+                        child: Icon(
+                          Icons.photo_library,
+                          size: 32,
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        "갤러리",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: const Color.fromARGB(255, 106, 106, 106),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               SizedBox(height: 30),
               Container(

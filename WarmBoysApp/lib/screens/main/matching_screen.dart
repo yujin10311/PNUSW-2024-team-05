@@ -9,6 +9,8 @@ import '../../widgets/profile_card.dart';
 import '../../widgets/member_details_scrollview.dart';
 import '../../widgets/member_symptom_scrollview.dart';
 import '../../widgets/autowrap_text_box.dart';
+import '../activity/activity_start_screen.dart';
+import '../activity/activity_end_screen.dart';
 
 class MatchingScreen extends StatefulWidget {
   @override
@@ -43,6 +45,7 @@ class _MatchingScreenState extends State<MatchingScreen>
     return DateFormat('yy.MM.dd').format(dateTime);
   }
 
+// 메이트 정보 다이얼로그(시니어 시점)
   void _buildMateInfoDialog(BuildContext context, Map<String, dynamic> post) {
     showModalBottomSheet(
       context: context,
@@ -121,6 +124,7 @@ class _MatchingScreenState extends State<MatchingScreen>
     );
   }
 
+// 시니어 정보 다이얼로그(메이트 시점)
   void _buildSeniorInfoDialog(BuildContext context, Map<String, dynamic> post) {
     showModalBottomSheet(
       context: context,
@@ -541,10 +545,12 @@ class _MatchingScreenState extends State<MatchingScreen>
                                         SizedBox(height: 10),
                                         ElevatedButton(
                                           onPressed: null,
-                                          child: Text('활동 전',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                              )),
+                                          child: Text(
+                                            '활동 전',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
