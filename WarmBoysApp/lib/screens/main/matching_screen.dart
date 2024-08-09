@@ -336,6 +336,13 @@ class _MatchingScreenState extends State<MatchingScreen>
                                               style: TextStyle(
                                                 fontSize: 13,
                                               )),
+                                          SizedBox(height: 5),
+                                          Text(
+                                            '크레딧: ${post['credit'].toString()}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -368,16 +375,16 @@ class _MatchingScreenState extends State<MatchingScreen>
                                                   );
                                                 },
                                                 child: CircleAvatar(
-                                                  radius: 40,
+                                                  radius: 50,
                                                   backgroundImage: NetworkImage(
                                                       post['imgUrl']),
                                                 ),
                                               )
                                             : CircleAvatar(
-                                                radius: 40,
+                                                radius: 50,
                                                 child: Icon(Icons.person),
                                               ),
-                                        SizedBox(height: 5),
+                                        SizedBox(height: 10),
                                         ElevatedButton(
                                           onPressed: () async {
                                             await FirebaseHelper.cancelApply(
@@ -495,8 +502,43 @@ class _MatchingScreenState extends State<MatchingScreen>
                                     ),
                                     Column(
                                       children: [
-                                        Icon(Icons.person, size: 80),
-                                        SizedBox(height: 5),
+                                        (post['imgUrl'] != '')
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Dialog(
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(); // 클릭 시 다이얼로그 닫기
+                                                          },
+                                                          child: Center(
+                                                            child: Image
+                                                                .network(post[
+                                                                    'imgUrl']), // 확대된 이미지
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                child: CircleAvatar(
+                                                  radius: 50,
+                                                  backgroundImage: NetworkImage(
+                                                      post['imgUrl']),
+                                                ),
+                                              )
+                                            : CircleAvatar(
+                                                radius: 50,
+                                                child: Icon(Icons.person),
+                                              ),
+                                        SizedBox(height: 10),
                                         ElevatedButton(
                                           onPressed: null,
                                           child: Text('활동 전',
@@ -776,7 +818,42 @@ class _MatchingScreenState extends State<MatchingScreen>
                                     ),
                                     Column(
                                       children: [
-                                        Icon(Icons.person, size: 80),
+                                        (post['imgUrl'] != '')
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Dialog(
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(); // 클릭 시 다이얼로그 닫기
+                                                          },
+                                                          child: Center(
+                                                            child: Image
+                                                                .network(post[
+                                                                    'imgUrl']), // 확대된 이미지
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                child: CircleAvatar(
+                                                  radius: 40,
+                                                  backgroundImage: NetworkImage(
+                                                      post['imgUrl']),
+                                                ),
+                                              )
+                                            : CircleAvatar(
+                                                radius: 40,
+                                                child: Icon(Icons.person),
+                                              ),
                                         SizedBox(height: 5),
                                         ElevatedButton(
                                           onPressed: null,

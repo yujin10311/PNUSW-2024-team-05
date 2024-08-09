@@ -259,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             )
                           : CircleAvatar(
-                              radius: 40,
+                              radius: 30,
                               child: Icon(Icons.person),
                             ),
                       title: Text(
@@ -282,6 +282,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             "${formatDate(postcard['startTime'])} / ${formatTime(postcard['startTime'])} ~ ${formatTime(postcard['endTime'])}",
                             style: TextStyle(fontSize: 16),
                           ),
+                          SizedBox(height: 5),
+                          Text(
+                            "크레딧: ${postcard['credit'].toString()}",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          )
                         ],
                       ),
                       onTap: () {

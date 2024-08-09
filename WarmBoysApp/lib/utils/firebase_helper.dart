@@ -61,6 +61,16 @@ class FirebaseHelper {
     }
   }
 
+  static int calculateCredit(DateTime startTime, DateTime endTime) {
+    Duration difference = endTime.difference(startTime);
+
+    double hours = difference.inMinutes / 60.0;
+
+    int credit = (hours.floor()) * 5;
+
+    return credit;
+  }
+
   // 이메일이 등록되어 있는지 확인
   static Future<bool> checkEmail(String email) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -220,6 +230,7 @@ class FirebaseHelper {
           'activityType': postData['activityType'] ?? '',
           'startTime': (postData['startTime'] as Timestamp).toDate(),
           'endTime': (postData['endTime'] as Timestamp).toDate(),
+          'credit': postData['credit'] ?? 0,
         });
       }
     }
@@ -283,6 +294,9 @@ class FirebaseHelper {
     print('startTime: ${postInfo['startTime']}');
     print('endTime: ${postInfo['endTime']}');
 
+    final int credit =
+        calculateCredit(postInfo['startTime'], postInfo['endTime']);
+
     try {
       await firestore.collection('posts').add({
         'seniorUid': postInfo['seniorUid'],
@@ -292,7 +306,7 @@ class FirebaseHelper {
         'activityType': postInfo['activityType'],
         'startTime': Timestamp.fromDate(postInfo['startTime']),
         'endTime': Timestamp.fromDate(postInfo['endTime']),
-        'credit': 5,
+        'credit': credit,
         'status': 'posted',
         'startImgUrl': null,
         'startReport': null,
@@ -532,6 +546,7 @@ class FirebaseHelper {
             'applyTime': (mateData['applyTime'] as Timestamp).toDate(),
             'applyTimeText': dateDifferenceToString(
                 (mateData['applyTime'] as Timestamp).toDate()),
+            'credit': postData['credit'] ?? 0,
           });
         }
       }
