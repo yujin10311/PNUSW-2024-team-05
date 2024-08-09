@@ -187,13 +187,24 @@ class FirebaseHelper {
     DateTime endOfDay =
         DateTime(endTime.year, endTime.month, endTime.day, 23, 59, 59, 999);
 
-    Query postsQuery = firestore
-        .collection('posts')
-        .where('startTime',
-            isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
-        .where('startTime', isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
-        .where('dong', isEqualTo: dong)
-        .where('status', whereIn: ['posted', 'notMatched']);
+    Query postsQuery;
+
+    if (dong == '전체') {
+      postsQuery = firestore
+          .collection('posts')
+          .where('startTime',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+          .where('startTime', isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
+          .where('status', whereIn: ['posted', 'notMatched']);
+    } else {
+      postsQuery = firestore
+          .collection('posts')
+          .where('startTime',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+          .where('startTime', isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
+          .where('dong', isEqualTo: dong)
+          .where('status', whereIn: ['posted', 'notMatched']);
+    }
 
     QuerySnapshot postsSnapshot = await postsQuery.get();
 
@@ -723,6 +734,7 @@ class FirebaseHelper {
         'matched',
         'activated',
         'finished',
+        'reviewedByMate',
         'failed',
       ]).get();
 

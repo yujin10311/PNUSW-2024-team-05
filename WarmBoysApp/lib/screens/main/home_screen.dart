@@ -196,6 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     });
                   },
                   items: <String>[
+                    '전체',
                     '구서1동',
                     '구서2동',
                     '금사회동동',
