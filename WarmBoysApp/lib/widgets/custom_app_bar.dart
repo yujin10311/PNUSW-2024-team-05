@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:warm_boys/widgets/custum_alarm.dart'; 
+import 'package:warm_boys/widgets/custum_alarm.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -13,6 +13,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       leading: leading,
       title: Text(title),
       actions: [

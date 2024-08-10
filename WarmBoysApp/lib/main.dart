@@ -10,6 +10,8 @@ import 'screens/register/register_select_screen_0.dart';
 import 'screens/login_screen.dart';
 import 'screens/main/education_screen.dart';
 import 'screens/post/post_screen.dart';
+import 'screens/activity/activity_screen.dart';
+
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
@@ -55,8 +57,25 @@ class MyApp extends StatelessWidget {
                 endTime: args['endTime'],
               ),
             );
+          } else if (settings.name == '/activity_screen') {
+            final args = settings.arguments as Map<String, dynamic>;
+            return MaterialPageRoute(
+              builder: (context) => ActivityScreen(
+                postId: args['postId'],
+                currentStatus: args['currentStatus'],
+                seniorUid: args['seniorUid'],
+                seniorPhoneNum2: args['seniorPhoneNum2'],
+                mateUid: args['mateUid'],
+              ),
+            );
           }
-          return null;
+          return MaterialPageRoute(
+            builder: (context) => Scaffold(
+              appBar: AppBar(title: Text('Unknown Route')),
+              body:
+                  Center(child: Text('No route defined for ${settings.name}')),
+            ),
+          );
         },
         routes: {
           '/register': (context) => RegisterSelectScreen0(),

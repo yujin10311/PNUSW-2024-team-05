@@ -9,8 +9,7 @@ import '../../widgets/profile_card.dart';
 import '../../widgets/member_details_scrollview.dart';
 import '../../widgets/member_symptom_scrollview.dart';
 import '../../widgets/autowrap_text_box.dart';
-import '../activity/activity_start_screen.dart';
-import '../activity/activity_end_screen.dart';
+import '../activity/activity_screen.dart';
 import '../../widgets/rating_stars.dart';
 
 class MatchingScreen extends StatefulWidget {
@@ -568,15 +567,65 @@ class _MatchingScreenState extends State<MatchingScreen>
                                         ElevatedButton(
                                           onPressed: post['status'] == 'matched'
                                               ? () {
+                                                  // print(post['postId']);
+                                                  // print(post['status']);
+                                                  // print(post['uid']);
+                                                  // print(post['phoneNum2']);
+                                                  // print(myUid);
                                                   // '활동 시작' 버튼을 눌렀을 때의 동작
+                                                  Navigator.pushNamed(context,
+                                                      '/activity_screen',
+                                                      arguments: {
+                                                        'postId':
+                                                            post['postId'],
+                                                        'currentStatus':
+                                                            post['status'],
+                                                        'seniorUid':
+                                                            post['uid'],
+                                                        'seniorPhoneNum2':
+                                                            post['phoneNum2'],
+                                                        'mateUid': myUid,
+                                                      });
                                                 }
                                               : post['status'] == 'activated'
                                                   ? () {
                                                       // '활동 중' 버튼을 눌렀을 때의 동작
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          '/activity_screen',
+                                                          arguments: {
+                                                            'postId':
+                                                                post['postId'],
+                                                            'currentStatus':
+                                                                post['status'],
+                                                            'seniorUid':
+                                                                post['uid'],
+                                                            'seniorPhoneNum2':
+                                                                post[
+                                                                    'phoneNum2'],
+                                                            'mateUid': myUid,
+                                                          });
                                                     }
                                                   : post['status'] == 'finished'
                                                       ? () {
                                                           // '활동 끝' 버튼을 눌렀을 때의 동작
+                                                          Navigator.pushNamed(
+                                                              context,
+                                                              '/activity_screen',
+                                                              arguments: {
+                                                                'postId': post[
+                                                                    'postId'],
+                                                                'currentStatus':
+                                                                    post[
+                                                                        'status'],
+                                                                'seniorUid':
+                                                                    post['uid'],
+                                                                'seniorPhoneNum2':
+                                                                    post[
+                                                                        'phoneNum2'],
+                                                                'mateUid':
+                                                                    myUid,
+                                                              });
                                                         }
                                                       : null, // 기타 상태일 때는 비활성화
 

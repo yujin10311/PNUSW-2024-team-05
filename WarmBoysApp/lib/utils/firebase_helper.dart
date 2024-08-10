@@ -694,6 +694,7 @@ class FirebaseHelper {
             'symptomInfo': seniorData['symptomInfo'] ?? '',
             'walkingType': seniorData['walkingType'] ?? '',
             'addInfo': seniorData['addInfo'] ?? '',
+            'phoneNum2': seniorData['phoneNum2'] ?? '',
             'uid': postData['seniorUid'] ?? '',
             'postId': postId,
             'city': postData['city'] ?? '',
@@ -733,8 +734,8 @@ class FirebaseHelper {
           .where('status', whereIn: [
         'matched',
         'activated',
+        'reviewed',
         'finished',
-        'reviewedByMate',
         'failed',
       ]).get();
 
@@ -1037,5 +1038,33 @@ class FirebaseHelper {
       'startTime': startTime,
       'timestamp': Timestamp.now(),
     });
+  }
+
+  Future<List<Map<String, String>>> getAllEmbd() async {
+    List<Map<String, String>> embdList = [];
+
+    try {
+      // Firestore 인스턴스 가져오기
+      final firestore = FirebaseFirestore.instance;
+
+      // 'user' 컬렉션의 모든 문서를 가져옴
+      QuerySnapshot querySnapshot = await firestore.collection('user').get();
+
+      // 각 문서를 순회하면서 uid와 imgEmbd를 Map으로 저장
+      for (var doc in querySnapshot.docs) {
+        // doc.data()는 Map<String, dynamic>을 반환하므로 타입 캐스팅 필요
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        String uid = doc.id; // 문서의 id를 uid로 사용
+        String imgEmbd = data['imgEmbd'] as String; // imgEmbd 필드를 가져옴
+
+        // uid와 imgEmbd를 매핑한 Map<String, String>을 리스트에 추가
+        embdList.add({'uid': uid, 'imgEmbd': imgEmbd});
+      }
+    } catch (e) {
+      print('Error fetching data from Firestore: $e');
+    }
+
+    return embdList;
   }
 }

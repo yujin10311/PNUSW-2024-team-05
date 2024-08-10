@@ -16,6 +16,7 @@ class CustomAppBarWithTab extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       leading: leading,
       title: Text(title),
       actions: [
