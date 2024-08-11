@@ -22,8 +22,8 @@ class HomeActivity : AppCompatActivity() {
             insets
         }
 
-        findViewById<TextView>(R.id.chat_btn).setOnClickListener {
-            val intent = Intent(this, ChatActivity::class.java)
+        findViewById<TextView>(R.id.comunity_btn).setOnClickListener {
+            val intent = Intent(this, CommunityActivity::class.java)
 
             this.startActivity(intent)
 
