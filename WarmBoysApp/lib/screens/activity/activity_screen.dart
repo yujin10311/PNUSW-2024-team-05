@@ -608,6 +608,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
                           reviewByMate: _reviewController.text,
                         );
                         if (success) {
+                          print(widget.mateUid);
+                          await FirebaseHelper.getCredit(
+                              widget.postId, widget.mateUid);
                           MainIndex.globalKey.currentState
                               ?.navigateToMatchingScreen();
                           Navigator.pop(context);

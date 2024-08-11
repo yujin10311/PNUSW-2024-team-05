@@ -1140,4 +1140,40 @@ class FirebaseHelper {
       return false;
     }
   }
+
+  static Future<void> getCredit(String postId, String mateUid) async {
+    final firestore = FirebaseFirestore.instance;
+
+    try {
+      // posts 컬렉션에서 postId와 일치하는 문서 찾기
+      DocumentSnapshot postDoc =
+          await firestore.collection('posts').doc(postId).get();
+
+      if (postDoc.exists) {
+        // posts 문서의 credit 값 가져오기
+        int postCredit = postDoc.get('credit');
+
+        // user 컬렉션에서 mateUid와 일치하는 문서 찾기
+        DocumentReference userDocRef =
+            firestore.collection('user').doc(mateUid);
+        DocumentSnapshot userDoc = await userDocRef.get();
+
+        if (userDoc.exists) {
+          // users 문서의 현재 credit 값 가져오기
+          int userCredit = userDoc.get('credit');
+
+          // posts의 credit 값을 users의 credit 값에 더하여 업데이트
+          await userDocRef.update({
+            'credit': userCredit + postCredit,
+          });
+        } else {
+          print('User document not found.');
+        }
+      } else {
+        print('Post document not found.');
+      }
+    } catch (e) {
+      print('Error updating credit: $e');
+    }
+  }
 }
