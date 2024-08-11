@@ -651,7 +651,6 @@ class FirebaseHelper {
         await firestore.collection('posts').where('status', whereIn: [
       'matched',
       'activated',
-      'finished',
       'failed',
     ]).get();
 
@@ -735,8 +734,7 @@ class FirebaseHelper {
           .where('status', whereIn: [
         'matched',
         'activated',
-        'reviewed',
-        'finished',
+        'notReviewedBySenior',
         'failed',
       ]).get();
 
@@ -786,6 +784,7 @@ class FirebaseHelper {
               'startTime': (postData['startTime'] as Timestamp).toDate(),
               'endTime': (postData['endTime'] as Timestamp).toDate(),
               'activityType': postData['activityType'] ?? '',
+              'status': postData['status'] ?? '',
             });
           }
         }
@@ -1093,6 +1092,45 @@ class FirebaseHelper {
         'startImgUrl': downloadUrl, // 'startImgUrl' 필드 업데이트
         'startReport': startReport, // 'startReport' 필드 업데이트
         'status': 'activated', // 'status' 필드를 'activated'로 업데이트
+      });
+
+      print('보고서가 성공적으로 제출되었습니다.');
+      return true;
+    } catch (e) {
+      print('보고서 제출 중 오류 발생: $e');
+      return false;
+    }
+  }
+
+  static Future<bool> submitEndReport({
+    required String postId,
+    required File endImg,
+    required String endReport,
+    required int ratingByMate,
+    required String reviewByMate,
+  }) async {
+    try {
+      print("postId: ${postId}, startReport: ${endReport}");
+      // 1. Firebase Storage에 이미지를 업로드하고 URL 가져오기
+      FirebaseStorage storage = FirebaseStorage.instance;
+      String fileName = '${postId}_endImg.jpg';
+      Reference storageRef = storage.ref().child('보고서 사진').child(fileName);
+
+      UploadTask uploadTask = storageRef.putFile(endImg);
+      TaskSnapshot snapshot = await uploadTask;
+      String downloadUrl = await snapshot.ref.getDownloadURL();
+
+      // 2. Firestore에서 postId에 해당하는 문서 업데이트
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentReference postDocRef = firestore.collection('posts').doc(postId);
+
+      await postDocRef.update({
+        'endImgUrl': downloadUrl, // 'endImgUrl' 필드 업데이트
+        'endReport': endReport, // 'endReport' 필드 업데이트
+        'ratingByMate': ratingByMate,
+        'reviewByMate': reviewByMate,
+        'status':
+            'notReviewedBySenior', // 'status' 필드를 'notReviewedBySenior'로 업데이트
       });
 
       print('보고서가 성공적으로 제출되었습니다.');

@@ -10,6 +10,7 @@ import 'package:warm_boys/utils/recognition.dart';
 import 'package:warm_boys/utils/recognizer.dart';
 import 'package:warm_boys/utils/firebase_helper.dart';
 import '../index/main_index.dart';
+import '../../widgets/rate_stars.dart';
 
 class ActivityScreen extends StatefulWidget {
   final String postId;
@@ -42,6 +43,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
   var image;
   bool faceAuth = false;
   final TextEditingController _reportController = TextEditingController();
+  final TextEditingController _reviewController = TextEditingController();
+  int ratingByMate = 0;
 
   @override
   void initState() {
@@ -189,6 +192,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
   // 보고서가 작성되었는지 확인
   bool get isReportFilled => _reportController.text.isNotEmpty;
+  bool get isReviewFilled => _reviewController.text.isNotEmpty;
 
   _buildMatchedScaffold(
       String postId, String seniorUid, String seniorPhoneNum2, String mateUid) {
@@ -370,7 +374,250 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             builder: (BuildContext context) {
                               return AlertDialog(
                                 title: Text('오류'),
-                                content: Text('보고서 제출에 실패했습니다.'),
+                                content: Text('시작 보고서 제출에 실패했습니다.'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('확인'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      }
+                    : null,
+                child: Text("제출"),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 50),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _buildActivatedScaffold(
+      String postId, String seniorUid, String seniorPhoneNum2, String mateUid) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("CurrentStatus: Activated"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "사진 인증",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  paintedImageBytes != null
+                      ? Container(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          height: MediaQuery.of(context).size.height / 3,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: MemoryImage(paintedImageBytes!),
+                              fit: BoxFit.fitHeight,
+                            ),
+                          ),
+                        )
+                      : Center(
+                          child: Container(
+                            width: 300,
+                            height: 200,
+                            color: Colors.grey[300],
+                            child: Icon(Icons.photo,
+                                size: 100, color: Colors.grey[700]),
+                          ),
+                        ),
+                  SizedBox(height: 5),
+                  faceAuth
+                      ? Center(
+                          child: Text(
+                            '얼굴 인증이 성공했습니다.',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: ui.Color.fromARGB(255, 7, 183, 33),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : Center(
+                          child: Text(
+                            '메이트와 시니어의 얼굴이 포함된 사진을 촬영해주세요.',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: const ui.Color.fromARGB(255, 255, 17, 0),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                  SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _imgFromCamera();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(140, 60),
+                                  ),
+                                  child: Icon(
+                                    Icons.camera_alt,
+                                    size: 32,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  "사진 촬영",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: const Color.fromARGB(
+                                        255, 106, 106, 106),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _imgFromGallery();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(140, 60),
+                                  ),
+                                  child: Icon(
+                                    Icons.photo_library,
+                                    size: 32,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  "갤러리",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: const Color.fromARGB(
+                                        255, 106, 106, 106),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          "종료 보고서 작성",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10),
+                        TextField(
+                          controller: _reportController,
+                          maxLines: 5,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: "보고서를 작성하세요...",
+                          ),
+                          onChanged: (text) {
+                            setState(() {});
+                          },
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          "별점 평가",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        RateStars(
+                          rating: ratingByMate,
+                          onRatingChanged: (rating) {
+                            setState(() {
+                              ratingByMate = rating;
+                            });
+                          },
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          "리뷰 작성",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10),
+                        TextField(
+                          controller: _reviewController,
+                          maxLines: 5,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: "리뷰를 작성하세요...",
+                          ),
+                          onChanged: (text) {
+                            setState(() {});
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 80),
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: ElevatedButton(
+                onPressed: faceAuth &&
+                        isReportFilled &&
+                        ratingByMate > 0 &&
+                        isReviewFilled
+                    ? () async {
+                        // FirebaseHelper.submitEndReport를 사용하여 제출 로직 구현
+                        bool success = await FirebaseHelper.submitEndReport(
+                          postId: widget.postId,
+                          endImg: _image!,
+                          endReport: _reportController.text,
+                          ratingByMate: ratingByMate,
+                          reviewByMate: _reviewController.text,
+                        );
+                        if (success) {
+                          MainIndex.globalKey.currentState
+                              ?.navigateToMatchingScreen();
+                          Navigator.pop(context);
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('오류'),
+                                content: Text('종료 보고서 제출에 실패했습니다.'),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
@@ -403,11 +650,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
       return _buildMatchedScaffold(widget.postId, widget.seniorUid,
           widget.seniorPhoneNum2, widget.mateUid);
     } else if (widget.currentStatus == 'activated') {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text("CurrentStatus: Activated"),
-        ),
-      );
+      return _buildActivatedScaffold(widget.postId, widget.seniorUid,
+          widget.seniorPhoneNum2, widget.mateUid);
     } else {
       return Scaffold(
         appBar: AppBar(title: Text("그 외")),

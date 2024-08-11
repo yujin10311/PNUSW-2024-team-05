@@ -606,38 +606,14 @@ class _MatchingScreenState extends State<MatchingScreen>
                                                             'mateUid': myUid,
                                                           });
                                                     }
-                                                  : post['status'] == 'finished'
-                                                      ? () {
-                                                          // '활동 끝' 버튼을 눌렀을 때의 동작
-                                                          Navigator.pushNamed(
-                                                              context,
-                                                              '/activity_screen',
-                                                              arguments: {
-                                                                'postId': post[
-                                                                    'postId'],
-                                                                'currentStatus':
-                                                                    post[
-                                                                        'status'],
-                                                                'seniorUid':
-                                                                    post['uid'],
-                                                                'seniorPhoneNum2':
-                                                                    post[
-                                                                        'phoneNum2'],
-                                                                'mateUid':
-                                                                    myUid,
-                                                              });
-                                                        }
-                                                      : null, // 기타 상태일 때는 비활성화
+                                                  : null, // 기타 상태일 때는 비활성화
 
                                           child: Text(
                                             post['status'] == 'matched'
                                                 ? '활동 시작'
                                                 : post['status'] == 'activated'
                                                     ? '활동 중'
-                                                    : post['status'] ==
-                                                            'finished'
-                                                        ? '활동 끝'
-                                                        : '활동 전', // 기본값으로 '활동 전'을 표시
+                                                    : '활동 실패', // status가 'failed'일 때는 '활동 실패' 표시
                                             style: TextStyle(
                                               fontSize: 16,
                                             ),
@@ -967,16 +943,21 @@ class _MatchingScreenState extends State<MatchingScreen>
                                               ),
                                         SizedBox(height: 5),
                                         ElevatedButton(
-                                          onPressed: null,
+                                          onPressed: post['status'] ==
+                                                  'notReviewedBySenior'
+                                              ? () {
+                                                  print(post['status']);
+                                                }
+                                              : null,
                                           child: Text(
                                             post['status'] == 'matched'
                                                 ? '활동 시작'
                                                 : post['status'] == 'activated'
                                                     ? '활동 중'
                                                     : post['status'] ==
-                                                            'finished'
-                                                        ? '활동 끝'
-                                                        : '활동 전', // 기본값으로 '활동 전'을 표시
+                                                            'notReviewedBySenior'
+                                                        ? '리뷰 쓰기'
+                                                        : '활동 에러', // status가 notReviewedBySenior일 때
                                             style: TextStyle(
                                               fontSize: 16,
                                             ),
