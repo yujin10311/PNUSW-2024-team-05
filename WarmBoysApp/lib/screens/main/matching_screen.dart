@@ -434,7 +434,7 @@ class _MatchingScreenState extends State<MatchingScreen>
               } else if (snapshot.hasError) {
                 return Center(child: Text('오류가 발생했습니다: ${snapshot.error}'));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('매칭 전 공고가 없습니다.'));
+                return Center(child: Text('매칭 후 공고가 없습니다.'));
               } else {
                 final posts = snapshot.data!;
                 return RefreshIndicator(
@@ -831,7 +831,7 @@ class _MatchingScreenState extends State<MatchingScreen>
               } else if (snapshot.hasError) {
                 return Center(child: Text('오류가 발생했습니다: ${snapshot.error}'));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('매칭 전 공고가 없습니다.'));
+                return Center(child: Text('매칭 후 공고가 없습니다.'));
               } else {
                 final posts = snapshot.data!;
                 return RefreshIndicator(
