@@ -6,6 +6,7 @@ import 'shared_preferences_helper.dart';
 import 'package:intl/intl.dart';
 import '../providers/custom_auth_provider.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
 
 class FirebaseHelper {
   final Map<String, DateTime> stringToDate = {
@@ -1040,7 +1041,7 @@ class FirebaseHelper {
     });
   }
 
-  Future<List<Map<String, String>>> getAllEmbd() async {
+  static Future<List<Map<String, String>>> getAllEmbd() async {
     List<Map<String, String>> embdList = [];
 
     try {
@@ -1066,5 +1067,39 @@ class FirebaseHelper {
     }
 
     return embdList;
+  }
+
+  static Future<bool> submitStartReport({
+    required String postId,
+    required File startImg,
+    required String startReport,
+  }) async {
+    try {
+      print("postId: ${postId}, startReport: ${startReport}");
+      // 1. Firebase Storage에 이미지를 업로드하고 URL 가져오기
+      FirebaseStorage storage = FirebaseStorage.instance;
+      String fileName = '${postId}_startImg.jpg';
+      Reference storageRef = storage.ref().child('보고서 사진').child(fileName);
+
+      UploadTask uploadTask = storageRef.putFile(startImg);
+      TaskSnapshot snapshot = await uploadTask;
+      String downloadUrl = await snapshot.ref.getDownloadURL();
+
+      // 2. Firestore에서 postId에 해당하는 문서 업데이트
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentReference postDocRef = firestore.collection('posts').doc(postId);
+
+      await postDocRef.update({
+        'startImgUrl': downloadUrl, // 'startImgUrl' 필드 업데이트
+        'startReport': startReport, // 'startReport' 필드 업데이트
+        'status': 'activated', // 'status' 필드를 'activated'로 업데이트
+      });
+
+      print('보고서가 성공적으로 제출되었습니다.');
+      return true;
+    } catch (e) {
+      print('보고서 제출 중 오류 발생: $e');
+      return false;
+    }
   }
 }

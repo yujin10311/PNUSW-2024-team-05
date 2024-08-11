@@ -8,6 +8,10 @@ import '../main/chatting_screen.dart';
 import '../main/exchange_screen.dart';
 
 class MainIndex extends StatefulWidget {
+  static final GlobalKey<_MainIndexState> globalKey =
+      GlobalKey<_MainIndexState>();
+
+  MainIndex({Key? key}) : super(key: globalKey);
   @override
   _MainIndexState createState() => _MainIndexState();
 }
@@ -20,6 +24,31 @@ class _MainIndexState extends State<MainIndex> {
     ChattingScreen(),
     ExchangeScreen(),
   ];
+  void navigateToHomeScreen() {
+    setState(() {
+      _currentIndex = 0; // HomeScreen의 인덱스
+    });
+  }
+
+  void navigateToMatchingScreen() {
+    setState(() {
+      _currentIndex = 1; // MatchingScreen의 인덱스
+      // 강제로 MatchingScreen을 다시 빌드
+      _pages[1] = MatchingScreen();
+    });
+  }
+
+  void navigateToChattingScreen() {
+    setState(() {
+      _currentIndex = 2; // ChattingScreen의 인덱스
+    });
+  }
+
+  void navigateToExchangeScreen() {
+    setState(() {
+      _currentIndex = 3; // ExchangeScreen의 인덱스
+    });
+  }
 
   bool _hasNewMessages = false;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -69,7 +98,8 @@ class _MainIndexState extends State<MainIndex> {
             label: '홈',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/matching.png', width: 24, height: 24),
+            icon:
+                Image.asset('assets/icons/matching.png', width: 24, height: 24),
             label: '매칭',
           ),
           BottomNavigationBarItem(
@@ -96,7 +126,8 @@ class _MainIndexState extends State<MainIndex> {
             label: '채팅',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/exchange.png', width: 24, height: 24),
+            icon:
+                Image.asset('assets/icons/exchange.png', width: 24, height: 24),
             label: '교환',
           ),
         ],

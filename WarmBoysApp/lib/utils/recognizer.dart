@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'recognition.dart';
+import 'firebase_helper.dart';
 
 class Recognizer {
   late Interpreter interpreter;
@@ -21,12 +22,26 @@ class Recognizer {
       _interpreterOptions.threads = numThreads;
     }
     loadModel();
-    // initDB();
+    initDB();
   }
 
   initDB() async {
     // await dbHelper.init();
-    // loadRegisteredFaces();
+    loadRegisteredFaces();
+  }
+
+  void loadRegisteredFaces() async {
+    final allRows = await FirebaseHelper.getAllEmbd();
+    for (final row in allRows) {
+      String uid = row['uid']!;
+      List<double> embd = row['imgEmbd']!
+          .split(',')
+          .map((e) => double.parse(e))
+          .toList()
+          .cast<double>();
+      Recognition recognition = Recognition(uid, Rect.zero, embd, 0);
+      registered.putIfAbsent(uid, () => recognition);
+    }
   }
 
   // void loadRegisteredFaces() async {
@@ -115,6 +130,7 @@ class Recognizer {
 
     //TODO looks for the nearest embeeding in the database and returns the pair
     Pair pair = findNearest(outputArray);
+    print("pair name= ${pair.name}");
     print("distance= ${pair.distance}");
 
     return Recognition(pair.name, location, outputArray, pair.distance);
