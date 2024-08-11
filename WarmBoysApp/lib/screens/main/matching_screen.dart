@@ -79,6 +79,7 @@ class _MatchingScreenState extends State<MatchingScreen>
                   ProfileCard(
                       imgUrl: post['imgUrl'],
                       username: post['username'],
+                      memberType: '메이트',
                       uid: post['uid'],
                       city: post['city'],
                       gu: post['gu'],
@@ -158,6 +159,7 @@ class _MatchingScreenState extends State<MatchingScreen>
                   ProfileCard(
                       imgUrl: post['imgUrl'],
                       username: post['username'],
+                      memberType: '시니어',
                       uid: post['uid'],
                       city: post['city'],
                       gu: post['gu'],

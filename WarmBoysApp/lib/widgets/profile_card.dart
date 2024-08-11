@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'rating_stars.dart';
+import '../screens/review/review.dart'; // ReviewScreen 파일 임포트
 
 class ProfileCard extends StatelessWidget {
   final String imgUrl;
   final String username;
+  final String memberType;
   final String uid;
   final String city;
   final String gu;
@@ -14,6 +16,7 @@ class ProfileCard extends StatelessWidget {
   ProfileCard({
     required this.imgUrl,
     required this.username,
+    required this.memberType,
     required this.uid,
     required this.city,
     required this.gu,
@@ -69,8 +72,20 @@ class ProfileCard extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold)),
                       TextButton(
-                        onPressed: () {},
-                        child: Text('리뷰'),
+                        onPressed: () {
+                          // 리뷰 보기 버튼 클릭 시 ReviewScreen으로 이동
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReviewScreen(
+                                username: username,
+                                uid: uid,
+                                memberType: memberType,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text('리뷰 보기'),
                       ),
                     ],
                   ),

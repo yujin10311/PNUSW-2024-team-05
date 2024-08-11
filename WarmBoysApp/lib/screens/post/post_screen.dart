@@ -169,6 +169,7 @@ class _PostScreenState extends State<PostScreen> {
               ProfileCard(
                 imgUrl: widget.imgUrl,
                 username: widget.seniorName,
+                memberType: '시니어',
                 uid: widget.seniorUid,
                 city: widget.city,
                 gu: widget.gu,

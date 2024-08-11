@@ -1199,4 +1199,63 @@ class FirebaseHelper {
       return false; // 실패 시 false 반환
     }
   }
+
+// 리뷰 쿼리
+  static Future<List<Map<String, dynamic>>> queryReview(
+      String uid, String memberType) async {
+    List<Map<String, dynamic>> reviews = [];
+
+    if (memberType == '메이트') {
+      // 'status'가 'finished'인 문서들 가져오기
+      QuerySnapshot postsSnapshot = await FirebaseFirestore.instance
+          .collection('posts')
+          .where('status', isEqualTo: 'finished')
+          .get();
+
+      int index = 1; // 익명 번호를 위한 인덱스
+
+      for (var doc in postsSnapshot.docs) {
+        // 'mates' 서브 컬렉션 내의 첫 번째 문서 가져오기
+        QuerySnapshot matesSnapshot =
+            await doc.reference.collection('mates').limit(1).get();
+
+        if (matesSnapshot.docs.isNotEmpty) {
+          DocumentSnapshot mateDoc = matesSnapshot.docs.first;
+
+          if (mateDoc['mateUid'] == uid) {
+            // 조건에 맞는 데이터를 Map으로 저장
+            reviews.add({
+              'name': '익명 $index',
+              'activityType': doc['activityType'],
+              'ratingBySenior': doc['ratingBySenior'],
+              'reviewBySenior': doc['reviewBySenior'],
+            });
+            index++; // 다음 익명 번호로 증가
+          }
+        }
+      }
+    } else if (memberType == '시니어') {
+      // 'status'가 'notReviewedBySenior' 또는 'finished'인 문서들 가져오기
+      QuerySnapshot postsSnapshot = await FirebaseFirestore.instance
+          .collection('posts')
+          .where('status', whereIn: ['notReviewedBySenior', 'finished'])
+          .where('seniorUid', isEqualTo: uid)
+          .get();
+
+      int index = 1; // 익명 번호를 위한 인덱스
+
+      for (var doc in postsSnapshot.docs) {
+        // 조건에 맞는 데이터를 Map으로 저장
+        reviews.add({
+          'name': '익명 $index',
+          'activityType': doc['activityType'],
+          'ratingByMate': doc['ratingByMate'],
+          'reviewByMate': doc['reviewByMate'],
+        });
+        index++; // 다음 익명 번호로 증가
+      }
+    }
+
+    return reviews;
+  }
 }
