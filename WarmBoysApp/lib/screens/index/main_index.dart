@@ -27,26 +27,28 @@ class _MainIndexState extends State<MainIndex> {
   void navigateToHomeScreen() {
     setState(() {
       _currentIndex = 0; // HomeScreen의 인덱스
+      _pages[0] = HomeScreen(); // 강제로 HomeScreen을 다시 빌드
     });
   }
 
   void navigateToMatchingScreen() {
     setState(() {
       _currentIndex = 1; // MatchingScreen의 인덱스
-      // 강제로 MatchingScreen을 다시 빌드
-      _pages[1] = MatchingScreen();
+      _pages[1] = MatchingScreen(); // 강제로 MatchingScreen을 다시 빌드
     });
   }
 
   void navigateToChattingScreen() {
     setState(() {
       _currentIndex = 2; // ChattingScreen의 인덱스
+      _pages[2] = ChattingScreen(); // 강제로 ChattingScreen을 다시 빌드
     });
   }
 
   void navigateToExchangeScreen() {
     setState(() {
       _currentIndex = 3; // ExchangeScreen의 인덱스
+      _pages[3] = ExchangeScreen(); // 강제로 ExchangeScreen을 다시 빌드
     });
   }
 
