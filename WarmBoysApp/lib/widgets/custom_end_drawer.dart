@@ -16,7 +16,7 @@ class CustomEndDrawer extends StatelessWidget {
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Colors.grey[100],
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -32,7 +32,7 @@ class CustomEndDrawer extends StatelessWidget {
                 Text(
                   username,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 24, 24, 24),
                     fontSize: 20,
                   ),
                 ),
