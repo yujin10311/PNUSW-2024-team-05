@@ -11,6 +11,7 @@ import 'package:warm_boys/utils/recognizer.dart';
 import 'package:warm_boys/utils/firebase_helper.dart';
 import '../index/main_index.dart';
 import '../../widgets/rate_stars.dart';
+import '../../widgets/member_symptom_scrollview.dart';
 
 class ActivityScreen extends StatefulWidget {
   final String postId;
@@ -190,6 +191,18 @@ class _ActivityScreenState extends State<ActivityScreen> {
     });
   }
 
+  // 전화번호 포맷
+  String formatPhoneNumber(String phoneNumber) {
+    // 전화번호 길이 체크 및 포맷 적용
+    if (phoneNumber.length == 11) {
+      return '${phoneNumber.substring(0, 3)}-${phoneNumber.substring(3, 7)}-${phoneNumber.substring(7)}';
+    } else if (phoneNumber.length == 10) {
+      return '${phoneNumber.substring(0, 3)}-${phoneNumber.substring(3, 6)}-${phoneNumber.substring(6)}';
+    } else {
+      return phoneNumber; // 잘못된 길이의 경우 입력 그대로 반환
+    }
+  }
+
   // 보고서가 작성되었는지 확인
   bool get isReportFilled => _reportController.text.isNotEmpty;
   bool get isReviewFilled => _reviewController.text.isNotEmpty;
@@ -211,9 +224,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        "사진 인증",
+                        "1. 사진 인증",
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -288,7 +301,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  "사진 촬영",
+                                  "카메라 촬영",
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: const Color.fromARGB(
@@ -325,11 +338,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 30),
                         Text(
-                          "시작 보고서 작성",
+                          "2. 활동 시작 보고서 작성",
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 10),
                         TextField(
@@ -343,6 +356,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             setState(() {});
                           },
                         ),
+                        SizedBox(height: 50),
+                        MemberSymptomScrollview(symptoms: [
+                          ' ※ 비상 연락망: ${formatPhoneNumber(seniorPhoneNum2)} '
+                        ]),
                       ],
                     ),
                   ),
@@ -389,7 +406,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         }
                       }
                     : null,
-                child: Text("제출"),
+                child: Text("제출하기"),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
                 ),
@@ -418,9 +435,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        "사진 인증",
+                        "1. 사진 인증",
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -469,7 +486,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 30),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Column(
@@ -495,7 +512,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  "사진 촬영",
+                                  "카메라 촬영",
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: const Color.fromARGB(
@@ -532,11 +549,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 30),
                         Text(
-                          "종료 보고서 작성",
+                          "2. 활동 종료 보고서 작성",
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 10),
                         TextField(
@@ -550,11 +567,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             setState(() {});
                           },
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 30),
                         Text(
-                          "별점 평가",
+                          "3. 활동에 참여한 시니어에 대해 평가해주세요.",
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         RateStars(
                           rating: ratingByMate,
@@ -564,11 +581,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             });
                           },
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 30),
                         Text(
-                          "리뷰 작성",
+                          "4. 시니어에 대한 후기를 작성해주세요.",
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 10),
                         TextField(
@@ -582,6 +599,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             setState(() {});
                           },
                         ),
+                        SizedBox(height: 50),
+                        MemberSymptomScrollview(symptoms: [
+                          ' ※ 비상 연락망: ${formatPhoneNumber(seniorPhoneNum2)} '
+                        ]),
                       ],
                     ),
                   ),

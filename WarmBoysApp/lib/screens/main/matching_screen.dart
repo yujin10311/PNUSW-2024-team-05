@@ -11,6 +11,8 @@ import '../../widgets/member_symptom_scrollview.dart';
 import '../../widgets/autowrap_text_box.dart';
 import '../activity/activity_screen.dart';
 import '../../widgets/rating_stars.dart';
+import '../../widgets/rate_stars.dart';
+import '../review/rating_by_senior.dart';
 
 class MatchingScreen extends StatefulWidget {
   @override
@@ -607,16 +609,23 @@ class _MatchingScreenState extends State<MatchingScreen>
                                                           });
                                                     }
                                                   : null, // 기타 상태일 때는 비활성화
-
                                           child: Text(
                                             post['status'] == 'matched'
                                                 ? '활동 시작'
                                                 : post['status'] == 'activated'
                                                     ? '활동 중'
                                                     : '활동 실패', // status가 'failed'일 때는 '활동 실패' 표시
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: post['status'] ==
+                                                    'matched'
+                                                ? Color.fromARGB(
+                                                    255, 111, 255, 95)
+                                                : post['status'] == 'activated'
+                                                    ? const Color.fromARGB(
+                                                        255, 255, 190, 92)
+                                                    : Colors.grey,
+                                            foregroundColor: Colors.black,
                                           ),
                                         ),
                                       ],
@@ -946,12 +955,20 @@ class _MatchingScreenState extends State<MatchingScreen>
                                           onPressed: post['status'] ==
                                                   'notReviewedBySenior'
                                               ? () {
-                                                  print(post['status']);
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          RatingBySeniorPage(
+                                                        postId: post['postId'],
+                                                      ),
+                                                    ),
+                                                  );
                                                 }
                                               : null,
                                           child: Text(
                                             post['status'] == 'matched'
-                                                ? '활동 시작'
+                                                ? '활동 전'
                                                 : post['status'] == 'activated'
                                                     ? '활동 중'
                                                     : post['status'] ==
@@ -961,6 +978,15 @@ class _MatchingScreenState extends State<MatchingScreen>
                                             style: TextStyle(
                                               fontSize: 16,
                                             ),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: post['status'] ==
+                                                    'notReviewedBySenior'
+                                                ? const Color.fromARGB(
+                                                    255, 255, 190, 92)
+                                                : Color.fromARGB(
+                                                    255, 129, 129, 129),
+                                            foregroundColor: Colors.black,
                                           ),
                                         ),
                                       ],

@@ -1176,4 +1176,27 @@ class FirebaseHelper {
       print('Error updating credit: $e');
     }
   }
+
+  static Future<bool> submitRatingBySenior(
+      String postId, int ratingBySenior, String reviewBySenior) async {
+    try {
+      // Firestore 인스턴스 생성
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      // 해당 문서 참조
+      DocumentReference postRef = firestore.collection('posts').doc(postId);
+
+      // 문서 업데이트
+      await postRef.update({
+        'ratingBySenior': ratingBySenior,
+        'reviewBySenior': reviewBySenior,
+        'status': 'finished',
+      });
+
+      return true; // 성공 시 true 반환
+    } catch (e) {
+      print('Error submitting review by senior: $e');
+      return false; // 실패 시 false 반환
+    }
+  }
 }
