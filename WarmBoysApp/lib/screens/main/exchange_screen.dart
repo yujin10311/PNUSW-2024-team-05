@@ -1,23 +1,248 @@
 import 'package:flutter/material.dart';
-import '../../widgets/custom_app_bar.dart';
+import 'package:path/path.dart';
+import 'package:warm_boys/utils/firebase_helper.dart';
+import '../../widgets/custom_app_bar_with_tab.dart';
 import '../../widgets/custom_end_drawer.dart';
+import 'package:provider/provider.dart';
+import '../../providers/custom_auth_provider.dart';
+import 'package:intl/intl.dart';
+import '../../widgets/exchange_card.dart';
+import '../../widgets/member_details_scrollview.dart';
+import '../../widgets/member_symptom_scrollview.dart';
+import '../../widgets/autowrap_text_box.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ExchangeScreen extends StatefulWidget {
   @override
   _ExchangeScreenState createState() => _ExchangeScreenState();
 }
 
+// 바텀모달로 터치시 추가정보 띄우기
+
+void exchanging(BuildContext context, int howmuch) {
+  showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Close'))
+            ],
+            title: Text('신청되셨습니다.'),
+            content: Text('남은 크레딧 : ${howmuch}'),
+          ));
+}
+
+void _buildInfoDialog(BuildContext context, Map<String, dynamic> exchange) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: Container(),
+        ),
+        body: Container(
+          padding: EdgeInsets.all(16.0),
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ExchangeCard(
+                    goodsName: exchange['goodsName'],
+                    inc: exchange['inc'],
+                    maxHeadcounts: exchange['maxHeadcounts'],
+                    needCredit: exchange['needCredit']),
+                FloatingActionButton(
+                    onPressed: () {
+                      exchanging(context, exchange['needCredit']);
+                    },
+                    child: Text('신청')),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
 class _ExchangeScreenState extends State<ExchangeScreen> {
   @override
   Widget build(BuildContext context) {
+    final customAuthProvider = Provider.of<CustomAuthProvider>(context);
+    final userInfo = customAuthProvider.userInfo;
+    final myUid = customAuthProvider.uid;
     return Scaffold(
-      appBar: CustomAppBar(
-        title: '교환 페이지',
+      appBar: AppBar(
+        title: Text('교환페이지'),
         leading: null,
       ),
-      body: Column(
-        children: [],
-      ),
+      body: StreamBuilder<QuerySnapshot>(
+          stream:
+              FirebaseFirestore.instance.collection('exchanges').snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Center(child: Text('오류가 발생했습니다: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Center(child: Text('존재하는 교환이 없습니다.'));
+            } else {
+              return RefreshIndicator(
+                  onRefresh: () async {
+                    setState(() {});
+                  },
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '내 리워드',
+                            style: TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            width: 100,
+                            alignment: Alignment.centerRight,
+                            padding: EdgeInsets.all(4.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(3),
+                                border: Border.all(
+                                    color: Colors.pink[100]!, width: 3)),
+                            child: Text(userInfo!['credit'] ?? '0'),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (ctx, index) => GestureDetector(
+                                onTap: () {
+                                  _buildInfoDialog(
+                                      context,
+                                      snapshot.data!.docs[index].data()
+                                          as Map<String, dynamic>);
+                                },
+                                child: Container(
+                                    padding: EdgeInsets.all(8),
+                                    child: Column(
+                                      children: [
+                                        ExchangeCard(
+                                          goodsName: snapshot.data!.docs[index]
+                                              ['goodsName'],
+                                          inc: snapshot.data!.docs[index]
+                                              ['inc'],
+                                          maxHeadcounts: snapshot.data!
+                                              .docs[index]['maxHeadcounts'],
+                                          needCredit: snapshot.data!.docs[index]
+                                              ['needCredit'],
+                                        ),
+                                      ],
+                                    )),
+                              ))
+                    ],
+                  ));
+            }
+          }),
+
+      // body: Column(
+      //   children: [
+      //     FutureBuilder<List<Map<String, dynamic>>>(
+      //       future: FirebaseHelper.queryExchanges(myUid!),
+      //       builder: (context, snapshot) {
+      //         if (snapshot.connectionState == ConnectionState.waiting) {
+      //           return Center(child: CircularProgressIndicator());
+      //         } else if (snapshot.hasError) {
+      //           return Center(child: Text('오류가 발생했습니다: ${snapshot.error}'));
+      //         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+      //           return Center(child: Text('교환페이지가 없습니다.'));
+      //         } else {
+      //           final exchanges = snapshot.data!;
+      //           return RefreshIndicator(
+      //             onRefresh: () async {
+      //               setState(() {});
+      //             },
+      //             child: ListView.builder(
+      //               itemCount: exchanges.length,
+      //               itemBuilder: (context, index) {
+      //                 final exchange = exchanges[index];
+      //                 return GestureDetector(
+      //                   onTap: () {
+      //                     _buildInfoDialog(context, exchange);
+      //                   },
+      //                   child: Card(
+      //                     child: Padding(
+      //                       padding: const EdgeInsets.all(15.0),
+      //                       child: Column(
+      //                         crossAxisAlignment: CrossAxisAlignment.start,
+      //                         children: [
+      //                           Row(
+      //                             crossAxisAlignment: CrossAxisAlignment.start,
+      //                             children: [
+      //                               Expanded(
+      //                                 child: Column(
+      //                                   crossAxisAlignment:
+      //                                       CrossAxisAlignment.start,
+      //                                   children: [
+      //                                     Row(
+      //                                       children: [
+      //                                         Text(
+      //                                           exchange['goodsName'],
+      //                                           style: TextStyle(
+      //                                             fontSize: 18,
+      //                                             fontWeight: FontWeight.bold,
+      //                                           ),
+      //                                         ),
+      //                                         SizedBox(width: 10),
+      //                                         Text(
+      //                                           exchange['inc'],
+      //                                           style: TextStyle(
+      //                                             fontSize: 16,
+      //                                             color: const Color.fromARGB(
+      //                                                 255, 110, 110, 110),
+      //                                             // fontWeight: FontWeight.bold,
+      //                                           ),
+      //                                         ),
+      //                                       ],
+      //                                     ),
+      //                                     SizedBox(height: 4),
+      //                                     Text(
+      //                                         '${exchange['maxHeadcounts']} (${exchange['needCredit']})',
+      //                                         style: TextStyle(
+      //                                           fontSize: 16,
+      //                                         )),
+      //                                     SizedBox(height: 4),
+      //                                   ],
+      //                                 ),
+      //                               ),
+      //                             ],
+      //                           ),
+      //                         ],
+      //                       ),
+      //                     ),
+      //                   ),
+      //                 );
+      //               },
+      //             ),
+      //           );
+      //         }
+      //       },
+      //     ),
+      //   ],
+      // ),
+
       endDrawer: CustomEndDrawer(),
     );
   }
