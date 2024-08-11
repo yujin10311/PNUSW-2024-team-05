@@ -6,6 +6,8 @@ import '../screens/login_screen.dart';
 class CustomEndDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final customAuthProvider =
+        Provider.of<CustomAuthProvider>(context, listen: false);
     final userInfo = Provider.of<CustomAuthProvider>(context).userInfo;
     final username = userInfo?['username'] ?? '사용자 이름';
 
@@ -21,7 +23,10 @@ class CustomEndDrawer extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 40,
-                  backgroundImage: AssetImage('assets/icons/profile_blank.png'),
+                  backgroundImage: customAuthProvider.profileImageBytes != null
+                      ? MemoryImage(customAuthProvider.profileImageBytes!)
+                      : AssetImage('assets/default_profile.png')
+                          as ImageProvider,
                 ),
                 SizedBox(height: 10),
                 Text(

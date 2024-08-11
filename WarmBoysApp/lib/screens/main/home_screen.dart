@@ -161,66 +161,70 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: () => _selectDateRange(context),
-                  child: Text('기간 선택', style: TextStyle(fontSize: 16)),
-                ),
-                SizedBox(width: 15),
-                DropdownButton<String>(
-                  value: _selectedSort,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedSort = newValue!;
-                      _fetchPostcards();
-                    });
-                  },
-                  items: <String>['오름차순', '내림차순']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-                SizedBox(width: 15),
-                DropdownButton<String>(
-                  value: _selectedDong,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedDong = newValue!;
-                      _fetchPostcards();
-                    });
-                  },
-                  items: <String>[
-                    '전체',
-                    '구서1동',
-                    '구서2동',
-                    '금사회동동',
-                    '금성동',
-                    '남산동',
-                    '부곡1동',
-                    '부곡2동',
-                    '부곡3동',
-                    '부곡4동',
-                    '서1동',
-                    '서2동',
-                    '서3동',
-                    '선두구동',
-                    '장전1동',
-                    '장전2동',
-                    '청룡노포동',
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              ],
+            padding: const EdgeInsets.all(5.0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              color: const Color.fromARGB(255, 245, 245, 245),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _selectDateRange(context),
+                    child: Text('기간 선택', style: TextStyle(fontSize: 16)),
+                  ),
+                  SizedBox(width: 15),
+                  DropdownButton<String>(
+                    value: _selectedSort,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedSort = newValue!;
+                        _fetchPostcards();
+                      });
+                    },
+                    items: <String>['오름차순', '내림차순']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(width: 15),
+                  DropdownButton<String>(
+                    value: _selectedDong,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedDong = newValue!;
+                        _fetchPostcards();
+                      });
+                    },
+                    items: <String>[
+                      '전체',
+                      '구서1동',
+                      '구서2동',
+                      '금사회동동',
+                      '금성동',
+                      '남산동',
+                      '부곡1동',
+                      '부곡2동',
+                      '부곡3동',
+                      '부곡4동',
+                      '서1동',
+                      '서2동',
+                      '서3동',
+                      '선두구동',
+                      '장전1동',
+                      '장전2동',
+                      '청룡노포동',
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
