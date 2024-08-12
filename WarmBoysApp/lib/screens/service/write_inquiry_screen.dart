@@ -1,10 +1,91 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
-class WriteInquiryScreen extends StatelessWidget {
+class WriteInquiryScreen extends StatefulWidget {
   final String uid;
 
   WriteInquiryScreen({required this.uid});
+
+  @override
+  _WriteInquiryScreenState createState() => _WriteInquiryScreenState();
+}
+
+class _WriteInquiryScreenState extends State<WriteInquiryScreen> {
+  String? _selectedCategory;
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+  bool _isButtonEnabled = false; // 버튼 활성화 상태를 관리할 변수
+
+  final List<String> _inquiryCategories = [
+    '매칭 관련 일반 문의',
+    '채팅 관련 일반 문의',
+    '프로필',
+    '홈페이지 공고',
+    '크레딧 반영 오류',
+    '얼굴 인증 문의',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 모든 텍스트 필드의 리스너에 _onTextFieldChanged 메서드를 연결
+    _titleController.addListener(_onTextFieldChanged);
+    _contentController.addListener(_onTextFieldChanged);
+  }
+
+  // 사용자가 텍스트 필드에 입력할 때마다 호출
+  void _onTextFieldChanged() {
+    setState(() {
+      _isButtonEnabled = _selectedCategory != null &&
+          _titleController.text.isNotEmpty &&
+          _contentController.text.isNotEmpty;
+    });
+  }
+
+  Future<void> _sendEmail() async {
+    final String subject = '[${_selectedCategory}] ${_titleController.text}';
+    final String body =
+        'uid: ${widget.uid}\n\n${_contentController.text}'; // 본문 첫 줄에 uid 추가
+
+    final Email emailToSend = Email(
+      body: body,
+      subject: subject,
+      recipients: ['addarrow3@gmail.com'], // 수신자 이메일 주소
+      isHTML: false,
+    );
+
+    try {
+      await FlutterEmailSender.send(emailToSend);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('문의가 접수되었습니다.')),
+      );
+      _resetForm(); // 폼을 초기화
+    } catch (error) {
+      print('Email send error: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('문의 접수에 실패했습니다. 다시 시도해주세요.')),
+      );
+    }
+  }
+
+  // 폼을 초기화하는 메서드
+  void _resetForm() {
+    setState(() {
+      _selectedCategory = null;
+      _titleController.clear();
+      _contentController.clear();
+      _isButtonEnabled = false; // 버튼 비활성화
+    });
+  }
+
+  @override
+  void dispose() {
+    // 리스너 제거
+    _titleController.dispose();
+    _contentController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +103,7 @@ class WriteInquiryScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
@@ -41,9 +123,117 @@ class WriteInquiryScreen extends StatelessWidget {
                         ),
                       ),
                     ],
-                  )
+                  ),
+                  SizedBox(height: 8),
+                  DropdownButtonFormField<String>(
+                    value: _selectedCategory,
+                    hint: Text('문의 분류를 선택하세요'),
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedCategory = newValue;
+                      });
+                      _onTextFieldChanged(); // 문의 분류 선택 시 버튼 상태 업데이트
+                    },
+                    items: _inquiryCategories.map((category) {
+                      return DropdownMenuItem<String>(
+                        value: category,
+                        child: Text(category),
+                      );
+                    }).toList(),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Text(
+                        "문의 제목",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "*",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  TextField(
+                    controller: _titleController,
+                    maxLength: 20,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: '제목을 입력해 주세요. (20자 이내)',
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Text(
+                        "문의 내용",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "*",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  TextField(
+                    controller: _contentController,
+                    maxLines: 10,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: '문의 내용을 입력하세요',
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  SizedBox(
+                    width: double.infinity, // 가로로 확장
+                    child: ElevatedButton(
+                      onPressed: _isButtonEnabled
+                          ? () {
+                              _sendEmail(); // 문의 접수 버튼을 눌렀을 때 이메일 전송
+                            }
+                          : null, // 비활성화
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        backgroundColor: _isButtonEnabled
+                            ? Color.fromARGB(255, 245, 174, 168)
+                            : Colors.grey,
+                        foregroundColor: Colors.black,
+                      ),
+                      child: Text(
+                        '문의 접수',
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
