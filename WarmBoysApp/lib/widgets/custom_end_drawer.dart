@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/custom_auth_provider.dart';
 import '../screens/login_screen.dart';
+import '../screens/service/customer_service_screen.dart';
 
 class CustomEndDrawer extends StatelessWidget {
   @override
@@ -10,6 +11,7 @@ class CustomEndDrawer extends StatelessWidget {
         Provider.of<CustomAuthProvider>(context, listen: false);
     final userInfo = Provider.of<CustomAuthProvider>(context).userInfo;
     final username = userInfo?['username'] ?? '사용자 이름';
+    final uid = Provider.of<CustomAuthProvider>(context).uid;
 
     return Drawer(
       child: ListView(
@@ -41,13 +43,24 @@ class CustomEndDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.person),
-            title: Text('프로필 수정'),
+            title: Text('내 프로필'),
             onTap: () {},
           ),
           ListTile(
-            leading: Icon(Icons.credit_card),
-            title: Text('내 크레딧'),
+            leading: Icon(Icons.history),
+            title: Text('활동 기록'),
             onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.help_outline),
+            title: Text('고객센터'),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => CustomerServiceScreen(uid: uid!),
+                ),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.logout),

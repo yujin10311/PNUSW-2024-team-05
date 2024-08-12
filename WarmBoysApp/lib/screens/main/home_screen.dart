@@ -160,11 +160,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
+          if (memberType == '시니어')
+            Divider(color: Colors.grey[300], thickness: 1),
           Padding(
-            padding: const EdgeInsets.all(5.0),
+            padding: const EdgeInsets.all(5),
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              color: const Color.fromARGB(255, 245, 245, 245),
+              // padding: const EdgeInsets.symmetric(vertical: 5),
+              // color: const Color.fromARGB(255, 245, 245, 245),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -227,6 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+          Divider(color: Colors.grey[300], thickness: 1),
           Expanded(
             child: RefreshIndicator(
               onRefresh: _fetchPostcards,

@@ -60,15 +60,17 @@ class ReviewScreen extends StatelessWidget {
                           SizedBox(height: 4),
                           Text('시니어의 리뷰: ${review['reviewBySenior']}'),
                         ] else if (memberType == '시니어') ...[
-                          Row(children: [
-                            Text('메이트의 평점:'),
-                            RatingStars(
-                                rating: review['ratingByMate'].toDouble()),
-                            Text(
-                              "${review['ratingByMate'].toStringAsFixed(2)})",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ]),
+                          Row(
+                            children: [
+                              Text('메이트의 평점:'),
+                              RatingStars(
+                                  rating: review['ratingByMate'].toDouble()),
+                              Text(
+                                "${review['ratingByMate'].toStringAsFixed(2)})",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
                           SizedBox(height: 4),
                           Text('메이트의 리뷰: ${review['reviewByMate']}'),
                         ],
