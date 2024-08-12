@@ -892,6 +892,76 @@ class FirebaseHelper {
     }
   }
 
+static Future<String?> getChatRoomWithUserId(String otherUserId) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    try {
+      // 현재 사용자 ID
+      String currentUserId = _auth.currentUser!.uid;
+
+      // 현재 사용자와 상대방 사용자가 포함된 채팅방 검색
+      QuerySnapshot chatSnapshot = await _firestore
+          .collection('chats')
+          .where('participants', arrayContains: currentUserId)
+          .get();
+
+      // 채팅방에서 상대방 사용자가 포함된 채팅방이 있는지 확인
+      for (var doc in chatSnapshot.docs) {
+        List<dynamic> participants = doc['participants'];
+
+        if (participants.contains(otherUserId)) {
+          // 상대방 사용자와 함께 있는 채팅방을 찾으면 해당 채팅방 ID 반환
+          return doc.id;
+        }
+      }
+
+      // 상대방 사용자와 함께 있는 채팅방이 없으면 null 반환
+      return null;
+    } catch (e) {
+      print('Error checking chat room: $e');
+      return null;
+    }
+  }
+
+//uid를 통한 채팅방 생성
+static Future<String?> CreateChatRoomWithUserId(String otherUserId) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    try {
+      String currentUserId = _auth.currentUser!.uid;
+
+      QuerySnapshot chatSnapshot = await _firestore
+          .collection('chats')
+          .where('participants', arrayContains: currentUserId)
+          .get();
+
+      // 채팅방에서 상대방 사용자가 포함된 채팅방이 있는지 확인
+      for (var doc in chatSnapshot.docs) {
+        List<dynamic> participants = doc['participants'];
+
+        if (participants.contains(otherUserId)) {
+          return doc.id;
+        }
+      }
+
+      // 상대방 사용자와 함께 있는 채팅방이 없으면 새 채팅방 생성
+      DocumentReference chatDocRef = await _firestore.collection('chats').add({
+        'participants': [currentUserId, otherUserId],
+        'lastMessage': '',
+        'lastMessageTime': Timestamp.now(),
+        'lastMessageSender': currentUserId,
+        'lastMessageReadBy': [],
+      });
+
+      return chatDocRef.id;
+    } catch (e) {
+      print('Error creating chat: $e');
+      return null;
+    }
+  }
+
 //이메일을 통한 채팅방 생성
   static Future<String?> createChatWithEmail(String email) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
