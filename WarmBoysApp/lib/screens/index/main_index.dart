@@ -96,18 +96,26 @@ class _MainIndexState extends State<MainIndex> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/home.png', width: 24, height: 24),
+            icon: Icon(
+              Icons.home,
+              size: 30,
+            ),
             label: '홈',
           ),
           BottomNavigationBarItem(
-            icon:
-                Image.asset('assets/icons/matching.png', width: 24, height: 24),
+            icon: Icon(
+              Icons.handshake,
+              size: 30,
+            ),
             label: '매칭',
           ),
           BottomNavigationBarItem(
             icon: Stack(
               children: [
-                Image.asset('assets/icons/chat.png', width: 24, height: 24),
+                Icon(
+                  Icons.chat,
+                  size: 30,
+                ),
                 if (_hasNewMessages)
                   Positioned(
                     right: 0,
@@ -128,8 +136,10 @@ class _MainIndexState extends State<MainIndex> {
             label: '채팅',
           ),
           BottomNavigationBarItem(
-            icon:
-                Image.asset('assets/icons/exchange.png', width: 24, height: 24),
+            icon: Icon(
+              Icons.card_giftcard,
+              size: 30,
+            ),
             label: '교환',
           ),
         ],
