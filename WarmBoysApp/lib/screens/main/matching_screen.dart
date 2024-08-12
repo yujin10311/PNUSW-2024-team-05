@@ -13,6 +13,7 @@ import '../activity/activity_screen.dart';
 import '../../widgets/rating_stars.dart';
 import '../../widgets/rate_stars.dart';
 import '../review/rating_by_senior.dart';
+import '../../screens/chatting/chat_screen.dart';
 
 class MatchingScreen extends StatefulWidget {
   @override
@@ -351,17 +352,12 @@ class _MatchingScreenState extends State<MatchingScreen>
                                               style: TextStyle(
                                                 fontSize: 13,
                                               )),
-                                          SizedBox(height: 5),
-                                          Text(
-                                            '크레딧: ${post['credit'].toString()}',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15),
-                                          ),
                                         ],
                                       ),
                                     ),
                                     Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         (post['imgUrl'] != '')
                                             ? GestureDetector(
@@ -399,18 +395,85 @@ class _MatchingScreenState extends State<MatchingScreen>
                                                 radius: 50,
                                                 child: Icon(Icons.person),
                                               ),
-                                        SizedBox(height: 10),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween, // Row 내부 요소 간의 간격을 최대화하여 좌우 끝으로 배치
+                                  children: [
+                                    Text(
+                                      '크레딧: ${post['credit'].toString()}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
                                         ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            foregroundColor:
+                                                const Color.fromARGB(
+                                                    255, 255, 17, 0),
+                                          ),
                                           onPressed: () async {
                                             await FirebaseHelper.cancelApply(
                                                 post['postId'], myUid);
                                             // 페이지 새로 고침
                                             setState(() {});
                                           },
-                                          child: Text('신청 취소',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                              )),
+                                          child: Text(
+                                            '신청 취소',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                            width: 10), // 버튼 사이에 간격을 추가합니다.
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            backgroundColor: Color.fromARGB(
+                                                255, 255, 199, 59),
+                                            foregroundColor:
+                                                Color.fromARGB(255, 50, 50, 50),
+                                          ),
+                                          onPressed: () async {
+                                            final chatId = await FirebaseHelper
+                                                .CreateChatRoomWithUserId(
+                                              post['uid'],
+                                            );
+                                            if (chatId != null) {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChatScreen(
+                                                          chatId: chatId),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          child: Text(
+                                            '대화하기',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -786,29 +849,85 @@ class _MatchingScreenState extends State<MatchingScreen>
                                                   );
                                                 },
                                                 child: CircleAvatar(
-                                                  radius: 40,
+                                                  radius: 55,
                                                   backgroundImage: NetworkImage(
                                                       post['imgUrl']),
                                                 ),
                                               )
                                             : CircleAvatar(
-                                                radius: 40,
+                                                radius: 55,
                                                 child: Icon(Icons.person),
                                               ),
-                                        SizedBox(height: 5),
-                                        ElevatedButton(
-                                          onPressed: () async {
-                                            await FirebaseHelper.acceptMatching(
-                                                post['uid'], post['postId']);
-                                            // 페이지 새로 고침
-                                            setState(() {});
-                                          },
-                                          child: Text('매칭 수락',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                              )),
-                                        ),
                                       ],
+                                    ),
+                                  ],
+                                ),
+                                Divider(
+                                  color: Color.fromARGB(255, 234, 234, 234),
+                                  thickness: 2,
+                                ),
+                                SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .end, // Row 내부 요소 간의 간격을 최대화하여 좌우 끝으로 배치
+                                  children: [
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        await FirebaseHelper.acceptMatching(
+                                            post['uid'], post['postId']);
+                                        // 페이지 새로 고침
+                                        setState(() {});
+                                      },
+                                      child: Text(
+                                        '매칭 수락',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10), // 버튼 사이에 간격을 추가합니다.
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 255, 199, 59),
+                                        foregroundColor:
+                                            Color.fromARGB(255, 50, 50, 50),
+                                      ),
+                                      onPressed: () async {
+                                        final chatId = await FirebaseHelper
+                                            .CreateChatRoomWithUserId(
+                                          post['uid'],
+                                        );
+                                        if (chatId != null) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ChatScreen(chatId: chatId),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      child: Text(
+                                        '대화하기',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),

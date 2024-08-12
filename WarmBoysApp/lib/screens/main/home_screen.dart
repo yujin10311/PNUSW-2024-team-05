@@ -6,6 +6,7 @@ import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_end_drawer.dart';
 import '../../utils/firebase_helper.dart';
 import '../../widgets/rating_stars.dart';
+import '../chatting/chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -298,11 +299,70 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(fontSize: 16),
                           ),
                           SizedBox(height: 5),
-                          Text(
-                            "크레딧: ${postcard['credit'].toString()}",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          )
+                          memberType == '메이트'
+                              ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "크레딧: ${postcard['credit'].toString()}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                    GestureDetector(
+                                      child: Container(
+                                        width: 88, // 원하는 너비로 설정
+                                        height: 32, // 원하는 높이로 설정
+                                        decoration: BoxDecoration(
+                                          color: Color.fromARGB(255, 255, 199,
+                                              59), // 배경색을 아이콘 색상으로 설정
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "대화하기",
+                                              style: TextStyle(
+                                                fontSize: 14, // 텍스트 크기 조절
+                                                color: Color.fromARGB(255, 50,
+                                                    50, 50), // 텍스트 색상을 흰색으로 설정
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      onTap: () async {
+                                        final chatId = await FirebaseHelper
+                                            .CreateChatRoomWithUserId(
+                                                postcard['seniorUid']);
+                                        if (chatId != null) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ChatScreen(chatId: chatId),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "크레딧: ${postcard['credit'].toString()}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                  ],
+                                ),
                         ],
                       ),
                       onTap: () {
