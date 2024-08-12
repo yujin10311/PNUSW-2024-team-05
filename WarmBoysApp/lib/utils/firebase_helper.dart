@@ -1225,7 +1225,7 @@ class FirebaseHelper {
           if (mateDoc['mateUid'] == uid) {
             // 조건에 맞는 데이터를 Map으로 저장
             reviews.add({
-              'name': '익명 $index',
+              'username': '익명 $index',
               'activityType': doc['activityType'],
               'ratingBySenior': doc['ratingBySenior'],
               'reviewBySenior': doc['reviewBySenior'],
@@ -1247,7 +1247,7 @@ class FirebaseHelper {
       for (var doc in postsSnapshot.docs) {
         // 조건에 맞는 데이터를 Map으로 저장
         reviews.add({
-          'name': '익명 $index',
+          'username': '익명 $index',
           'activityType': doc['activityType'],
           'ratingByMate': doc['ratingByMate'],
           'reviewByMate': doc['reviewByMate'],

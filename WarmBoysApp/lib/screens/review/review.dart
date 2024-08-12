@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../utils/firebase_helper.dart'; // FirebaseHelper import
+import '../../widgets/rating_stars.dart';
 
 class ReviewScreen extends StatelessWidget {
   final String username;
@@ -41,16 +42,33 @@ class ReviewScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '활동 유형: ${review['activityType']}',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          '${review['username']}',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 8),
                         if (memberType == '메이트') ...[
-                          Text('시니어의 평점: ${review['ratingBySenior']}'),
+                          Row(children: [
+                            Text('시니어의 평점:'),
+                            RatingStars(
+                                rating: review['ratingBySenior'].toDouble()),
+                            Text(
+                              "${review['ratingBySenior'].toStringAsFixed(2)})",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ]),
                           SizedBox(height: 4),
                           Text('시니어의 리뷰: ${review['reviewBySenior']}'),
                         ] else if (memberType == '시니어') ...[
-                          Text('메이트의 평점: ${review['ratingByMate']}'),
+                          Row(children: [
+                            Text('메이트의 평점:'),
+                            RatingStars(
+                                rating: review['ratingByMate'].toDouble()),
+                            Text(
+                              "${review['ratingByMate'].toStringAsFixed(2)})",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ]),
                           SizedBox(height: 4),
                           Text('메이트의 리뷰: ${review['reviewByMate']}'),
                         ],
