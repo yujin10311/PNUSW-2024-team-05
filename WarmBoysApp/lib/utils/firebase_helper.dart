@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'dart:io';
 
 class FirebaseHelper {
-  final Map<String, DateTime> stringToDate = {
+  static final Map<String, DateTime> stringToDate = {
     '오전 9시': DateTime(1, 1, 1, 9),
     '오전 10시': DateTime(1, 1, 1, 10),
     '오전 11시': DateTime(1, 1, 1, 11),
@@ -25,7 +25,7 @@ class FirebaseHelper {
     '오후 9시': DateTime(1, 1, 1, 21),
   };
 
-  final Map<DateTime, String> dateToString = {
+  static final Map<DateTime, String> dateToString = {
     DateTime(1, 1, 1, 9): '오전 9시',
     DateTime(1, 1, 1, 10): '오전 10시',
     DateTime(1, 1, 1, 11): '오전 11시',
@@ -1330,5 +1330,164 @@ class FirebaseHelper {
     }
 
     return reviews;
+  }
+
+  static Future<List<Map<String, dynamic>>> queryActivities(
+      String uid, String memberType) async {
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    List<Map<String, dynamic>> results = [];
+
+    try {
+      // posts 컬렉션에서 status가 notReviewedBySenior 또는 finished인 문서들을 가져옴
+      QuerySnapshot postsSnapshot = await _firestore
+          .collection('posts')
+          .where('status', whereIn: ['notReviewedBySenior', 'finished']).get();
+
+      for (var postDoc in postsSnapshot.docs) {
+        final postData = postDoc.data() as Map<String, dynamic>;
+
+        // 시니어의 경우
+        if (memberType == '시니어') {
+          if (postData['seniorUid'] == uid) {
+            // mates 서브 컬렉션에서 첫 번째 문서 가져오기
+            final matesSnapshot =
+                await postDoc.reference.collection('mates').limit(1).get();
+
+            if (matesSnapshot.docs.isNotEmpty) {
+              DocumentSnapshot matesDoc = matesSnapshot.docs.first;
+              final mateUid = matesDoc['mateUid'];
+
+              // mateUid로 user 컬렉션에서 해당 유저의 정보를 가져오기
+              final mateSnapshot =
+                  await _firestore.collection('user').doc(mateUid).get();
+
+              // 기본 유저 정보
+              Map<String, dynamic> mateData = {
+                'mateUid': null,
+                'imgUrl': null,
+                'username': null,
+                'city': null,
+                'gu': null,
+                'dong': null,
+                'rating': null,
+                'ratingCount': null,
+              };
+
+              if (mateSnapshot.exists) {
+                DocumentSnapshot mateDoc = mateSnapshot;
+                mateData = {
+                  'uid': mateUid,
+                  'imgUrl': mateDoc['imgUrl'],
+                  'username': mateDoc['username'],
+                  'city': mateDoc['city'],
+                  'gu': mateDoc['gu'],
+                  'dong': mateDoc['dong'],
+                  'rating': mateDoc['rating'],
+                  'ratingCount': mateDoc['ratingCount'],
+                };
+              }
+              DateTime startTimeTemp = DateTime(1, 1, 1,
+                  ((postData['startTime'] as Timestamp).toDate()).hour);
+              DateTime endTimeTemp = DateTime(
+                  1, 1, 1, ((postData['endTime'] as Timestamp).toDate()).hour);
+
+              // posts 문서의 정보
+              mateData.addAll({
+                'timeDiff': dateDifferenceToString(
+                    (postData['endTime'] as Timestamp).toDate()),
+                'date': DateFormat('yy.MM.dd')
+                    .format((postData['startTime'] as Timestamp).toDate()),
+                'startTime': dateToString[startTimeTemp],
+                'endTime': dateToString[endTimeTemp],
+                'activityCity': postData['city'],
+                'activityGu': postData['gu'],
+                'activityDong': postData['dong'],
+                'activityType': postData['activityType'],
+                'startImgUrl': postData['startImgUrl'],
+                'endImgUrl': postData['endImgUrl'],
+                'startReport': postData['startReport'],
+                'endReport': postData['endReport'],
+                'credit': postData['credit'],
+              });
+
+              results.add(mateData);
+            }
+          }
+        } else if (memberType == '메이트') {
+          // 메이트의 경우
+          final matesSnapshot =
+              await postDoc.reference.collection('mates').limit(1).get();
+
+          if (matesSnapshot.docs.isNotEmpty) {
+            DocumentSnapshot matesDoc = matesSnapshot.docs.first;
+            final mateUid = matesDoc['mateUid'];
+
+            if (mateUid == uid) {
+              final seniorUid = postData['seniorUid'];
+
+              // seniorUid로 user 컬렉션에서 해당 유저의 정보를 가져오기
+              final seniorSnapshot =
+                  await _firestore.collection('user').doc(seniorUid).get();
+
+              // 기본 시니어 정보
+              Map<String, dynamic> seniorData = {
+                'uid': seniorUid,
+                'imgUrl': null,
+                'username': null,
+                'city': null,
+                'gu': null,
+                'dong': null,
+                'rating': null,
+                'ratingCount': null,
+              };
+
+              if (seniorSnapshot.exists) {
+                DocumentSnapshot seniorDoc = seniorSnapshot;
+                seniorData = {
+                  'uid': seniorUid,
+                  'imgUrl': seniorDoc['imgUrl'],
+                  'username': seniorDoc['username'],
+                  'city': seniorDoc['city'],
+                  'gu': seniorDoc['gu'],
+                  'dong': seniorDoc['dong'],
+                  'rating': seniorDoc['rating'],
+                  'ratingCount': seniorDoc['ratingCount'],
+                };
+              }
+
+              DateTime startTimeTemp = DateTime(1, 1, 1,
+                  ((postData['startTime'] as Timestamp).toDate()).hour);
+              DateTime endTimeTemp = DateTime(
+                  1, 1, 1, ((postData['endTime'] as Timestamp).toDate()).hour);
+
+              // posts 문서의 정보
+              seniorData.addAll({
+                'timeDiff': dateDifferenceToString(
+                    (postData['endTime'] as Timestamp).toDate()),
+                'date': DateFormat('yy.MM.dd')
+                    .format((postData['startTime'] as Timestamp).toDate()),
+                'startTime': dateToString[startTimeTemp],
+                'endTime': dateToString[endTimeTemp],
+                'activityCity': postData['city'],
+                'activityGu': postData['gu'],
+                'activityDong': postData['dong'],
+                'activityType': postData['activityType'],
+                'startImgUrl': postData['startImgUrl'],
+                'endImgUrl': postData['endImgUrl'],
+                'startReport': postData['startReport'],
+                'endReport': postData['endReport'],
+                'credit': postData['credit'],
+              });
+
+              results.add(seniorData);
+            }
+          }
+        }
+      }
+    } catch (e) {
+      print('Error querying activities: $e');
+    }
+
+    return results;
   }
 }
