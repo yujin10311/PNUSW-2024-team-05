@@ -702,6 +702,7 @@ class FirebaseHelper {
             'city': postData['city'] ?? '',
             'gu': postData['gu'] ?? '',
             'dong': postData['dong'] ?? '',
+            'detailedAddress': seniorData['detailedAddress'] ?? '',
             'date':
                 '${DateFormat('yy.MM.dd').format((postData['startTime'] as Timestamp).toDate())}' ??
                     '',

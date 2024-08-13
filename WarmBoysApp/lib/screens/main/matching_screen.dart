@@ -168,6 +168,23 @@ class _MatchingScreenState extends State<MatchingScreen>
                       rating: post['rating'],
                       ratingCount: post['ratingCount']),
                   SizedBox(height: 30),
+                  if (post['detailedAddress'] != null)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '상세 주소',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          '${post['city']} ${post['gu']} ${post['dong']}, ${post['detailedAddress']}',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        SizedBox(height: 30),
+                      ],
+                    ),
                   Text(
                     '회원 상세 정보',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -178,13 +195,20 @@ class _MatchingScreenState extends State<MatchingScreen>
                       withPet: post['withPet'],
                       withCam: post['withCam']),
                   SizedBox(height: 30),
-                  Text(
-                    '반려동물 상세 설명',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
-                  AutowrapTextBox(text: post['petInfo']),
-                  SizedBox(height: 30),
+                  if (post['petInfo'] != '')
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '반려동물 상세 설명',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10),
+                        AutowrapTextBox(text: post['petInfo']),
+                        SizedBox(height: 30),
+                      ],
+                    ),
                   Text(
                     '해당되는 증상',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
