@@ -285,7 +285,10 @@ class ProfileMateScreen extends StatelessWidget {
                                           Navigator.of(context)
                                               .pop(); // 다이얼로그 닫기
                                           Navigator.of(context)
-                                              .pushReplacementNamed('/login');
+                                              .pushNamedAndRemoveUntil(
+                                                  '/login',
+                                                  (Route<dynamic> route) =>
+                                                      false);
                                         });
                                       },
                                       child: Text(
