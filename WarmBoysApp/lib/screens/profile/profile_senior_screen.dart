@@ -39,7 +39,10 @@ class ProfileSeniorScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("내 프로필 - 시니어"),
+        title: Text(
+          "내 프로필 - 시니어",
+          style: TextStyle(fontSize: 18),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
