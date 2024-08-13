@@ -19,63 +19,120 @@ class ExchangeScreen extends StatefulWidget {
 
 // 바텀모달로 터치시 추가정보 띄우기
 
-void exchanging(BuildContext context, int howmuch) {
-  showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Close'))
-            ],
-            title: Text('신청되셨습니다.'),
-            content: Text('남은 크레딧 : ${howmuch}'),
-          ));
-}
+class _ExchangeScreenState extends State<ExchangeScreen>
+    with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<CustomAuthProvider>(this.context, listen: false);
+  }
 
-void _buildInfoDialog(BuildContext context, Map<String, dynamic> exchange) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    builder: (BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-          leading: Container(),
-        ),
-        body: Container(
-          padding: EdgeInsets.all(16.0),
-          height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ExchangeCard(
-                    goodsName: exchange['goodsName'],
-                    inc: exchange['inc'],
-                    maxHeadcounts: exchange['maxHeadcounts'],
-                    needCredit: exchange['needCredit']),
-                FloatingActionButton(
-                    onPressed: () {
-                      exchanging(context, exchange['needCredit']);
-                    },
-                    child: Text('신청')),
-              ],
+  int credit = 0;
+  int isinit = 1;
+
+  Future exchanging(
+    BuildContext context,
+    int howmuch,
+    int userCredit,
+    String uid,
+  ) async {
+    if (userCredit < howmuch) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Close'))
+                ],
+                title: Text('교환이 불가합니다.'),
+                content: Text('사유 : 크레딧이 부족합니다.'),
+              ));
+    } else if (userCredit >= howmuch) {
+      await FirebaseFirestore.instance
+          .collection("user")
+          .doc(uid)
+          .update({"credit": userCredit - howmuch});
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Close'))
+                ],
+                title: Text('신청되셨습니다.'),
+                content: Text('남은 크레딧 : ${userCredit - howmuch}'),
+              ));
+      creditChange(howmuch);
+    }
+  }
+
+  void creditChange(int howmuch) {
+    setState(() {
+      credit = credit - howmuch;
+    });
+    print(credit);
+  }
+
+  void _buildInfoDialog(
+    BuildContext context,
+    Map<String, dynamic> exchange,
+    int userCredit,
+    String uid,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: Container(),
+          ),
+          body: Container(
+            padding: EdgeInsets.all(16.0),
+            height: MediaQuery.of(context).size.height,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ExchangeCard(
+                      imgUrl: exchange['imgUrl'],
+                      goodsName: exchange['goodsName'],
+                      inc: exchange['inc'],
+                      maxHeadcounts: exchange['maxHeadcounts'],
+                      needCredit: exchange['needCredit']),
+                  FloatingActionButton(
+                      onPressed: () {
+                        exchanging(
+                            context, exchange['needCredit'], userCredit, uid);
+                      },
+                      child: Text('교환')),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
-class _ExchangeScreenState extends State<ExchangeScreen> {
   @override
   Widget build(BuildContext context) {
     final customAuthProvider = Provider.of<CustomAuthProvider>(context);
     final userInfo = customAuthProvider.userInfo;
     final myUid = customAuthProvider.uid;
+    final memberType = userInfo?['memberType'];
+    if (isinit == 1) {
+      setState(() {
+        credit = userInfo?['credit'] ?? 0;
+        isinit = 0;
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('교환페이지'),
@@ -117,7 +174,7 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
                                 borderRadius: BorderRadius.circular(3),
                                 border: Border.all(
                                     color: Colors.pink[100]!, width: 3)),
-                            child: Text(userInfo!['credit'] ?? '0'),
+                            child: Text(credit.toString()),
                           )
                         ],
                       ),
@@ -133,13 +190,17 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
                                   _buildInfoDialog(
                                       context,
                                       snapshot.data!.docs[index].data()
-                                          as Map<String, dynamic>);
+                                          as Map<String, dynamic>,
+                                      credit,
+                                      myUid!);
                                 },
                                 child: Container(
                                     padding: EdgeInsets.all(8),
                                     child: Column(
                                       children: [
                                         ExchangeCard(
+                                          imgUrl: snapshot.data!.docs[index]
+                                              ['imgUrl'],
                                           goodsName: snapshot.data!.docs[index]
                                               ['goodsName'],
                                           inc: snapshot.data!.docs[index]
