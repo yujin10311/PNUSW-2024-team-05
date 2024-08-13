@@ -13,7 +13,6 @@ class ChattingScreen extends StatefulWidget {
 
 class _ChattingScreenState extends State<ChattingScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final TextEditingController _emailController = TextEditingController();
   Map<String, String?> userProfileUrls = {};
   Map<String, String?> userNames = {};
 
@@ -26,54 +25,6 @@ class _ChattingScreenState extends State<ChattingScreen> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      hintText: '이메일 입력',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () async {
-                    String? chatId = await FirebaseHelper.createChatWithEmail(_emailController.text.trim());
-                    if (chatId != null) {
-                      _emailController.clear();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChatScreen(chatId: chatId),
-                        ),
-                      );
-                    } else {
-                      // 이메일로 사용자 찾기 실패 시 에러 메시지 표시
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text('오류'),
-                          content: Text('사용자를 찾을 수 없습니다.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: Text('확인'),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
           Expanded(
             child: StreamBuilder(
               stream: FirebaseHelper.getChatsStream(_auth.currentUser!.uid),
@@ -94,75 +45,90 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   itemCount: chatDocs.length,
                   itemBuilder: (ctx, index) {
                     var chatData = chatDocs[index];
-                    var participants = chatData['participants'] as List<dynamic>;
-                    var otherUserId = participants.firstWhere((id) => id != _auth.currentUser!.uid, orElse: () => null);
-                    var isRead = (chatData['lastMessageReadBy'] as List<dynamic>?)?.contains(_auth.currentUser!.uid) ?? false;
+                    var participants =
+                        chatData['participants'] as List<dynamic>;
+                    var otherUserId = participants.firstWhere(
+                        (id) => id != _auth.currentUser!.uid,
+                        orElse: () => null);
+                    var isRead =
+                        (chatData['lastMessageReadBy'] as List<dynamic>?)
+                                ?.contains(_auth.currentUser!.uid) ??
+                            false;
 
                     return FutureBuilder<Map<String, String?>>(
                       future: _getUserProfileAndName(otherUserId),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return ListTile(
                             title: Text('Loading...'),
                             subtitle: Text(chatData['lastMessageTime'] != null
-                                ? FirebaseHelper.formatDate(chatData['lastMessageTime'].toDate())
+                                ? FirebaseHelper.formatDate(
+                                    chatData['lastMessageTime'].toDate())
                                 : ''),
                           );
                         }
                         var userProfileUrl = snapshot.data?['profileUrl'];
                         var userName = snapshot.data?['userName'] ?? 'Unknown';
-                        return Column(
-                          children: [
-                            ListTile(
-                              leading: CircleAvatar(
-                                radius: 22,
-                                backgroundImage: userProfileUrl != null && userProfileUrl.isNotEmpty
-                                    ? NetworkImage(userProfileUrl)
-                                    : const AssetImage('assets/images/default_profile.png') as ImageProvider,
-                              ),
-                              title: Text(
-                                userName,
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    chatData['lastMessage'],
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                  Text(
-                                    chatData['lastMessageTime'] != null
-                                        ? FirebaseHelper.formatTime(chatData['lastMessageTime'].toDate())
-                                        : '',
-                                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                                  ),
-                                ],
-                              ),
-                              trailing: !isRead
-                                  ? Container(
-                                      width: 16,
-                                      height: 16,
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    )
-                                  : null,
-                              onTap: () async {
-                                await FirebaseHelper.markMessageAsRead(chatData.id, _auth.currentUser!.uid);
-                                if (mounted) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ChatScreen(chatId: chatData.id),
-                                    ),
-                                  );
-                                }
-                              },
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              radius: 30,
+                              backgroundImage: userProfileUrl != null &&
+                                      userProfileUrl.isNotEmpty
+                                  ? NetworkImage(userProfileUrl)
+                                  : const AssetImage(
+                                          'assets/images/default_profile.png')
+                                      as ImageProvider,
                             ),
-                            const Divider(), // 리스트 항목 구분선
-                          ],
+                            title: Text(
+                              userName,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  chatData['lastMessage'],
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                                Text(
+                                  chatData['lastMessageTime'] != null
+                                      ? FirebaseHelper.formatTime(
+                                          chatData['lastMessageTime'].toDate())
+                                      : '',
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                            trailing: !isRead
+                                ? Container(
+                                    width: 16,
+                                    height: 16,
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  )
+                                : null,
+                            onTap: () async {
+                              await FirebaseHelper.markMessageAsRead(
+                                  chatData.id, _auth.currentUser!.uid);
+                              if (mounted) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ChatScreen(chatId: chatData.id),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          // const Divider(), // 리스트 항목 구분선
                         );
                       },
                     );
@@ -181,9 +147,13 @@ class _ChattingScreenState extends State<ChattingScreen> {
     if (userId == null) return {'profileUrl': null, 'userName': null};
 
     if (userProfileUrls.containsKey(userId) && userNames.containsKey(userId)) {
-      return {'profileUrl': userProfileUrls[userId], 'userName': userNames[userId]};
+      return {
+        'profileUrl': userProfileUrls[userId],
+        'userName': userNames[userId]
+      };
     } else {
-      final doc = await FirebaseFirestore.instance.collection('user').doc(userId).get();
+      final doc =
+          await FirebaseFirestore.instance.collection('user').doc(userId).get();
       if (doc.exists) {
         String? imgUrl = doc['imgUrl'];
         String? userName = doc['username'];
