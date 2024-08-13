@@ -310,35 +310,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16),
                                     ),
-                                    GestureDetector(
-                                      child: Container(
-                                        width: 88, // 원하는 너비로 설정
-                                        height: 32, // 원하는 높이로 설정
-                                        decoration: BoxDecoration(
-                                          color: Color.fromARGB(255, 255, 199,
-                                              59), // 배경색을 아이콘 색상으로 설정
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(8),
                                         ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "대화하기",
-                                              style: TextStyle(
-                                                fontSize: 14, // 텍스트 크기 조절
-                                                color: Color.fromARGB(255, 50,
-                                                    50, 50), // 텍스트 색상을 흰색으로 설정
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 255, 199, 59),
+                                        foregroundColor:
+                                            Color.fromARGB(255, 50, 50, 50),
                                       ),
-                                      onTap: () async {
+                                      onPressed: () async {
                                         final chatId = await FirebaseHelper
                                             .CreateChatRoomWithUserId(
-                                                postcard['seniorUid']);
+                                          postcard['seniorUid'],
+                                        );
                                         if (chatId != null) {
                                           Navigator.push(
                                             context,
@@ -349,6 +338,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                           );
                                         }
                                       },
+                                      child: Text(
+                                        '대화하기',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 )

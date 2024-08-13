@@ -583,12 +583,6 @@ class _MatchingScreenState extends State<MatchingScreen>
                                                 fontSize: 13,
                                               )),
                                           SizedBox(height: 5),
-                                          Text(
-                                            '크레딧: ${post['credit'].toString()}',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15),
-                                          ),
                                         ],
                                       ),
                                     ),
@@ -630,7 +624,22 @@ class _MatchingScreenState extends State<MatchingScreen>
                                                 radius: 50,
                                                 child: Icon(Icons.person),
                                               ),
-                                        SizedBox(height: 10),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '크레딧: ${post['credit'].toString()}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15),
+                                    ),
+                                    Row(
+                                      children: [
                                         ElevatedButton(
                                           onPressed: post['status'] == 'matched'
                                               ? () {
@@ -676,27 +685,80 @@ class _MatchingScreenState extends State<MatchingScreen>
                                                   : null, // 기타 상태일 때는 비활성화
                                           child: Text(
                                             post['status'] == 'matched'
-                                                ? '활동 시작'
+                                                ? '활동 시작하기'
                                                 : post['status'] == 'activated'
-                                                    ? '활동 중'
+                                                    ? '활동 종료하기'
                                                     : '활동 실패', // status가 'failed'일 때는 '활동 실패' 표시
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
                                           ),
                                           style: ElevatedButton.styleFrom(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
                                             backgroundColor: post['status'] ==
                                                     'matched'
                                                 ? Color.fromARGB(
-                                                    255, 111, 255, 95)
+                                                    255, 244, 255, 242)
                                                 : post['status'] == 'activated'
-                                                    ? const Color.fromARGB(
-                                                        255, 255, 190, 92)
+                                                    ? Color.fromARGB(
+                                                        255, 254, 246, 236)
                                                     : Colors.grey,
-                                            foregroundColor: Colors.black,
+                                            foregroundColor: post['status'] ==
+                                                    'matched'
+                                                ? const Color.fromARGB(
+                                                    255, 0, 146, 5)
+                                                : post['status'] == 'activated'
+                                                    ? Color.fromARGB(
+                                                        255, 195, 117, 0)
+                                                    : Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(width: 10),
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            backgroundColor: Color.fromARGB(
+                                                255, 255, 199, 59),
+                                            foregroundColor:
+                                                Color.fromARGB(255, 50, 50, 50),
+                                          ),
+                                          onPressed: () async {
+                                            final chatId = await FirebaseHelper
+                                                .CreateChatRoomWithUserId(
+                                              post['uid'],
+                                            );
+                                            if (chatId != null) {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChatScreen(
+                                                          chatId: chatId),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          child: Text(
+                                            '대화하기',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
                                           ),
                                         ),
                                       ],
-                                    ),
+                                    )
                                   ],
-                                ),
+                                )
                               ],
                             ),
                           ),
