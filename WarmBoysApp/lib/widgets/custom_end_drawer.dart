@@ -3,13 +3,15 @@ import 'package:provider/provider.dart';
 import '../providers/custom_auth_provider.dart';
 import '../screens/login_screen.dart';
 import '../screens/service/customer_service_screen.dart';
+import '../screens/profile/profile_mate_screen.dart';
+import '../screens/profile/profile_senior_screen.dart';
 
 class CustomEndDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final customAuthProvider =
         Provider.of<CustomAuthProvider>(context, listen: false);
-    final userInfo = Provider.of<CustomAuthProvider>(context).userInfo;
+    final userInfo = Provider.of<CustomAuthProvider>(context).userInfo!;
     final username = userInfo?['username'] ?? '사용자 이름';
     final uid = Provider.of<CustomAuthProvider>(context).uid;
 
@@ -44,7 +46,22 @@ class CustomEndDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.person),
             title: Text('내 프로필'),
-            onTap: () {},
+            onTap: () {
+              if (userInfo['memberType'] == '메이트') {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ProfileMateScreen(),
+                  ),
+                );
+              } else if (userInfo['memberType'] == '시니어') {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ProfileSeniorScreen(),
+                  ),
+                );
+              } else
+                print("잘못된 회원 유형입니다.");
+            },
           ),
           ListTile(
             leading: Icon(Icons.history),
