@@ -86,7 +86,7 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
               _buildLocationSection(),
               SizedBox(height: 10),
               _buildDetailedAddressSection(),
-              SizedBox(height: 50),
+              SizedBox(height: 30),
               _buildActivitySection(),
               SizedBox(height: 30),
               _buildDependentSection(),
@@ -202,7 +202,7 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
           ),
           child: Text(
             _detailedAddress,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: 16),
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
