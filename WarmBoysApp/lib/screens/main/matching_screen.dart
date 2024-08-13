@@ -706,7 +706,7 @@ class _MatchingScreenState extends State<MatchingScreen>
                                                     255, 244, 255, 242)
                                                 : post['status'] == 'activated'
                                                     ? Color.fromARGB(
-                                                        255, 254, 246, 236)
+                                                        255, 255, 255, 255)
                                                     : Colors.grey,
                                             foregroundColor: post['status'] ==
                                                     'matched'
@@ -714,7 +714,7 @@ class _MatchingScreenState extends State<MatchingScreen>
                                                     255, 0, 146, 5)
                                                 : post['status'] == 'activated'
                                                     ? Color.fromARGB(
-                                                        255, 195, 117, 0)
+                                                        255, 255, 98, 0)
                                                     : Colors.black,
                                           ),
                                         ),
