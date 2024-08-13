@@ -2,7 +2,7 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 
 admin.initializeApp();
-//새로운 메시지가 오면 알림 생성
+
 exports.sendChatNotification = functions.firestore
   .document("chats/{chatId}/messages/{messageId}")
   .onCreate(async (snapshot, context) => {
@@ -25,6 +25,9 @@ exports.sendChatNotification = functions.firestore
     const senderData = senderDoc.data();
     const senderUsername = senderData.username;
 
+    // 메시지 내용 가져옴
+    const messageText = messageData.text;
+
     // 채팅방 참여자 리스트
     const participants = chatData.participants;
 
@@ -38,7 +41,8 @@ exports.sendChatNotification = functions.firestore
           // 알림 저장
           await admin.firestore().collection("alarms")
             .doc(participant).collection("userAlarms").add({
-              "message": `${senderUsername}님으로부터 메시지가 도착했습니다.`,
+              "alarmType": "chat",
+              "message": `${senderUsername} : ${messageText}`, // 알림 내용 수정
               "timestamp": admin.firestore.FieldValue.serverTimestamp(),
               "chatId": chatId,
               "senderId": senderId,
@@ -55,6 +59,7 @@ exports.sendChatNotification = functions.firestore
 
     console.log("알림 저장 완료");
   });
+
 //새로운 채팅이 왔는지 확인하고 트리거
   exports.updateHasNewChat = functions.firestore
     .document('chats/{chatId}/messages/{messageId}')
@@ -131,3 +136,179 @@ exports.sendChatNotification = functions.firestore
             console.log('No new readers found');
         }
     });
+
+ 
+// 공고 상태가 변경될 때 알림 생성
+exports.onPostStatusChanged = functions.firestore
+    .document('posts/{postId}')
+    .onUpdate(async (change, context) => {
+        const beforeData = change.before.data();
+        const afterData = change.after.data();
+        const postId = context.params.postId;
+
+        try {
+            // 1. 상태 변경이 발생했을 때
+            const seniorUid = afterData.seniorUid;
+
+            if (afterData.status === 'matched') {
+                // 상태가 'matched'로 변경되었을 때
+                const matesSnapshot = await admin.firestore()
+                    .collection('posts')
+                    .doc(postId)
+                    .collection('mates')
+                    .get();
+
+                matesSnapshot.forEach(async mateDoc => {
+                    const mateUid = mateDoc.data().mateUid;
+
+                    // mateUid에게 알림 생성
+                    await admin.firestore().collection('alarms')
+                        .doc(mateUid)
+                        .collection('userAlarms')
+                        .add({
+                            "alarmType": "post",
+                            "message": "축하합니다! 신청하신 공고가 매칭되었습니다. 함께 활동을 시작해보세요!",
+                            "timestamp": admin.firestore.FieldValue.serverTimestamp(),
+                            "postId": postId,
+                            "status": afterData.status,
+                            "read": false,
+                        });
+
+                    console.log(`matched 알림 생성 완료: [postId: ${postId}, mateUid: ${mateUid}]`);
+                });
+
+                // seniorUid에게 알림 생성
+                await admin.firestore().collection('alarms')
+                    .doc(seniorUid)
+                    .collection('userAlarms')
+                    .add({
+                        "alarmType": "post",
+                        "message": "매칭이 완료되었습니다! 메이트와 함께 활동을 진행해보세요.",
+                        "timestamp": admin.firestore.FieldValue.serverTimestamp(),
+                        "postId": postId,
+                        "status": afterData.status,
+                        "read": false,
+                    });
+
+                console.log(`매칭 알림 생성 완료: [postId: ${postId}, seniorUid: ${seniorUid}]`);
+            }
+
+            // 2. 상태가 'activated', 'finished', 'failed'로 변경될 때
+            if (['activated', 'finished', 'failed'].includes(afterData.status)) {
+                const statusMessages = {
+                    'activated': "활동이 시작되었습니다! 성공적인 활동을 응원합니다.",
+                    'finished': "활동이 완료되었습니다! 활동을 통해 좋은 경험을 하셨기를 바랍니다.",
+                    'failed': "안타깝게도 활동이 실패로 종료되었습니다. 다음엔 더 좋은 기회가 있을 거예요."
+                };
+
+                // seniorUid에게 알림 생성
+                await admin.firestore().collection('alarms')
+                    .doc(seniorUid)
+                    .collection('userAlarms')
+                    .add({
+                        "alarmType": "post",
+                        "message": statusMessages[afterData.status],
+                        "timestamp": admin.firestore.FieldValue.serverTimestamp(),
+                        "postId": postId,
+                        "status": afterData.status,
+                        "read": false,
+                    });
+
+                console.log(`상태 변경 알림 생성 완료 (seniorUid): [postId: ${postId}, status: ${afterData.status}, seniorUid: ${seniorUid}]`);
+
+                // mateUid에게 알림 생성
+                const matesSnapshot = await admin.firestore()
+                    .collection('posts')
+                    .doc(postId)
+                    .collection('mates')
+                    .get();
+
+                matesSnapshot.forEach(async mateDoc => {
+                    const mateUid = mateDoc.data().mateUid;
+
+                    await admin.firestore().collection('alarms')
+                        .doc(mateUid)
+                        .collection('userAlarms')
+                        .add({
+                            "alarmType": "post",
+                            "message": statusMessages[afterData.status],
+                            "timestamp": admin.firestore.FieldValue.serverTimestamp(),
+                            "postId": postId,
+                            "status": afterData.status,
+                            "read": false,
+                        });
+
+                    console.log(`상태 변경 알림 생성 완료 (mateUid): [postId: ${postId}, status: ${afterData.status}, mateUid: ${mateUid}]`);
+                });
+            }
+        } catch (error) {
+            console.error(`Error processing status change for postId: ${postId}`, error);
+        }
+    });
+
+// 'mates' 문서 추가 또는 업데이트 시 알림 생성
+exports.onMateAddedOrUpdated = functions.firestore
+    .document('posts/{postId}/mates/{mateId}')
+    .onWrite(async (change, context) => {
+        const postId = context.params.postId;
+        const mateUid = context.params.mateId;
+
+        try {
+            const postDoc = await admin.firestore().collection('posts').doc(postId).get();
+            const postData = postDoc.data();
+            const seniorUid = postData.seniorUid;
+
+            // seniorUid에게 알림 생성
+            await admin.firestore().collection('alarms')
+                .doc(seniorUid)
+                .collection('userAlarms')
+                .add({
+                  "alarmType": "post", 
+                  "message": "새로운 메이트가 공고에 신청했습니다! 지금 확인해보세요.",
+                  "timestamp": admin.firestore.FieldValue.serverTimestamp(),
+                  "postId": postId,
+                  "mateUid": mateUid,
+                  "status": 'notMatched',
+                  "read": false,
+                });
+
+            console.log(`새로운 메이트 신청 알림 생성 완료: [postId: ${postId}, seniorUid: ${seniorUid}]`);
+        } catch (error) {
+            console.error(`Error processing mate addition/update for postId: ${postId}`, error);
+        }
+    });
+
+// 'userAlarms' 컬렉션의 문서가 생성되거나 업데이트될 때, 읽지 않은 알림이 있는지 확인하고 hasNewAlarms 업데이트
+exports.updateHasNewAlarms = functions.firestore
+  .document('alarms/{userId}/userAlarms/{alarmId}')
+  .onWrite(async (change, context) => {
+    const userId = context.params.userId;
+
+    try {
+      // 1. 사용자의 알림 컬렉션을 가져옴
+      const userAlarmsSnapshot = await admin.firestore()
+        .collection('alarms')
+        .doc(userId)
+        .collection('userAlarms')
+        .get();
+
+      let hasUnreadAlarms = false;
+
+      // 2. 각 알림의 'read' 필드를 확인
+      userAlarmsSnapshot.forEach(doc => {
+        const alarmData = doc.data();
+        if (!alarmData.read) {
+          hasUnreadAlarms = true;
+        }
+      });
+
+      // 3. hasUnreadAlarms 값에 따라 hasNewAlarms 필드를 업데이트
+      await admin.firestore().collection('alarms').doc(userId).set({
+        "hasNewAlarms": hasUnreadAlarms,
+      }, { merge: true });
+
+      console.log(`hasNewAlarms 상태 업데이트 완료: [userId: ${userId}, hasNewAlarms: ${hasUnreadAlarms}]`);
+    } catch (e) {
+      console.error(`Error updating hasNewAlarms for user ${userId}: `, e);
+    }
+  });
