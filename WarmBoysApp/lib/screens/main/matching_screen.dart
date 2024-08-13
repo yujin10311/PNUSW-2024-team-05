@@ -1124,58 +1124,112 @@ class _MatchingScreenState extends State<MatchingScreen>
                                                   );
                                                 },
                                                 child: CircleAvatar(
-                                                  radius: 40,
+                                                  radius: 55,
                                                   backgroundImage: NetworkImage(
                                                       post['imgUrl']),
                                                 ),
                                               )
                                             : CircleAvatar(
-                                                radius: 40,
+                                                radius: 55,
                                                 child: Icon(Icons.person),
                                               ),
                                         SizedBox(height: 5),
-                                        ElevatedButton(
-                                          onPressed: post['status'] ==
-                                                  'notReviewedBySenior'
-                                              ? () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          RatingBySeniorPage(
-                                                        postId: post['postId'],
-                                                      ),
-                                                    ),
-                                                  );
-                                                }
-                                              : null,
-                                          child: Text(
-                                            post['status'] == 'matched'
-                                                ? '활동 전'
-                                                : post['status'] == 'activated'
-                                                    ? '활동 중'
-                                                    : post['status'] ==
-                                                            'notReviewedBySenior'
-                                                        ? '리뷰 쓰기'
-                                                        : '활동 에러', // status가 notReviewedBySenior일 때
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: post['status'] ==
-                                                    'notReviewedBySenior'
-                                                ? const Color.fromARGB(
-                                                    255, 255, 190, 92)
-                                                : Color.fromARGB(
-                                                    255, 129, 129, 129),
-                                            foregroundColor: Colors.black,
-                                          ),
-                                        ),
                                       ],
                                     ),
                                   ],
                                 ),
+                                Divider(
+                                  color: Color.fromARGB(255, 234, 234, 234),
+                                  thickness: 2,
+                                ),
+                                SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        backgroundColor: post['status'] ==
+                                                'notReviewedBySenior'
+                                            ? Color.fromARGB(255, 255, 255, 255)
+                                            : Color.fromARGB(
+                                                255, 129, 129, 129),
+                                        foregroundColor: post['status'] ==
+                                                'notReviewedBySenior'
+                                            ? Color.fromARGB(255, 255, 98, 0)
+                                            : Colors.black,
+                                      ),
+                                      onPressed: post['status'] ==
+                                              'notReviewedBySenior'
+                                          ? () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      RatingBySeniorPage(
+                                                    postId: post['postId'],
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          : null,
+                                      child: Text(
+                                        post['status'] == 'matched'
+                                            ? '활동 전'
+                                            : post['status'] == 'activated'
+                                                ? '활동 중'
+                                                : post['status'] ==
+                                                        'notReviewedBySenior'
+                                                    ? '리뷰 쓰기'
+                                                    : '활동 에러', // status가 notReviewedBySenior일 때
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 255, 199, 59),
+                                        foregroundColor:
+                                            Color.fromARGB(255, 50, 50, 50),
+                                      ),
+                                      onPressed: () async {
+                                        final chatId = await FirebaseHelper
+                                            .CreateChatRoomWithUserId(
+                                          post['uid'],
+                                        );
+                                        if (chatId != null) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ChatScreen(chatId: chatId),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      child: Text(
+                                        '대화하기',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           ),
