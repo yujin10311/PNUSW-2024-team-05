@@ -89,7 +89,7 @@ class ProfileMateScreen extends StatelessWidget {
               ),
               SizedBox(height: 24),
               Text(
-                "신상 정보",
+                "내 신상 정보",
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -211,7 +211,7 @@ class ProfileMateScreen extends StatelessWidget {
               ),
               SizedBox(height: 36),
               Text(
-                "활동 정보",
+                "내 상세 정보",
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

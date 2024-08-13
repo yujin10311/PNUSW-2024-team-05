@@ -97,7 +97,7 @@ class ProfileSeniorScreen extends StatelessWidget {
               ),
               SizedBox(height: 24),
               Text(
-                "신상 정보",
+                "내 신상 정보",
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -242,7 +242,7 @@ class ProfileSeniorScreen extends StatelessWidget {
               ),
               SizedBox(height: 36),
               Text(
-                "활동 정보",
+                "내 상세 정보",
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -275,7 +275,7 @@ class ProfileSeniorScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "회원 상세 정보",
+                    "주거 환경 특이사항",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -292,6 +292,32 @@ class ProfileSeniorScreen extends StatelessWidget {
                 color: Color.fromARGB(255, 234, 234, 234),
                 thickness: 2,
               ),
+              _petInfo != ''
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "반려동물 주의사항",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          _petInfo,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        Divider(
+                          color: Color.fromARGB(255, 234, 234, 234),
+                          thickness: 2,
+                        ),
+                      ],
+                    )
+                  : Container(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -310,6 +336,32 @@ class ProfileSeniorScreen extends StatelessWidget {
                 color: Color.fromARGB(255, 234, 234, 234),
                 thickness: 2,
               ),
+              _symptomInfo != ''
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "증상 상세 설명",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          _symptomInfo,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        Divider(
+                          color: Color.fromARGB(255, 234, 234, 234),
+                          thickness: 2,
+                        ),
+                      ],
+                    )
+                  : Container(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
