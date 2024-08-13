@@ -17,6 +17,9 @@ class _RegisterSeniorScreen2State extends State<RegisterSeniorScreen2> {
   String selectedCity = '부산광역시';
   String selectedDistrict = '금정구';
   String? selectedSubDistrict;
+  String detailedAddress = ''; // 상세 주소 저장
+
+  final TextEditingController _addressController = TextEditingController();
 
   Map<String, List<String>> cityDistrictMap = {
     '서울특별시': [],
@@ -79,26 +82,34 @@ class _RegisterSeniorScreen2State extends State<RegisterSeniorScreen2> {
   @override
   void initState() {
     super.initState();
-    _loadSavedSubDistrict();
+    _loadSavedAddress(); // 수정된 메서드 호출
   }
 
-  Future<void> _loadSavedSubDistrict() async {
+  Future<void> _loadSavedAddress() async {
+    // 저장된 동과 상세 주소 불러오기
     String? subDistrict = await SharedPreferencesHelper.getByKey('_dong');
-    if (subDistrict != null) {
-      setState(() {
+    String? savedDetailedAddress =
+        await SharedPreferencesHelper.getByKey('_detailedAddress');
+
+    setState(() {
+      if (subDistrict != null) {
         selectedSubDistrict = subDistrict;
-      });
-    } else {
-      setState(() {
+      } else {
         selectedSubDistrict = districtSubDistrictMap[selectedDistrict]![0];
-      });
-    }
+      }
+
+      if (savedDetailedAddress != null) {
+        detailedAddress = savedDetailedAddress;
+        _addressController.text = detailedAddress; // 텍스트 필드에 값 표시
+      }
+    });
   }
 
   Future<void> _saveLocationData() async {
     await SharedPreferencesHelper.saveData('_city', selectedCity);
     await SharedPreferencesHelper.saveData('_gu', selectedDistrict);
     await SharedPreferencesHelper.saveData('_dong', selectedSubDistrict!);
+    await SharedPreferencesHelper.saveData('_detailedAddress', detailedAddress);
   }
 
   @override
@@ -113,24 +124,51 @@ class _RegisterSeniorScreen2State extends State<RegisterSeniorScreen2> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: Row(
+        padding: const EdgeInsets.all(20.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "1. 거주 지역을 선택해 주세요.",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 2),
+                  Text(
+                    "*",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: _buildButtonColumn(
-                        cityDistrictMap.keys.toList(),
-                        selectedCity,
-                        (value) {},
-                        true, // 1열은 비활성화
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      child: SingleChildScrollView(
+                        child: _buildButtonColumn(
+                          cityDistrictMap.keys.toList(),
+                          selectedCity,
+                          (value) {},
+                          true, // 1열은 비활성화
+                        ),
                       ),
                     ),
                   ),
                   Expanded(
+                      child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.5,
                     child: SingleChildScrollView(
                       child: _buildButtonColumn(
                         cityDistrictMap[selectedCity]!,
@@ -139,32 +177,70 @@ class _RegisterSeniorScreen2State extends State<RegisterSeniorScreen2> {
                         true, // 2열은 비활성화
                       ),
                     ),
-                  ),
+                  )),
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: _buildButtonColumn(
-                        districtSubDistrictMap[selectedDistrict]!,
-                        selectedSubDistrict,
-                        (value) {
-                          setState(() {
-                            selectedSubDistrict = value;
-                          });
-                        },
-                        false, // 3열은 활성화
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      child: SingleChildScrollView(
+                        child: _buildButtonColumn(
+                          districtSubDistrictMap[selectedDistrict]!,
+                          selectedSubDistrict,
+                          (value) {
+                            setState(() {
+                              selectedSubDistrict = value;
+                            });
+                          },
+                          false, // 3열은 활성화
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
-            ),
-            SizedBox(height: 20),
-          ],
+              SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "2. 상세 주소를 작성해 주세요.",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 2),
+                  Text(
+                    "*",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              TextField(
+                controller: _addressController,
+                onChanged: (value) {
+                  setState(() {
+                    detailedAddress = value;
+                  });
+                },
+                maxLength: 30,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: '상세 주소를 입력하세요. (30자 이내)',
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
-          onPressed: selectedSubDistrict != null
+          onPressed: selectedSubDistrict != null && detailedAddress.isNotEmpty
               ? () async {
                   await _saveLocationData();
                   widget.onNextPage();
