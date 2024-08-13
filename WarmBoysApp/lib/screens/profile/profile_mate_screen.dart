@@ -31,7 +31,10 @@ class ProfileMateScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("내 프로필 - 메이트"),
+        title: Text(
+          "내 프로필 - 메이트",
+          style: TextStyle(fontSize: 18),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
