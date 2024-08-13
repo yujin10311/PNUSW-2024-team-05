@@ -687,7 +687,7 @@ class _MatchingScreenState extends State<MatchingScreen>
                                             post['status'] == 'matched'
                                                 ? '활동 시작하기'
                                                 : post['status'] == 'activated'
-                                                    ? '활동 종료하기'
+                                                    ? '활동 마치기'
                                                     : '활동 실패', // status가 'failed'일 때는 '활동 실패' 표시
                                             style: TextStyle(
                                               fontSize: 14,
