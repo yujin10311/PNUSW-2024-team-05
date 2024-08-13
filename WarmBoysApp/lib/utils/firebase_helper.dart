@@ -121,6 +121,7 @@ class FirebaseHelper {
       'city': prefs['_city'] ?? '',
       'gu': prefs['_gu'] ?? '',
       'dong': prefs['_dong'] ?? '',
+      'detailedAddress': prefs['_detailedAddress'] ?? '',
       'activityType': prefs['_activityType'] ?? '',
       'symptom': prefs['_symptom'] ?? '',
       'withPet': withPet,
@@ -165,6 +166,7 @@ class FirebaseHelper {
       'city': prefs['_city'] ?? '',
       'gu': prefs['_gu'] ?? '',
       'dong': prefs['_dong'] ?? '',
+      'detailedAddress': prefs['_detailedAddress'] ?? '',
       'activityType': prefs['_activityType'] ?? '',
       'dayTime': prefs['_dayTime'] ?? '',
       'residentCert': false,
@@ -892,7 +894,7 @@ class FirebaseHelper {
     }
   }
 
-static Future<String?> getChatRoomWithUserId(String otherUserId) async {
+  static Future<String?> getChatRoomWithUserId(String otherUserId) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -925,7 +927,7 @@ static Future<String?> getChatRoomWithUserId(String otherUserId) async {
   }
 
 //uid를 통한 채팅방 생성
-static Future<String?> CreateChatRoomWithUserId(String otherUserId) async {
+  static Future<String?> CreateChatRoomWithUserId(String otherUserId) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
