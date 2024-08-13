@@ -19,6 +19,7 @@ class _RegisterMateScreen5State extends State<RegisterMateScreen5> {
   String _city = '';
   String _gu = '';
   String _dong = '';
+  String _detailedAddress = '';
   List<String> _activityType = [];
   String _addInfo = '';
   Map<String, dynamic> _dayTime = {};
@@ -37,6 +38,8 @@ class _RegisterMateScreen5State extends State<RegisterMateScreen5> {
     _city = await SharedPreferencesHelper.getByKey('_city') ?? '';
     _gu = await SharedPreferencesHelper.getByKey('_gu') ?? '';
     _dong = await SharedPreferencesHelper.getByKey('_dong') ?? '';
+    _detailedAddress =
+        await SharedPreferencesHelper.getByKey('_detailedAddress') ?? '';
     _activityType =
         await SharedPreferencesHelper.getStringList('_activityType') ?? [];
     _addInfo = await SharedPreferencesHelper.getByKey('_addInfo') ?? '';
@@ -68,6 +71,8 @@ class _RegisterMateScreen5State extends State<RegisterMateScreen5> {
               _buildInfoRow('연락처:', _phoneNum, fontSize: 16.0),
               SizedBox(height: 10),
               _buildInfoRow('지역:', '$_city > $_gu > $_dong', fontSize: 16.0),
+              SizedBox(height: 10),
+              _buildDetailedAddressSection(),
               SizedBox(height: 30),
               _buildActivitySection(),
               SizedBox(height: 30),
@@ -104,6 +109,33 @@ class _RegisterMateScreen5State extends State<RegisterMateScreen5> {
         Text(
           value,
           style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDetailedAddressSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '상세 주소:',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 10),
+        Container(
+          padding: EdgeInsets.all(8.0),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Text(
+            _detailedAddress,
+            style: TextStyle(fontSize: 16),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );
