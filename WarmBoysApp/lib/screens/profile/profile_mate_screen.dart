@@ -87,7 +87,19 @@ class ProfileMateScreen extends StatelessWidget {
                 color: Color.fromARGB(255, 216, 216, 216),
                 thickness: 4,
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 24),
+              Text(
+                "신상 정보",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[500]),
+              ),
+              SizedBox(height: 10),
+              Divider(
+                color: Color.fromARGB(255, 234, 234, 234),
+                thickness: 2,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -193,6 +205,19 @@ class ProfileMateScreen extends StatelessWidget {
                   )
                 ],
               ),
+              Divider(
+                color: Color.fromARGB(255, 234, 234, 234),
+                thickness: 2,
+              ),
+              SizedBox(height: 36),
+              Text(
+                "활동 정보",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[500]),
+              ),
+              SizedBox(height: 10),
               Divider(
                 color: Color.fromARGB(255, 234, 234, 234),
                 thickness: 2,
