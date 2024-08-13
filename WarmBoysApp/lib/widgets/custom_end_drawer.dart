@@ -5,6 +5,7 @@ import '../screens/login_screen.dart';
 import '../screens/service/customer_service_screen.dart';
 import '../screens/profile/profile_mate_screen.dart';
 import '../screens/profile/profile_senior_screen.dart';
+import '../screens/history/history_screen.dart';
 
 class CustomEndDrawer extends StatelessWidget {
   @override
@@ -66,7 +67,13 @@ class CustomEndDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.history),
             title: Text('활동 기록'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => HistoryScreen(),
+                ),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.help_outline),
@@ -86,14 +93,18 @@ class CustomEndDrawer extends StatelessWidget {
               // CustomAuthProvider의 logOut 메서드를 호출하고 로그인 페이지로 이동
               Provider.of<CustomAuthProvider>(context, listen: false)
                   .logOut()
-                  .then((_) {
-                Navigator.of(context).pushReplacement(PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) =>
-                      LoginScreen(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ));
-              });
+                  .then(
+                (_) {
+                  Navigator.of(context).pushReplacement(
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) =>
+                          LoginScreen(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
+                  );
+                },
+              );
             },
           ),
         ],
