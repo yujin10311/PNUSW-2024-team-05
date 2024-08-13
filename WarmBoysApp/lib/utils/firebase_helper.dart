@@ -1408,6 +1408,7 @@ class FirebaseHelper {
                 'startReport': postData['startReport'],
                 'endReport': postData['endReport'],
                 'credit': postData['credit'],
+                'sort': (postData['endTime'] as Timestamp).toDate(),
               });
 
               results.add(mateData);
@@ -1477,6 +1478,7 @@ class FirebaseHelper {
                 'startReport': postData['startReport'],
                 'endReport': postData['endReport'],
                 'credit': postData['credit'],
+                'sort': (postData['endTime'] as Timestamp).toDate(),
               });
 
               results.add(seniorData);
@@ -1487,6 +1489,7 @@ class FirebaseHelper {
     } catch (e) {
       print('Error querying activities: $e');
     }
+    results.sort((a, b) => b['sort'].compareTo(a['sort']));
 
     return results;
   }
