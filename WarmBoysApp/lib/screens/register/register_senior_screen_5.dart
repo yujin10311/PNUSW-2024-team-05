@@ -20,6 +20,7 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
   String _city = '';
   String _gu = '';
   String _dong = '';
+  String _detailedAddress = '';
   String _dependentType = '';
   bool _withPet = false;
   bool _withCam = false;
@@ -43,6 +44,8 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
     _city = await SharedPreferencesHelper.getByKey('_city') ?? '';
     _gu = await SharedPreferencesHelper.getByKey('_gu') ?? '';
     _dong = await SharedPreferencesHelper.getByKey('_dong') ?? '';
+    _detailedAddress =
+        await SharedPreferencesHelper.getByKey('_detailedAddress') ?? '';
     _dependentType =
         await SharedPreferencesHelper.getByKey('_dependentType') ?? '';
     _withPet = await SharedPreferencesHelper.getBool('_withPet') ?? false;
@@ -81,7 +84,9 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
               _buildInfoRow('비상 연락망:', _phoneNum2, fontSize: 16.0),
               SizedBox(height: 10),
               _buildLocationSection(),
-              SizedBox(height: 30),
+              SizedBox(height: 10),
+              _buildDetailedAddressSection(),
+              SizedBox(height: 50),
               _buildActivitySection(),
               SizedBox(height: 30),
               _buildDependentSection(),
@@ -168,12 +173,39 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          '지역',
+          '지역:',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         Text(
           '$_city > $_gu > $_dong',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDetailedAddressSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '상세 주소:',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 10),
+        Container(
+          padding: EdgeInsets.all(8.0),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Text(
+            _detailedAddress,
+            style: TextStyle(fontSize: 14),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );
