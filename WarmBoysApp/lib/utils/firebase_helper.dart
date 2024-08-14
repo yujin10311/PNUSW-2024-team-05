@@ -1493,4 +1493,138 @@ class FirebaseHelper {
 
     return results;
   }
+
+  static Future<List<Map<String, dynamic>>> queryExchangePosts() async {
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    List<Map<String, dynamic>> results = [];
+
+    try {
+      // 'exchanges' 컬렉션에서 문서들을 가져옴
+      QuerySnapshot exchangeSnapshot =
+          await _firestore.collection('exchanges').get();
+
+      for (var doc in exchangeSnapshot.docs) {
+        // 문서 데이터를 가져와서 필요한 필드를 추출
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        // 필요한 필드들을 Map에 추가
+        Map<String, dynamic> exchangeData = {
+          'docId': doc.id,
+          'goodsName': data['goodsName'] as String,
+          'maxHeadcounts': data['maxHeadcounts'] as int,
+          'currentHeadcounts': data['currentHeadcounts'] as int,
+          'needCredit': data['needCredit'] as int,
+          'imgUrl': data['imgUrl'] as String,
+          'incIntroduction': data['incIntroduction'] as String,
+          'inc': data['inc'] as String,
+          'incUrl': data['incUrl'] as String,
+          'supportReason': data['supportReason'] as String,
+        };
+
+        // 결과 리스트에 추가
+        results.add(exchangeData);
+      }
+    } catch (e) {
+      print('Error querying exchange posts: $e');
+    }
+
+    return results;
+  }
+
+  static Future<bool> applyExchange(
+      String uid, int myCredit, String exchangeId) async {
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    try {
+      // 'exchanges' 컬렉션에서 doc id가 exchangeId와 같은 문서를 찾는다.
+      DocumentReference exchangeRef =
+          _firestore.collection('exchanges').doc(exchangeId);
+      DocumentSnapshot exchangeDoc = await exchangeRef.get();
+
+      if (!exchangeDoc.exists) {
+        return false; // 문서가 존재하지 않으면 false 반환
+      }
+
+      Map<String, dynamic> exchangeData =
+          exchangeDoc.data() as Map<String, dynamic>;
+
+      int needCredit = exchangeData['needCredit'];
+      int currentHeadcounts = exchangeData['currentHeadcounts'];
+      int maxHeadcounts = exchangeData['maxHeadcounts'];
+
+      // myCredit이 필요 크레딧보다 작거나, 현재 인원이 최대 인원과 같거나 많으면 false 반환
+      if (myCredit < needCredit || currentHeadcounts >= maxHeadcounts) {
+        return false;
+      }
+
+      // 'applicants' 서브 컬렉션이 있는지 확인하고 없다면 생성
+      CollectionReference applicantsRef = exchangeRef.collection('applicants');
+      QuerySnapshot applicantSnapshot = await applicantsRef.get();
+
+      bool alreadyApplied = false;
+
+      for (var applicant in applicantSnapshot.docs) {
+        if (applicant['applicantUid'] == uid) {
+          alreadyApplied = true;
+          break;
+        }
+      }
+
+      if (alreadyApplied) {
+        return false; // 이미 신청한 경우 false 반환
+      }
+
+      // 신청자 수 증가
+      await exchangeRef.update({'currentHeadcounts': FieldValue.increment(1)});
+
+      // 'applicants' 서브 컬렉션에 새로운 신청자 추가
+      await applicantsRef.add({
+        'applicantUid': uid,
+        'applyTime': Timestamp.now(),
+      });
+
+      // 'user' 컬렉션에서 uid에 해당하는 문서의 크레딧 감소
+      DocumentReference userRef = _firestore.collection('user').doc(uid);
+      await userRef.update({'credit': FieldValue.increment(-needCredit)});
+
+      return true; // 성공 시 true 반환
+    } catch (e) {
+      print('Error applying for exchange: $e');
+      return false; // 오류 발생 시 false 반환
+    }
+  }
+
+  static Future<bool> checkApplyExchange(String exchangeId, String uid) async {
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    try {
+      // exchanges 컬렉션의 doc id가 exchangeId인 문서를 찾음
+      final docSnapshot =
+          await _firestore.collection('exchanges').doc(exchangeId).get();
+
+      if (!docSnapshot.exists) {
+        return true; // 해당 문서가 없으면 true 반환
+      }
+
+      // applicants 서브 컬렉션의 문서들을 확인
+      final applicantsSnapshot =
+          await docSnapshot.reference.collection('applicants').get();
+
+      if (applicantsSnapshot.docs.isEmpty) {
+        return true; // applicants 서브 컬렉션이 없거나 비어있으면 true 반환
+      }
+
+      // applicants 서브 컬렉션 내의 문서들을 순회하면서 applicantUid가 uid와 동일한지 확인
+      for (var doc in applicantsSnapshot.docs) {
+        if (doc.data()['applicantUid'] == uid) {
+          return false; // 동일한 uid를 찾으면 false 반환
+        }
+      }
+
+      return true; // 동일한 uid를 찾지 못했으면 true 반환
+    } catch (e) {
+      print('Error checking apply exchange: $e');
+      return false; // 오류 발생 시 false 반환
+    }
+  }
 }
