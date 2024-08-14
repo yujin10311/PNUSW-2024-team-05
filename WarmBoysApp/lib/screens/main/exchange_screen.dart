@@ -27,7 +27,7 @@ class _ExchangeScreenState extends State<ExchangeScreen>
     final customAuthProvider = Provider.of<CustomAuthProvider>(context);
     final userInfo = customAuthProvider.userInfo;
     final uid = customAuthProvider.uid!;
-    final myCredit = userInfo!['credit'];
+    final myCredit = userInfo!['credit'] ?? 0;
     final memberType = userInfo['memberType'];
 
     return Scaffold(
