@@ -275,6 +275,9 @@ class _MatchingScreenState extends State<MatchingScreen>
         title: '매칭 페이지 - 메이트',
         bottom: TabBar(
           controller: _tabController,
+          indicatorColor: Color.fromARGB(255, 174, 63, 86), // 선택된 탭의 하단 라인 색상
+          labelColor: Color.fromARGB(255, 174, 63, 86), // 선택된 탭의 텍스트 색상
+          unselectedLabelColor: Colors.grey, // 선택되지 않은 탭의 텍스트 색상
           tabs: [
             Tab(text: '매칭 전'),
             Tab(text: '매칭 후'),
@@ -466,15 +469,14 @@ class _MatchingScreenState extends State<MatchingScreen>
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: 15),
+                                                horizontal: 24),
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                                  BorderRadius.circular(20),
                                             ),
                                             backgroundColor: Color.fromARGB(
-                                                255, 255, 199, 59),
-                                            foregroundColor:
-                                                Color.fromARGB(255, 50, 50, 50),
+                                                255, 255, 89, 123),
+                                            foregroundColor: Colors.white,
                                           ),
                                           onPressed: () async {
                                             final chatId = await FirebaseHelper
@@ -495,7 +497,7 @@ class _MatchingScreenState extends State<MatchingScreen>
                                           child: Text(
                                             '대화하기',
                                             style: TextStyle(
-                                              fontSize: 14,
+                                              fontSize: 16,
                                             ),
                                           ),
                                         ),
@@ -746,15 +748,14 @@ class _MatchingScreenState extends State<MatchingScreen>
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: 15),
+                                                horizontal: 24),
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                                  BorderRadius.circular(20),
                                             ),
                                             backgroundColor: Color.fromARGB(
-                                                255, 255, 199, 59),
-                                            foregroundColor:
-                                                Color.fromARGB(255, 50, 50, 50),
+                                                255, 255, 89, 123),
+                                            foregroundColor: Colors.white,
                                           ),
                                           onPressed: () async {
                                             final chatId = await FirebaseHelper
@@ -807,6 +808,8 @@ class _MatchingScreenState extends State<MatchingScreen>
         title: '매칭 페이지 - 시니어',
         bottom: TabBar(
           controller: _tabController,
+          indicatorColor: Color.fromARGB(255, 174, 63, 86), // 선택된 탭의 하단 라인 색상
+          labelColor: Color.fromARGB(255, 174, 63, 86),
           tabs: [
             Tab(text: '매칭 전'),
             Tab(text: '매칭 후'),
@@ -960,11 +963,13 @@ class _MatchingScreenState extends State<MatchingScreen>
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         padding: EdgeInsets.symmetric(
-                                            horizontal: 15),
+                                            horizontal: 24),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(8),
+                                              BorderRadius.circular(20),
                                         ),
+                                        foregroundColor:
+                                            Color.fromARGB(255, 255, 89, 123),
                                       ),
                                       onPressed: () async {
                                         await FirebaseHelper.acceptMatching(
@@ -983,15 +988,14 @@ class _MatchingScreenState extends State<MatchingScreen>
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         padding: EdgeInsets.symmetric(
-                                            horizontal: 15),
+                                            horizontal: 24),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(8),
+                                              BorderRadius.circular(20),
                                         ),
                                         backgroundColor:
-                                            Color.fromARGB(255, 255, 199, 59),
-                                        foregroundColor:
-                                            Color.fromARGB(255, 50, 50, 50),
+                                            Color.fromARGB(255, 255, 89, 123),
+                                        foregroundColor: Colors.white,
                                       ),
                                       onPressed: () async {
                                         final chatId = await FirebaseHelper
@@ -1220,15 +1224,14 @@ class _MatchingScreenState extends State<MatchingScreen>
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         padding: EdgeInsets.symmetric(
-                                            horizontal: 15),
+                                            horizontal: 24),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(8),
+                                              BorderRadius.circular(20),
                                         ),
                                         backgroundColor:
-                                            Color.fromARGB(255, 255, 199, 59),
-                                        foregroundColor:
-                                            Color.fromARGB(255, 50, 50, 50),
+                                            Color.fromARGB(255, 255, 89, 123),
+                                        foregroundColor: Colors.white,
                                       ),
                                       onPressed: () async {
                                         final chatId = await FirebaseHelper

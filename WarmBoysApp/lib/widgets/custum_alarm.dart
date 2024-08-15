@@ -46,26 +46,11 @@ class CustomAlarmButton extends StatelessWidget {
         ),
         if (hasNewAlarms)
           Positioned(
-            right: 11,
-            top: 11,
-            child: Container(
-              padding: EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(6),
-              ),
-              constraints: BoxConstraints(
-                minWidth: 14,
-                minHeight: 14,
-              ),
-              child: Text(
-                '!',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 8,
-                ),
-                textAlign: TextAlign.center,
-              ),
+            right: 13,
+            top: 13,
+            child: CircleAvatar(
+              radius: 3,
+              backgroundColor: Colors.red,
             ),
           ),
       ],

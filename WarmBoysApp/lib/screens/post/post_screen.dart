@@ -249,10 +249,10 @@ class _PostScreenState extends State<PostScreen> {
         ),
         SizedBox(height: 10),
         _buildInfoBox([
-          '활동 종류: ${widget.activityType}',
-          '날짜: ${DateFormat('yy.M.d').format(widget.startTime)}',
-          '시작 시간: ${_formatTime(widget.startTime)}',
-          '종료 시간: ${_formatTime(widget.endTime)}',
+          '활동 종류:       ${widget.activityType}',
+          '날짜:              ${DateFormat('yy.M.d').format(widget.startTime)}',
+          '시작 시간:       ${_formatTime(widget.startTime)}',
+          '종료 시간:       ${_formatTime(widget.endTime)}',
         ])
       ],
     );
@@ -270,10 +270,10 @@ class _PostScreenState extends State<PostScreen> {
         ),
         SizedBox(height: 10),
         _buildInfoBox([
-          '활동 종류: ${widget.activityType}',
-          '날짜: ${DateFormat('yy.M.d').format(widget.startTime)}',
-          '시작 시간: ${_formatTime(widget.startTime)}',
-          '종료 시간: ${_formatTime(widget.endTime)}',
+          '활동 종류:       ${widget.activityType}',
+          '날짜:              ${DateFormat('yy.M.d').format(widget.startTime)}',
+          '시작 시간:       ${_formatTime(widget.startTime)}',
+          '종료 시간:       ${_formatTime(widget.endTime)}',
         ], hasButton: true)
       ],
     );
@@ -319,11 +319,11 @@ class _PostScreenState extends State<PostScreen> {
               shape: BoxShape.circle,
             ),
             selectedDecoration: BoxDecoration(
-              color: Color.fromARGB(255, 13, 0, 255),
+              color: Color.fromARGB(255, 174, 63, 86),
               shape: BoxShape.circle,
             ),
             markerDecoration: BoxDecoration(
-              color: Color.fromARGB(255, 255, 0, 0),
+              color: Color.fromARGB(255, 174, 63, 86),
               shape: BoxShape.circle,
             ),
           ),
@@ -472,89 +472,120 @@ class _PostScreenState extends State<PostScreen> {
       {bool hasButton = false, bool isSelf = false}) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             for (var line in lines)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 0.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                 child: isSelf
                     ? _buildSelfLine(line)
-                    : Text(line, style: TextStyle(fontSize: 18)),
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(line, style: TextStyle(fontSize: 18)),
+                        ],
+                      ),
               ),
+            SizedBox(height: 30),
             if (hasButton) _buildMateApplyButton(), // '매칭 신청' 버튼
             if (isSelf)
-              ElevatedButton(
-                onPressed: isPostButtonEnabled
-                    ? () async {
-                        DateTime startTime = stringToDate[selectedStartTime!]!;
-                        DateTime endTime = stringToDate[selectedEndTime!]!;
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            backgroundColor: Color.fromARGB(255, 174, 63, 86),
+                            foregroundColor: Colors.white,
+                          ),
+                          onPressed: isPostButtonEnabled
+                              ? () async {
+                                  DateTime startTime =
+                                      stringToDate[selectedStartTime!]!;
+                                  DateTime endTime =
+                                      stringToDate[selectedEndTime!]!;
 
-                        // 선택한 날짜의 연, 월, 일을 시작 시간과 종료 시간에 적용
-                        startTime = DateTime(
-                            _selectedDay!.year,
-                            _selectedDay!.month,
-                            _selectedDay!.day,
-                            startTime.hour,
-                            startTime.minute);
-                        endTime = DateTime(
-                            _selectedDay!.year,
-                            _selectedDay!.month,
-                            _selectedDay!.day,
-                            endTime.hour,
-                            endTime.minute);
+                                  // 선택한 날짜의 연, 월, 일을 시작 시간과 종료 시간에 적용
+                                  startTime = DateTime(
+                                      _selectedDay!.year,
+                                      _selectedDay!.month,
+                                      _selectedDay!.day,
+                                      startTime.hour,
+                                      startTime.minute);
+                                  endTime = DateTime(
+                                      _selectedDay!.year,
+                                      _selectedDay!.month,
+                                      _selectedDay!.day,
+                                      endTime.hour,
+                                      endTime.minute);
 
-                        Map<String, dynamic> postInfo = {
-                          'seniorUid': widget.myUid,
-                          'city': widget.city,
-                          'gu': widget.gu,
-                          'dong': widget.dong,
-                          'activityType': selectedActivityType,
-                          'startTime': startTime,
-                          'endTime': endTime,
-                        };
-                        bool success =
-                            await FirebaseHelper.postMyPost(postInfo);
-                        // 페이지 다시 라우트 (애니메이션 제거)
-                        if (success) {
-                          Navigator.pushReplacement(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation1, animation2) =>
-                                  PostScreen(
-                                memberType: widget.memberType,
-                                myUid: widget.myUid,
-                                postId: widget.postId,
-                                seniorUid: widget.seniorUid,
-                                seniorName: widget.seniorName,
-                                imgUrl: widget.imgUrl,
-                                city: widget.city,
-                                gu: widget.gu,
-                                dong: widget.dong,
-                                dependentType: widget.dependentType,
-                                withPet: widget.withPet,
-                                withCam: widget.withCam,
-                                symptom: widget.symptom,
-                                petInfo: widget.petInfo,
-                                symptomInfo: widget.symptomInfo,
-                                walkingType: widget.walkingType,
-                                rating: widget.rating,
-                                ratingCount: widget.ratingCount,
-                                activityType: widget.activityType,
-                                startTime: widget.startTime,
-                                endTime: widget.endTime,
-                              ),
-                              transitionDuration: Duration.zero,
-                              reverseTransitionDuration: Duration.zero,
-                            ),
-                          );
-                        } else {
-                          print("공고 올리기에 실패했습니다.");
-                        }
-                      }
-                    : null,
-                child: Text('공고 올리기'),
+                                  Map<String, dynamic> postInfo = {
+                                    'seniorUid': widget.myUid,
+                                    'city': widget.city,
+                                    'gu': widget.gu,
+                                    'dong': widget.dong,
+                                    'activityType': selectedActivityType,
+                                    'startTime': startTime,
+                                    'endTime': endTime,
+                                  };
+                                  bool success =
+                                      await FirebaseHelper.postMyPost(postInfo);
+                                  // 페이지 다시 라우트 (애니메이션 제거)
+                                  if (success) {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder:
+                                            (context, animation1, animation2) =>
+                                                PostScreen(
+                                          memberType: widget.memberType,
+                                          myUid: widget.myUid,
+                                          postId: widget.postId,
+                                          seniorUid: widget.seniorUid,
+                                          seniorName: widget.seniorName,
+                                          imgUrl: widget.imgUrl,
+                                          city: widget.city,
+                                          gu: widget.gu,
+                                          dong: widget.dong,
+                                          dependentType: widget.dependentType,
+                                          withPet: widget.withPet,
+                                          withCam: widget.withCam,
+                                          symptom: widget.symptom,
+                                          petInfo: widget.petInfo,
+                                          symptomInfo: widget.symptomInfo,
+                                          walkingType: widget.walkingType,
+                                          rating: widget.rating,
+                                          ratingCount: widget.ratingCount,
+                                          activityType: widget.activityType,
+                                          startTime: widget.startTime,
+                                          endTime: widget.endTime,
+                                        ),
+                                        transitionDuration: Duration.zero,
+                                        reverseTransitionDuration:
+                                            Duration.zero,
+                                      ),
+                                    );
+                                  } else {
+                                    print("공고 올리기에 실패했습니다.");
+                                  }
+                                }
+                              : null,
+                          child:
+                              Text('공고 올리기', style: TextStyle(fontSize: 18.0)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
           ],
         ),
@@ -568,19 +599,23 @@ class _PostScreenState extends State<PostScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text('$label: ', style: TextStyle(fontSize: 18)),
-          DropdownButton<String>(
-            value: selectedActivityType,
-            items: ['실내활동', '실외활동', '밥 챙겨주기', '책 읽기', '재능기부']
-                .map((type) => DropdownMenuItem<String>(
-                      value: type,
-                      child: Text(type, style: TextStyle(fontSize: 18)),
-                    ))
-                .toList(),
-            onChanged: (value) {
-              setState(() {
-                selectedActivityType = value;
-              });
-            },
+          SizedBox(width: 24),
+          Expanded(
+            child: DropdownButton<String>(
+              value: selectedActivityType,
+              items: ['실내활동', '실외활동', '밥 챙겨주기', '책 읽기', '재능기부']
+                  .map((type) => DropdownMenuItem<String>(
+                        value: type,
+                        child: Text(type, style: TextStyle(fontSize: 18)),
+                      ))
+                  .toList(),
+              isExpanded: true,
+              onChanged: (value) {
+                setState(() {
+                  selectedActivityType = value;
+                });
+              },
+            ),
           ),
         ],
       );
@@ -589,20 +624,24 @@ class _PostScreenState extends State<PostScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text('$label: ', style: TextStyle(fontSize: 18)),
-          DropdownButton<String>(
-            value: selectedStartTime,
-            items: stringToDate.keys.map((String key) {
-              return DropdownMenuItem<String>(
-                value: key,
-                child: Text(key, style: TextStyle(fontSize: 18)),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                selectedStartTime = value;
-                selectedEndTime = null;
-              });
-            },
+          SizedBox(width: 24),
+          Expanded(
+            child: DropdownButton<String>(
+              value: selectedStartTime,
+              items: stringToDate.keys.map((String key) {
+                return DropdownMenuItem<String>(
+                  value: key,
+                  child: Text(key, style: TextStyle(fontSize: 18)),
+                );
+              }).toList(),
+              isExpanded: true,
+              onChanged: (value) {
+                setState(() {
+                  selectedStartTime = value;
+                  selectedEndTime = null;
+                });
+              },
+            ),
           ),
         ],
       );
@@ -614,21 +653,25 @@ class _PostScreenState extends State<PostScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text('$label: ', style: TextStyle(fontSize: 18)),
-          DropdownButton<String>(
-            value: selectedEndTime,
-            items: stringToDate.entries
-                .where((entry) => entry.value.isAfter(startTime))
-                .map((entry) {
-              return DropdownMenuItem<String>(
-                value: entry.key,
-                child: Text(entry.key, style: TextStyle(fontSize: 18)),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                selectedEndTime = value;
-              });
-            },
+          SizedBox(width: 24),
+          Expanded(
+            child: DropdownButton<String>(
+              value: selectedEndTime,
+              items: stringToDate.entries
+                  .where((entry) => entry.value.isAfter(startTime))
+                  .map((entry) {
+                return DropdownMenuItem<String>(
+                  value: entry.key,
+                  child: Text(entry.key, style: TextStyle(fontSize: 18)),
+                );
+              }).toList(),
+              isExpanded: true,
+              onChanged: (value) {
+                setState(() {
+                  selectedEndTime = value;
+                });
+              },
+            ),
           ),
         ],
       );
@@ -653,6 +696,11 @@ class _PostScreenState extends State<PostScreen> {
       return Text('공고가 존재하지 않습니다.');
     } else if (checkStat == 'canApply') {
       return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          backgroundColor: Color.fromARGB(255, 174, 63, 86),
+          foregroundColor: Colors.white,
+        ),
         onPressed: () async {
           bool success =
               await FirebaseHelper.applyMatching(widget.postId, widget.myUid);
@@ -689,7 +737,7 @@ class _PostScreenState extends State<PostScreen> {
             );
           }
         },
-        child: Text('매칭 신청'),
+        child: Text('매칭 신청', style: TextStyle(fontSize: 18)),
       );
     } else if (checkStat == 'alreadyApplied') {
       return ElevatedButton(

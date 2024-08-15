@@ -70,7 +70,8 @@ class ProfileCard extends StatelessWidget {
                     children: [
                       Text(username,
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      SizedBox(width: 5),
                       TextButton(
                         onPressed: () {
                           // 리뷰 보기 버튼 클릭 시 ReviewScreen으로 이동
@@ -85,11 +86,19 @@ class ProfileCard extends StatelessWidget {
                             ),
                           );
                         },
-                        child: Text('리뷰 보기'),
+                        child: Text(
+                          '리뷰 보기',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 174, 63, 86),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  Text('${city} > ${gu} > ${dong}'),
+                  Text(
+                    '${city} > ${gu} > ${dong}',
+                    style: TextStyle(fontSize: 16),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

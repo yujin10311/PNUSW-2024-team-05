@@ -1,3 +1,16 @@
+// // 색상 리스트
+// // 기본
+// 시그니처: Color.fromARGB(255, 174, 63, 86),
+// 카드 배경: Color.fromARGB(255, 252, 246, 24),
+// title 텍스트: Color.fromARGB(255, 68, 68, 68),
+// subtitle 텍스트: Color.fromARGB(255, 195, 195, 195),
+// 회색: Color.fromARGB(255, 147, 149, 151),
+
+// // 메뉴
+// 어두운 배경: Color.fromARGB(255, 44, 45, 47),
+// 리스트 아이콘: Color.fromARGB(255, 159, 159, 159),
+// 리스트 텍스트: Color.fromARGB(255, 207, 207, 207),
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String formatDate(DateTime date) {
-    return DateFormat('yyyy.MM.dd').format(date);
+    return DateFormat('yy.MM.dd').format(date);
   }
 
   String formatTime(DateTime dateTime) {
@@ -152,9 +165,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               'endTime': endTime,
                             });
                       },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color.fromARGB(255, 174, 63, 86),
+                        elevation: 5,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
                       child: Text(
                         '+ 내 공고 작성하기',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ),
@@ -162,18 +183,20 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           if (memberType == '시니어')
-            Divider(color: Colors.grey[300], thickness: 1),
+            Divider(color: Color.fromARGB(255, 238, 238, 238), thickness: 2),
           Padding(
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
             child: Container(
-              // padding: const EdgeInsets.symmetric(vertical: 5),
-              // color: const Color.fromARGB(255, 245, 245, 245),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
                     onPressed: () => _selectDateRange(context),
                     child: Text('기간 선택', style: TextStyle(fontSize: 16)),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Color.fromARGB(255, 174, 63, 86),
+                      elevation: 2,
+                    ),
                   ),
                   SizedBox(width: 15),
                   DropdownButton<String>(
@@ -230,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          Divider(color: Colors.grey[300], thickness: 1),
+          Divider(color: Color.fromARGB(255, 238, 238, 238), thickness: 2),
           Expanded(
             child: RefreshIndicator(
               onRefresh: _fetchPostcards,
@@ -238,127 +261,214 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: _postcards.length,
                 itemBuilder: (context, index) {
                   final postcard = _postcards[index];
-                  return Card(
-                    child: ListTile(
-                      leading: (postcard['imgUrl'] != '')
-                          ? GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Dialog(
-                                      backgroundColor: Colors.transparent,
-                                      child: GestureDetector(
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: GestureDetector(
+                      child: Card(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        elevation: 5,
+                        shadowColor: Colors.black87,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0), // 모서리 반경 설정
+                        ),
+                        child: Row(
+                          children: [
+                            postcard['imgUrl'] != ''
+                                ? Column(
+                                    children: [
+                                      GestureDetector(
                                         onTap: () {
-                                          Navigator.of(context)
-                                              .pop(); // 클릭 시 다이얼로그 닫기
-                                        },
-                                        child: Center(
-                                          child: Image.network(
-                                              postcard['imgUrl']), // 확대된 이미지
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundImage:
-                                    NetworkImage(postcard['imgUrl']),
-                              ),
-                            )
-                          : CircleAvatar(
-                              radius: 30,
-                              child: Icon(Icons.person),
-                            ),
-                      title: Text(
-                        postcard['seniorName'],
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${postcard['city']} > ${postcard['gu']} > ${postcard['dong']}",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              RatingStars(rating: postcard['rating']),
-                              Text(
-                                "${postcard['rating'].toStringAsFixed(2)} (${postcard['ratingCount']})",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            "${formatDate(postcard['startTime'])} / ${formatTime(postcard['startTime'])} ~ ${formatTime(postcard['endTime'])}",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          SizedBox(height: 5),
-                          memberType == '메이트'
-                              ? Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "크레딧: ${postcard['credit'].toString()}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                    ),
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 15),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        backgroundColor:
-                                            Color.fromARGB(255, 255, 199, 59),
-                                        foregroundColor:
-                                            Color.fromARGB(255, 50, 50, 50),
-                                      ),
-                                      onPressed: () async {
-                                        final chatId = await FirebaseHelper
-                                            .CreateChatRoomWithUserId(
-                                          postcard['seniorUid'],
-                                        );
-                                        if (chatId != null) {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ChatScreen(chatId: chatId),
-                                            ),
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Dialog(
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.of(context)
+                                                        .pop(); // 클릭 시 다이얼로그 닫기
+                                                  },
+                                                  child: Center(
+                                                    child: Image.network(
+                                                        postcard['imgUrl']),
+                                                  ),
+                                                ),
+                                              );
+                                            },
                                           );
-                                        }
-                                      },
-                                      child: Text(
-                                        '대화하기',
-                                        style: TextStyle(
-                                          fontSize: 14,
+                                        },
+                                        child: Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.35, // 너비는 고정, 높이는 부모의 높이를 따르도록 설정
+                                          height:
+                                              memberType == '메이트' ? 310 : 270,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                  postcard['imgUrl']),
+                                              fit: BoxFit.cover,
+                                            ),
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(5.0),
+                                              bottomLeft: Radius.circular(5.0),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                )
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                    ],
+                                  )
+                                : CircleAvatar(
+                                    radius: 40,
+                                    child: Icon(Icons.person),
+                                  ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(24),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "크레딧: ${postcard['credit'].toString()}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
+                                      postcard['seniorName'],
+                                      style: TextStyle(fontSize: 22),
                                     ),
+                                    SizedBox(height: 5),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        RatingStars(rating: postcard['rating']),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          "${postcard['rating'].toStringAsFixed(2)} (${postcard['ratingCount']})",
+                                          style: TextStyle(fontSize: 14),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${postcard['city']} ${postcard['gu']} ${postcard['dong']}",
+                                          style: TextStyle(
+                                              fontSize:
+                                                  memberType == '시니어' ? 16 : 14,
+                                              color: Colors.black54),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 20),
+                                    Text(
+                                      "날짜: ${formatDate(postcard['startTime'])}",
+                                      style: TextStyle(
+                                          fontSize:
+                                              memberType == '시니어' ? 16 : 14,
+                                          color: Colors.black54),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      "시간: ${formatTime(postcard['startTime'])} ~ ${formatTime(postcard['endTime'])}",
+                                      style: TextStyle(
+                                          fontSize:
+                                              memberType == '시니어' ? 16 : 14,
+                                          color: Colors.black54),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      "활동: ${postcard['activityType']}",
+                                      style: TextStyle(
+                                          fontSize:
+                                              memberType == '시니어' ? 16 : 14,
+                                          color: Colors.black54),
+                                    ),
+                                    SizedBox(height: 5),
+                                    memberType == '메이트'
+                                        ? Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "크레딧: ${postcard['credit'].toString()}",
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        memberType == '시니어'
+                                                            ? 16
+                                                            : 14,
+                                                    color: Colors.black54),
+                                              ),
+                                              SizedBox(height: 14),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 18),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(3),
+                                                      ),
+                                                      backgroundColor:
+                                                          Color.fromARGB(
+                                                              255, 174, 63, 86),
+                                                      foregroundColor:
+                                                          Colors.white,
+                                                      elevation: 2,
+                                                    ),
+                                                    onPressed: () async {
+                                                      final chatId =
+                                                          await FirebaseHelper
+                                                              .CreateChatRoomWithUserId(
+                                                        postcard['seniorUid'],
+                                                      );
+                                                      if (chatId != null) {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                ChatScreen(
+                                                                    chatId:
+                                                                        chatId),
+                                                          ),
+                                                        );
+                                                      }
+                                                    },
+                                                    child: Text(
+                                                      '대화하기',
+                                                      style: TextStyle(
+                                                          fontSize: 18),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          )
+                                        : Row(
+                                            children: [
+                                              Text(
+                                                "크레딧: ${postcard['credit'].toString()}",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.black54),
+                                              ),
+                                            ],
+                                          ),
                                   ],
                                 ),
-                        ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       onTap: () {
                         // 앱 사용자 정보

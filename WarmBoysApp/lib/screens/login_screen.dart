@@ -158,38 +158,41 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     SizedBox(width: 10),
-                    Container(
-                      width: 145, // 드롭다운 버튼의 폭 지정
-                      height: 54, // 이메일 텍스트 필드와 동일한 높이로 설정
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: DropdownButton<String>(
-                        value: _emailDomain,
-                        underline: SizedBox(),
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: 145, // 드롭다운 버튼의 폭 지정
+                        height: 54, // 이메일 텍스트 필드와 동일한 높이로 설정
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey),
                         ),
-                        items: <String>[
-                          'gmail.com',
-                          'naver.com',
-                          'yahoo.com',
-                          'daum.net'
-                        ].map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _emailDomain = newValue!;
-                          });
-                        },
+                        child: DropdownButton<String>(
+                          value: _emailDomain,
+                          underline: SizedBox(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                          items: <String>[
+                            'gmail.com',
+                            'naver.com',
+                            'yahoo.com',
+                            'daum.net'
+                          ].map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _emailDomain = newValue!;
+                            });
+                          },
+                        ),
                       ),
                     ),
                   ],
