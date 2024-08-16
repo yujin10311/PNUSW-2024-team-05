@@ -34,6 +34,13 @@ class HomeActivity : AppCompatActivity() {
 
         }
 
+        findViewById<TextView>(R.id.chat_btn).setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+
+            this.startActivity(intent)
+
+        }
+
         findViewById<TextView>(R.id.character_btn).setOnClickListener {
             val intent = Intent(this, AvatarActivity::class.java)
 
