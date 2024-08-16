@@ -21,6 +21,11 @@ class HomeActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        findViewById<TextView>(R.id.chat_btn).setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+
+            this.startActivity(intent)
+        }
 
         findViewById<TextView>(R.id.comunity_btn).setOnClickListener {
             val intent = Intent(this, CommunityActivity::class.java)
