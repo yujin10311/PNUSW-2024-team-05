@@ -6,3 +6,10 @@ data class Message(
 ) {
     constructor() : this("", "")
 }
+data class Message_chat(
+    var message: String?,
+    var sendId: String? ,
+    var emotion: String?
+) {
+    constructor() : this("", "", "")
+}

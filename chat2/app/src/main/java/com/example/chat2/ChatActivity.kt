@@ -93,6 +93,8 @@ class ChatActivity : AppCompatActivity() {
             // 데이터 저장
             CoroutineScope(Dispatchers.Main).launch() {
                 var response = chat.sendMessage("다음 텍스트에 대해 3줄 이내로 채팅하듯이 심리상담을 해줘 텍스트:$message")
+                var emotion = chat.sendMessage("지금까지 한 사용자의 심리상담 채팅 내용과 지금 주어진 텍스트를 같이 적용해서 상담자의 감정을 다음 중 하나로 분류해줘 : (행복, 슬픔, 즐거움, 분노, 중립) 다른 설명 없이 '분류한 감정 두글자'만 알려줘. 텍스트:$message")
+
                 mDbRef.child("chats").child(senderRoom).child("message").push()
                     .setValue(messageObject)//.addOnSuccessListener {
                 // 저장 성공하면(상대방 화면에 -> 이거는 굳이 필요 없을듯)
@@ -101,7 +103,7 @@ class ChatActivity : AppCompatActivity() {
 //                    }
                 // 입력값 초기화
                 mDbRef.child("chats").child(senderRoom).child("message").push()
-                    .setValue(Message(response.text.toString(), senderUid+"a"))
+                    .setValue(Message_chat(response.text.toString() , senderUid+"a", emotion.text.toString()))
                 binding.messageEdit.setText("")
             }
         }
