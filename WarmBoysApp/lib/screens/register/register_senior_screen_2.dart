@@ -237,8 +237,9 @@ class _RegisterSeniorScreen2State extends State<RegisterSeniorScreen2> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: ElevatedButton(
           onPressed: selectedSubDistrict != null && detailedAddress.isNotEmpty
               ? () async {
@@ -246,9 +247,11 @@ class _RegisterSeniorScreen2State extends State<RegisterSeniorScreen2> {
                   widget.onNextPage();
                 }
               : null,
-          child: Text('다음'),
+          child: Text('다음', style: TextStyle(fontSize: 20)),
           style: ElevatedButton.styleFrom(
             minimumSize: Size(double.infinity, 50),
+            backgroundColor: Color.fromARGB(255, 224, 73, 81),
+            foregroundColor: Colors.white,
           ),
         ),
       ),

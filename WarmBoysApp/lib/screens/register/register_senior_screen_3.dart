@@ -156,7 +156,7 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
       builder: (ctx) {
         final customAuthProvider = Provider.of<CustomAuthProvider>(ctx);
         return AlertDialog(
-          title: const Text("Face Registration", textAlign: TextAlign.center),
+          title: const Text("인식된 얼굴", textAlign: TextAlign.center),
           alignment: Alignment.center,
           content: SizedBox(
             height: 340,
@@ -172,7 +172,7 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                   height: 200,
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 ElevatedButton(
                     onPressed: () async {
@@ -184,9 +184,10 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Color.fromARGB(255, 224, 73, 81),
+                        foregroundColor: Colors.white,
                         minimumSize: const Size(200, 40)),
-                    child: const Text("완료"))
+                    child: const Text("완료", style: TextStyle(fontSize: 16.0))),
               ],
             ),
           ),
@@ -444,7 +445,7 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: _selectedGender == '남성'
-                                  ? Colors.blue
+                                  ? Color.fromARGB(255, 224, 73, 81)
                                   : Colors.grey,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
@@ -465,7 +466,7 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: _selectedGender == '여성'
-                                  ? Colors.blue
+                                  ? Color.fromARGB(255, 224, 73, 81)
                                   : Colors.grey,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
@@ -585,8 +586,9 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: ElevatedButton(
           onPressed: _isFormValid
               ? () async {
@@ -594,9 +596,11 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                   widget.onNextPage();
                 }
               : null,
-          child: Text('다음'),
+          child: Text('다음', style: TextStyle(fontSize: 20)),
           style: ElevatedButton.styleFrom(
             minimumSize: Size(double.infinity, 50),
+            backgroundColor: Color.fromARGB(255, 224, 73, 81),
+            foregroundColor: Colors.white,
           ),
         ),
       ),

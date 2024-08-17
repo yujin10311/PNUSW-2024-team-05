@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _login(BuildContext context) async {
-    String email = '${_emailController.text}@$_emailDomain';
+    String email = _emailController.text;
     String password = _passwordController.text;
 
     try {
@@ -91,111 +91,92 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF8C2BD), // 배경색 설정
+      // backgroundColor: Color.fromARGB(255, 244, 195, 198), // 배경색 설정
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(30.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: 60),
-                // 타이틀 로고
-                Center(
-                  child: Image.asset(
-                    'assets/logos/apptitle.png', // 타이틀 로고 이미지 경로
-                    width: 210, // 로고 너비
-                    height: 100, // 로고 높이
-                  ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Welcome",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black54)),
+                  ],
                 ),
-                SizedBox(height: 5), // 타이틀 로고와 회사 로고 사이 여백
-                // 팀 로고
-                Center(
-                  child: Image.asset(
-                    'assets/logos/company.png', // 로고 이미지 경로
-                    width: 200, // 로고 너비
-                    height: 50, // 로고 높이
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("따시게",
+                        style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 224, 73, 81))),
+                  ],
                 ),
+                // // 타이틀 로고
+                // Center(
+                //   child: Image.asset(
+                //     'assets/logos/apptitle.png', // 타이틀 로고 이미지 경로
+                //     width: 210, // 로고 너비
+                //     height: 100, // 로고 높이
+                //   ),
+                // ),
+                // SizedBox(height: 5), // 타이틀 로고와 회사 로고 사이 여백
+                // // 팀 로고
+                // Center(
+                //   child: Image.asset(
+                //     'assets/logos/company.png', // 로고 이미지 경로
+                //     width: 200, // 로고 너비
+                //     height: 50, // 로고 높이
+                //   ),
+                // ),
                 SizedBox(height: 60), // 로고와 입력 필드 사이 여백
                 // Email Input
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 54, // 이메일 텍스트 필드의 높이 지정
-                        child: TextField(
-                          controller: _emailController,
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: '이메일',
-                            hintStyle: TextStyle(
-                              color: Color(0xFFB6B6B6),
-                              fontSize: 20,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.normal, // Medium
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 15, horizontal: 15),
-                          ),
-                        ),
-                      ),
+                Container(
+                  height: 54, // 이메일 텍스트 필드의 높이 지정
+                  child: TextField(
+                    controller: _emailController,
+                    style: TextStyle(
+                      fontSize: 18,
                     ),
-                    SizedBox(width: 10),
-                    Text(
-                      '@',
-                      style: TextStyle(
-                        fontSize: 26,
-                        color: Colors.black,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.email,
+                        color: Colors.black45,
+                        size: 24,
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 145, // 드롭다운 버튼의 폭 지정
-                        height: 54, // 이메일 텍스트 필드와 동일한 높이로 설정
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey),
-                        ),
-                        child: DropdownButton<String>(
-                          value: _emailDomain,
-                          underline: SizedBox(),
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                          ),
-                          items: <String>[
-                            'gmail.com',
-                            'naver.com',
-                            'yahoo.com',
-                            'daum.net'
-                          ].map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              _emailDomain = newValue!;
-                            });
-                          },
-                        ),
+                      hintText: '이메일',
+                      hintStyle: TextStyle(
+                        color: Color(0xFFB6B6B6),
+                        fontSize: 18,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.normal, // Medium
                       ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black12, width: 3),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Color.fromARGB(255, 224, 73, 81), width: 2),
+                      ),
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black12, width: 3),
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                     ),
-                  ],
+                  ),
                 ),
                 SizedBox(height: 10),
                 // Password Input
@@ -205,20 +186,32 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _passwordController,
                     obscureText: true,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                     ),
                     decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        color: Colors.black45,
+                        size: 24,
+                      ),
                       hintText: '비밀번호',
                       hintStyle: TextStyle(
                         color: Color(0xFFB6B6B6),
-                        fontSize: 20,
+                        fontSize: 18,
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.normal, // Medium
                       ),
                       filled: true,
                       fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black12, width: 3),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Color.fromARGB(255, 224, 73, 81), width: 2),
+                      ),
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black12, width: 3),
                       ),
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -233,6 +226,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(color: Colors.red),
                     ),
                   ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        print('Styled TextButton pressed');
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.black54, // 텍스트 색상
+                        // padding: EdgeInsets.symmetric(
+                        //     horizontal: 24.0, vertical: 12.0), // 버튼의 padding
+                      ),
+                      child: Text(
+                        '비밀번호를 잊으셨나요?',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    )
+                  ],
+                ),
                 SizedBox(height: 20),
                 // Login Button
                 Padding(
@@ -241,8 +253,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _isButtonDisabled
                           ? Colors.grey
-                          : Color.fromARGB(255, 70, 94, 219),
-                      padding: EdgeInsets.symmetric(vertical: 10), // 높이 조절
+                          : Color.fromARGB(255, 224, 73, 81),
+                      padding: EdgeInsets.symmetric(vertical: 12), // 높이 조절
+                      elevation: 3,
                     ),
                     onPressed: _isButtonDisabled ? null : () => _login(context),
                     child: Text(
@@ -262,7 +275,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 10), // 높이 조절
+                      padding: EdgeInsets.symmetric(vertical: 12), // 높이 조절
+                      elevation: 3,
                     ),
                     onPressed: () {
                       // 회원가입 버튼을 눌렀을 때 입력 필드를 초기화
@@ -273,7 +287,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(
                       '따시게 가입하기',
                       style: TextStyle(
-                        color: Color.fromARGB(255, 254, 169, 161),
+                        color: Color.fromARGB(255, 225, 98, 104),
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.bold,
                         fontSize: 20,

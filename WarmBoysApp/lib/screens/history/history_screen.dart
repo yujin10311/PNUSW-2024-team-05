@@ -93,6 +93,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         children: snapshot.data!.map((activity) {
                           return GestureDetector(
                             child: Card(
+                              color: Colors.white,
                               margin: EdgeInsets.symmetric(vertical: 5),
                               child: Padding(
                                 padding: const EdgeInsets.all(15.0),
@@ -168,26 +169,39 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           SizedBox(height: 5),
                                           Text(
                                             "장소: ${activity['activityCity']} ${activity['activityGu']} ${activity['activityDong']}",
-                                            style: TextStyle(fontSize: 16),
+                                            style: TextStyle(
+                                                fontSize: _memberType == '메이트'
+                                                    ? 14
+                                                    : 16),
                                           ),
                                           Text(
                                             "날짜: ${activity['date']}",
-                                            style: TextStyle(fontSize: 16),
+                                            style: TextStyle(
+                                                fontSize: _memberType == '메이트'
+                                                    ? 14
+                                                    : 16),
                                           ),
                                           Text(
                                             "시간: ${activity['startTime']} ~ ${activity['endTime']}",
-                                            style: TextStyle(fontSize: 16),
+                                            style: TextStyle(
+                                                fontSize: _memberType == '메이트'
+                                                    ? 14
+                                                    : 16),
                                           ),
                                           Text(
                                             "활동 종류: ${activity['activityType']}",
-                                            style: TextStyle(fontSize: 16),
+                                            style: TextStyle(
+                                                fontSize: _memberType == '메이트'
+                                                    ? 14
+                                                    : 16),
                                           ),
                                           SizedBox(height: 10),
                                           Text(
                                             "크레딧: ${activity['credit']}",
                                             style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600,
+                                              fontSize: _memberType == '메이트'
+                                                  ? 14
+                                                  : 16,
                                             ),
                                           ),
                                         ],

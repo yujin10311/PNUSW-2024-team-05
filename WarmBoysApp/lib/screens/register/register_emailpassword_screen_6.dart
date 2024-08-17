@@ -59,7 +59,7 @@ class _RegisterEmailpasswordScreen6State
       _isLoading = true;
     });
 
-    final email = '${_emailController.text}@$_selectedDomain';
+    final email = _emailController.text;
     final password = _passwordController.text;
     bool emailExists = await FirebaseHelper.checkEmail(email);
     if (emailExists) {
@@ -139,6 +139,7 @@ class _RegisterEmailpasswordScreen6State
     final customAuthProvider = Provider.of<CustomAuthProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        title: Text("이메일 / 비밀번호 입력"),
         automaticallyImplyLeading: false, // 기본 뒤로 가기 버튼을 비활성화
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -161,16 +162,19 @@ class _RegisterEmailpasswordScreen6State
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: _isLoading
             ? Center(child: CircularProgressIndicator())
             : ElevatedButton(
                 onPressed:
                     _isFormValid ? () => _register(customAuthProvider) : null,
-                child: Text('다음'),
+                child: Text('다음', style: TextStyle(fontSize: 20)),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
+                  backgroundColor: Color.fromARGB(255, 224, 73, 81),
+                  foregroundColor: Colors.white,
                 ),
               ),
       ),
@@ -189,25 +193,6 @@ class _RegisterEmailpasswordScreen6State
               border: OutlineInputBorder(),
             ),
           ),
-        ),
-        SizedBox(width: 10),
-        Text('@'),
-        SizedBox(width: 10),
-        DropdownButton<String>(
-          hint: Text('선택'),
-          value: _selectedDomain,
-          items: _emailDomains.map((String domain) {
-            return DropdownMenuItem<String>(
-              value: domain,
-              child: Text(domain),
-            );
-          }).toList(),
-          onChanged: (String? newValue) {
-            setState(() {
-              _selectedDomain = newValue;
-              _validateForm();
-            });
-          },
         ),
       ],
     );

@@ -83,15 +83,18 @@ class _RegisterMateScreen5State extends State<RegisterMateScreen5> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: ElevatedButton(
           onPressed: () async {
             widget.onNextPage();
           },
-          child: Text('다음'),
+          child: Text('다음', style: TextStyle(fontSize: 20)),
           style: ElevatedButton.styleFrom(
             minimumSize: Size(double.infinity, 50),
+            backgroundColor: Color.fromARGB(255, 224, 73, 81),
+            foregroundColor: Colors.white,
           ),
         ),
       ),
@@ -215,8 +218,9 @@ class _RegisterMateScreen5State extends State<RegisterMateScreen5> {
                   children: [
                     CircleAvatar(
                       radius: 20,
-                      backgroundColor:
-                          dayInfo != null ? Colors.blue : Colors.grey,
+                      backgroundColor: dayInfo != null
+                          ? Color.fromARGB(255, 224, 73, 81)
+                          : Colors.grey,
                       child: Text(
                         day,
                         style: TextStyle(color: Colors.white),
@@ -226,14 +230,17 @@ class _RegisterMateScreen5State extends State<RegisterMateScreen5> {
                     Icon(
                       Icons.wb_sunny,
                       size: 30,
-                      color: isMorning || isFullDay ? Colors.blue : Colors.grey,
+                      color: isMorning || isFullDay
+                          ? Color.fromARGB(255, 224, 73, 81)
+                          : Colors.grey,
                     ),
                     SizedBox(height: 5),
                     Icon(
                       Icons.nights_stay,
                       size: 30,
-                      color:
-                          isAfternoon || isFullDay ? Colors.blue : Colors.grey,
+                      color: isAfternoon || isFullDay
+                          ? Color.fromARGB(255, 224, 73, 81)
+                          : Colors.grey,
                     ),
                     SizedBox(height: 5),
                   ],

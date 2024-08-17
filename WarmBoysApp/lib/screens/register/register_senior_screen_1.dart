@@ -81,13 +81,16 @@ class _RegisterSeniorScreen1State extends State<RegisterSeniorScreen1> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: ElevatedButton(
           onPressed: _selectedActivities.isNotEmpty ? widget.onNextPage : null,
-          child: Text('다음'),
+          child: Text('다음', style: TextStyle(fontSize: 20)),
           style: ElevatedButton.styleFrom(
             minimumSize: Size(double.infinity, 50),
+            backgroundColor: Color.fromARGB(255, 224, 73, 81),
+            foregroundColor: Colors.white,
           ),
         ),
       ),
@@ -103,7 +106,8 @@ class _RegisterSeniorScreen1State extends State<RegisterSeniorScreen1> {
         children: [
           CircleAvatar(
             radius: 30,
-            backgroundColor: isSelected ? Colors.blue : Colors.grey,
+            backgroundColor:
+                isSelected ? Color.fromARGB(255, 224, 73, 81) : Colors.grey,
             child: Icon(icon,
                 size: 30, color: isSelected ? Colors.white : Colors.black),
           ),
@@ -112,7 +116,8 @@ class _RegisterSeniorScreen1State extends State<RegisterSeniorScreen1> {
             text,
             style: TextStyle(
               fontSize: 16.0,
-              color: isSelected ? Colors.blue : Colors.black,
+              color:
+                  isSelected ? Color.fromARGB(255, 224, 73, 81) : Colors.black,
             ),
             textAlign: TextAlign.center,
           ),

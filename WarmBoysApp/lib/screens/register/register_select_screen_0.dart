@@ -77,6 +77,7 @@ class _RegisterSelectScreen0State extends State<RegisterSelectScreen0> {
     return GestureDetector(
       onTap: onTap,
       child: Card(
+        color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),

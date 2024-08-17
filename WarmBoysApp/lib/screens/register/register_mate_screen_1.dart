@@ -81,8 +81,9 @@ class _RegisterMateScreen1State extends State<RegisterMateScreen1> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: ElevatedButton(
           onPressed: _selectedActivities.isNotEmpty
               ? () async {
@@ -90,9 +91,11 @@ class _RegisterMateScreen1State extends State<RegisterMateScreen1> {
                   widget.onNextPage();
                 }
               : null,
-          child: Text('다음'),
+          child: Text('다음', style: TextStyle(fontSize: 20)),
           style: ElevatedButton.styleFrom(
             minimumSize: Size(double.infinity, 50),
+            backgroundColor: Color.fromARGB(255, 224, 73, 81),
+            foregroundColor: Colors.white,
           ),
         ),
       ),
@@ -108,7 +111,8 @@ class _RegisterMateScreen1State extends State<RegisterMateScreen1> {
         children: [
           CircleAvatar(
             radius: 30,
-            backgroundColor: isSelected ? Colors.blue : Colors.grey,
+            backgroundColor:
+                isSelected ? Color.fromARGB(255, 224, 73, 81) : Colors.grey,
             child: Icon(icon,
                 size: 30, color: isSelected ? Colors.white : Colors.black),
           ),
@@ -116,7 +120,10 @@ class _RegisterMateScreen1State extends State<RegisterMateScreen1> {
           Text(
             text,
             style: TextStyle(
-                fontSize: 16.0, color: isSelected ? Colors.blue : Colors.black),
+                fontSize: 16.0,
+                color: isSelected
+                    ? Color.fromARGB(255, 224, 73, 81)
+                    : Colors.black),
             textAlign: TextAlign.center,
           ),
         ],

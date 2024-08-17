@@ -7,17 +7,20 @@ class AutowrapTextBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(fontSize: 18),
+    return Material(
+      borderRadius: BorderRadius.circular(3.0),
+      elevation: 1.0,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(3.0),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 18),
+        ),
       ),
     );
   }

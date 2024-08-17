@@ -40,7 +40,7 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("교환 정보"),
+        title: Text("교환 상세"),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -95,6 +95,29 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
+                          "  상품명",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        Text(
+                          '${widget.post['goodsName']}  ',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(
+                      color: Color.fromARGB(255, 234, 234, 234),
+                      thickness: 2,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
                           "  필요 크레딧",
                           style: TextStyle(
                             fontSize: 16,
@@ -102,7 +125,53 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
                           ),
                         ),
                         Text(
-                          '${widget.post['needCredit']}  ',
+                          '${widget.post['needCredit']} 크레딧  ',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(
+                      color: Color.fromARGB(255, 234, 234, 234),
+                      thickness: 2,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "  모집 인원",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        Text(
+                          '${widget.post['maxHeadcounts']}명  ',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(
+                      color: Color.fromARGB(255, 234, 234, 234),
+                      thickness: 2,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "  현재 인원",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        Text(
+                          '${widget.post['currentHeadcounts']}명  ',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,

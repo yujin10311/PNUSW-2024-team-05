@@ -42,7 +42,7 @@ class ActivityTypeScrollView extends StatelessWidget {
                 SizedBox(height: 5),
                 Text(
                   activity,
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
               ],

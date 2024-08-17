@@ -39,8 +39,9 @@ class DayTimeCalendar extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 20,
-                      backgroundColor:
-                          dayInfo != null ? Colors.blue : Colors.grey,
+                      backgroundColor: dayInfo != null
+                          ? Color.fromARGB(255, 224, 73, 81)
+                          : Colors.grey,
                       child: Text(
                         day,
                         style: TextStyle(color: Colors.white),
@@ -50,14 +51,17 @@ class DayTimeCalendar extends StatelessWidget {
                     Icon(
                       Icons.wb_sunny,
                       size: 30,
-                      color: isMorning || isFullDay ? Colors.blue : Colors.grey,
+                      color: isMorning || isFullDay
+                          ? Color.fromARGB(255, 224, 73, 81)
+                          : Colors.grey,
                     ),
                     SizedBox(height: 5),
                     Icon(
                       Icons.nights_stay,
                       size: 30,
-                      color:
-                          isAfternoon || isFullDay ? Colors.blue : Colors.grey,
+                      color: isAfternoon || isFullDay
+                          ? Color.fromARGB(255, 224, 73, 81)
+                          : Colors.grey,
                     ),
                     SizedBox(height: 5),
                   ],

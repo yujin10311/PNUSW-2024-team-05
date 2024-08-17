@@ -29,6 +29,7 @@ class PostScreen extends StatefulWidget {
   final String activityType;
   final DateTime startTime;
   final DateTime endTime;
+  final String addInfo;
 
   PostScreen({
     required this.memberType,
@@ -52,6 +53,7 @@ class PostScreen extends StatefulWidget {
     required this.activityType,
     required this.startTime,
     required this.endTime,
+    required this.addInfo,
   });
 
   @override
@@ -158,7 +160,7 @@ class _PostScreenState extends State<PostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Post Senior Screen"),
+        title: Text("공고 상세"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -179,9 +181,14 @@ class _PostScreenState extends State<PostScreen> {
               ),
               SizedBox(height: 30),
               _buildConditionalSection(),
-              SizedBox(height: 30),
+              SizedBox(height: 16),
+              Divider(
+                color: Color.fromARGB(255, 234, 234, 234),
+                thickness: 2,
+              ),
+              SizedBox(height: 10),
               Text(
-                '회원 상세 정보',
+                '시니어 주거 환경',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
@@ -190,34 +197,67 @@ class _PostScreenState extends State<PostScreen> {
                 withPet: widget.withPet,
                 withCam: widget.withCam,
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 16),
+              Divider(
+                color: Color.fromARGB(255, 234, 234, 234),
+                thickness: 2,
+              ),
+              SizedBox(height: 10),
               Text(
                 '반려동물 상세 설명',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
               AutowrapTextBox(text: widget.petInfo),
-              SizedBox(height: 30),
+              SizedBox(height: 16),
+              Divider(
+                color: Color.fromARGB(255, 234, 234, 234),
+                thickness: 2,
+              ),
+              SizedBox(height: 10),
               Text(
                 '해당되는 증상',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
               MemberSymptomScrollview(symptoms: widget.symptom),
-              SizedBox(height: 30),
+              SizedBox(height: 16),
+              Divider(
+                color: Color.fromARGB(255, 234, 234, 234),
+                thickness: 2,
+              ),
+              SizedBox(height: 10),
               Text(
                 '증상 상세 설명',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
               AutowrapTextBox(text: widget.symptomInfo),
-              SizedBox(height: 30),
+              SizedBox(height: 16),
+              Divider(
+                color: Color.fromARGB(255, 234, 234, 234),
+                thickness: 2,
+              ),
+              SizedBox(height: 10),
               Text(
                 '거동 상태',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
-              MemberSymptomScrollview(symptoms: [widget.walkingType])
+              MemberSymptomScrollview(symptoms: [widget.walkingType]),
+              SizedBox(height: 16),
+              Divider(
+                color: Color.fromARGB(255, 234, 234, 234),
+                thickness: 2,
+              ),
+              SizedBox(height: 10),
+              Text(
+                '시니어 소개글',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              AutowrapTextBox(text: widget.addInfo),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.3),
             ],
           ),
         ),
@@ -248,12 +288,52 @@ class _PostScreenState extends State<PostScreen> {
           ],
         ),
         SizedBox(height: 10),
-        _buildInfoBox([
-          '활동 종류:       ${widget.activityType}',
-          '날짜:              ${DateFormat('yy.M.d').format(widget.startTime)}',
-          '시작 시간:       ${_formatTime(widget.startTime)}',
-          '종료 시간:       ${_formatTime(widget.endTime)}',
-        ])
+        Card(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("활동 종류:", style: TextStyle(fontSize: 18.0)),
+                    Text("${widget.activityType}",
+                        style: TextStyle(fontSize: 18.0)),
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("활동 날짜:", style: TextStyle(fontSize: 18.0)),
+                    Text("${DateFormat('yy.M.d').format(widget.startTime)}",
+                        style: TextStyle(fontSize: 18.0)),
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("시작 시간:", style: TextStyle(fontSize: 18.0)),
+                    Text("${_formatTime(widget.startTime)}",
+                        style: TextStyle(fontSize: 18.0)),
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("종료 시간:", style: TextStyle(fontSize: 18.0)),
+                    Text("${_formatTime(widget.endTime)}",
+                        style: TextStyle(fontSize: 18.0)),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -269,12 +349,54 @@ class _PostScreenState extends State<PostScreen> {
           ],
         ),
         SizedBox(height: 10),
-        _buildInfoBox([
-          '활동 종류:       ${widget.activityType}',
-          '날짜:              ${DateFormat('yy.M.d').format(widget.startTime)}',
-          '시작 시간:       ${_formatTime(widget.startTime)}',
-          '종료 시간:       ${_formatTime(widget.endTime)}',
-        ], hasButton: true)
+        Card(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("활동 종류:", style: TextStyle(fontSize: 18.0)),
+                    Text("${widget.activityType}",
+                        style: TextStyle(fontSize: 18.0)),
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("활동 날짜:", style: TextStyle(fontSize: 18.0)),
+                    Text("${DateFormat('yy.M.d').format(widget.startTime)}",
+                        style: TextStyle(fontSize: 18.0)),
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("시작 시간:", style: TextStyle(fontSize: 18.0)),
+                    Text("${_formatTime(widget.startTime)}",
+                        style: TextStyle(fontSize: 18.0)),
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("종료 시간:", style: TextStyle(fontSize: 18.0)),
+                    Text("${_formatTime(widget.endTime)}",
+                        style: TextStyle(fontSize: 18.0)),
+                  ],
+                ),
+                SizedBox(height: 30),
+                _buildMateApplyButton(),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -319,11 +441,11 @@ class _PostScreenState extends State<PostScreen> {
               shape: BoxShape.circle,
             ),
             selectedDecoration: BoxDecoration(
-              color: Color.fromARGB(255, 174, 63, 86),
+              color: Color.fromARGB(255, 224, 73, 81),
               shape: BoxShape.circle,
             ),
             markerDecoration: BoxDecoration(
-              color: Color.fromARGB(255, 174, 63, 86),
+              color: Color.fromARGB(255, 224, 73, 81),
               shape: BoxShape.circle,
             ),
           ),
@@ -346,8 +468,10 @@ class _PostScreenState extends State<PostScreen> {
 
   Widget _buildEventInfoBox(Map<String, dynamic> event) {
     return Card(
+      color: Colors.white,
+      elevation: 1,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(30.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -364,7 +488,7 @@ class _PostScreenState extends State<PostScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -378,7 +502,7 @@ class _PostScreenState extends State<PostScreen> {
                 )
               ],
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -392,7 +516,7 @@ class _PostScreenState extends State<PostScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -406,8 +530,13 @@ class _PostScreenState extends State<PostScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 10),
-            ElevatedButton(
+            SizedBox(height: 40),
+            TextButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 1,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                foregroundColor: Color.fromARGB(255, 224, 73, 81),
+              ),
               onPressed: () async {
                 // Call delete function from FirebaseHelper
                 // FirebaseHelper.deletePost(event['postId']);
@@ -443,16 +572,20 @@ class _PostScreenState extends State<PostScreen> {
                         activityType: widget.activityType,
                         startTime: widget.startTime,
                         endTime: widget.endTime,
+                        addInfo: widget.addInfo,
                       ),
                       transitionDuration: Duration.zero,
                       reverseTransitionDuration: Duration.zero,
                     ),
                   );
                 } else {
-                  print("공고 삭제에 실패했습니다.");
+                  print("공고 내리기에 실패했습니다.");
                 }
               },
-              child: Text('삭제'),
+              child: Text('공고 내리기',
+                  style: TextStyle(
+                    fontSize: 18,
+                  )),
             ),
           ],
         ),
@@ -471,6 +604,7 @@ class _PostScreenState extends State<PostScreen> {
   Widget _buildInfoBox(List<String> lines,
       {bool hasButton = false, bool isSelf = false}) {
     return Card(
+      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -479,7 +613,7 @@ class _PostScreenState extends State<PostScreen> {
             for (var line in lines)
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 3),
                 child: isSelf
                     ? _buildSelfLine(line)
                     : Row(
@@ -490,12 +624,11 @@ class _PostScreenState extends State<PostScreen> {
                       ),
               ),
             SizedBox(height: 30),
-            if (hasButton) _buildMateApplyButton(), // '매칭 신청' 버튼
             if (isSelf)
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 30),
+                  SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -504,7 +637,7 @@ class _PostScreenState extends State<PostScreen> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 14),
-                            backgroundColor: Color.fromARGB(255, 174, 63, 86),
+                            backgroundColor: Color.fromARGB(255, 224, 73, 81),
                             foregroundColor: Colors.white,
                           ),
                           onPressed: isPostButtonEnabled
@@ -568,6 +701,7 @@ class _PostScreenState extends State<PostScreen> {
                                           activityType: widget.activityType,
                                           startTime: widget.startTime,
                                           endTime: widget.endTime,
+                                          addInfo: widget.addInfo,
                                         ),
                                         transitionDuration: Duration.zero,
                                         reverseTransitionDuration:
@@ -585,6 +719,7 @@ class _PostScreenState extends State<PostScreen> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 16),
                 ],
               ),
           ],
@@ -698,7 +833,7 @@ class _PostScreenState extends State<PostScreen> {
       return ElevatedButton(
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 14),
-          backgroundColor: Color.fromARGB(255, 174, 63, 86),
+          backgroundColor: Color.fromARGB(255, 224, 73, 81),
           foregroundColor: Colors.white,
         ),
         onPressed: () async {
@@ -730,6 +865,7 @@ class _PostScreenState extends State<PostScreen> {
                   activityType: widget.activityType,
                   startTime: widget.startTime,
                   endTime: widget.endTime,
+                  addInfo: widget.addInfo,
                 ),
                 transitionDuration: Duration.zero,
                 reverseTransitionDuration: Duration.zero,
@@ -740,7 +876,11 @@ class _PostScreenState extends State<PostScreen> {
         child: Text('매칭 신청', style: TextStyle(fontSize: 18)),
       );
     } else if (checkStat == 'alreadyApplied') {
-      return ElevatedButton(
+      return TextButton(
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          foregroundColor: Color.fromARGB(255, 224, 73, 81),
+        ),
         onPressed: () async {
           bool success =
               await FirebaseHelper.cancelApply(widget.postId, widget.myUid);
@@ -770,6 +910,7 @@ class _PostScreenState extends State<PostScreen> {
                   activityType: widget.activityType,
                   startTime: widget.startTime,
                   endTime: widget.endTime,
+                  addInfo: widget.addInfo,
                 ),
                 transitionDuration: Duration.zero,
                 reverseTransitionDuration: Duration.zero,
@@ -777,7 +918,7 @@ class _PostScreenState extends State<PostScreen> {
             );
           }
         },
-        child: Text('신청 취소'),
+        child: Text('신청 취소', style: TextStyle(fontSize: 18)),
       );
     } else if (checkStat == 'error') {
       return Text('에러');

@@ -211,7 +211,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
       String postId, String seniorUid, String seniorPhoneNum2, String mateUid) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("CurrentStatus: Matched"),
+        title: Text("활동 시작하기"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -347,7 +347,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         SizedBox(height: 10),
                         TextField(
                           controller: _reportController,
-                          maxLines: 5,
+                          maxLines: 10,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: "보고서를 작성하세요...",
@@ -363,12 +363,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 80),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.3),
                 ],
               ),
             ),
             Positioned(
-              bottom: 0,
+              bottom: 20,
               left: 0,
               right: 0,
               child: ElevatedButton(
@@ -406,8 +406,17 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         }
                       }
                     : null,
-                child: Text("제출하기"),
+                child: Text(
+                  "시작 보고서 제출하기",
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
                 style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Color.fromARGB(255, 224, 73, 81),
+                  elevation: 2,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                   minimumSize: Size(double.infinity, 50),
                 ),
               ),
@@ -422,7 +431,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
       String postId, String seniorUid, String seniorPhoneNum2, String mateUid) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("CurrentStatus: Activated"),
+        title: Text("활동 종료하기"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -558,7 +567,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         SizedBox(height: 10),
                         TextField(
                           controller: _reportController,
-                          maxLines: 5,
+                          maxLines: 10,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: "보고서를 작성하세요...",
@@ -606,12 +615,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 80),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.3),
                 ],
               ),
             ),
             Positioned(
-              bottom: 0,
+              bottom: 20,
               left: 0,
               right: 0,
               child: ElevatedButton(
@@ -656,8 +665,17 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         }
                       }
                     : null,
-                child: Text("제출"),
+                child: Text(
+                  "종료 보고서 제출하기",
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
                 style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Color.fromARGB(255, 224, 73, 81),
+                  elevation: 2,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                   minimumSize: Size(double.infinity, 50),
                 ),
               ),

@@ -104,7 +104,7 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
       child: GestureDetector(
         onTap: () => _toggleLivingOption(option),
         child: Card(
-          color: isSelected ? Colors.blue[100] : Colors.white,
+          color: isSelected ? Color.fromARGB(255, 251, 196, 198) : Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
@@ -117,7 +117,7 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
               children: [
                 Icon(icon, size: 40, color: Colors.grey),
                 SizedBox(height: 5),
-                Text(text, style: TextStyle(fontSize: 12)),
+                Text(text, style: TextStyle(fontSize: 16)),
               ],
             ),
           ),
@@ -130,7 +130,7 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
     return GestureDetector(
       onTap: _toggleHasPet,
       child: Card(
-        color: _hasPet ? Colors.blue[100] : Colors.white,
+        color: _hasPet ? Color.fromARGB(255, 251, 196, 198) : Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
@@ -157,13 +157,14 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: isSelected ? Colors.blue : Colors.grey,
+          backgroundColor:
+              isSelected ? Color.fromARGB(255, 224, 73, 81) : Colors.grey,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
         ),
-        child: Text(text),
+        child: Text(text, style: TextStyle(fontSize: 16)),
       ),
     );
   }
@@ -173,13 +174,14 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
     return ElevatedButton(
       onPressed: () => _toggleSymptom(text),
       style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? Colors.blue : Colors.grey,
+        backgroundColor:
+            isSelected ? Color.fromARGB(255, 224, 73, 81) : Colors.grey,
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
       ),
-      child: Text(text),
+      child: Text(text, style: TextStyle(fontSize: 16)),
     );
   }
 
@@ -355,16 +357,19 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: ElevatedButton(
           onPressed: () async {
             await _saveFormData();
             widget.onNextPage();
           },
-          child: Text('다음'),
+          child: Text('다음', style: TextStyle(fontSize: 20)),
           style: ElevatedButton.styleFrom(
             minimumSize: Size(double.infinity, 50),
+            backgroundColor: Color.fromARGB(255, 224, 73, 81),
+            foregroundColor: Colors.white,
           ),
         ),
       ),

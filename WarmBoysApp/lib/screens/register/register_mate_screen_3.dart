@@ -162,7 +162,7 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                   height: 200,
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 ElevatedButton(
                     onPressed: () async {
@@ -174,7 +174,8 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Color.fromARGB(255, 224, 73, 81),
+                        foregroundColor: Colors.white,
                         minimumSize: const Size(200, 40)),
                     child: const Text("완료"))
               ],
@@ -440,7 +441,7 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: _selectedGender == '남성'
-                                  ? Colors.blue
+                                  ? Color.fromARGB(255, 224, 73, 81)
                                   : Colors.grey,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
@@ -461,7 +462,7 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: _selectedGender == '여성'
-                                  ? Colors.blue
+                                  ? Color.fromARGB(255, 224, 73, 81)
                                   : Colors.grey,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
@@ -548,8 +549,9 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: ElevatedButton(
           onPressed: _isFormValid
               ? () async {
@@ -557,9 +559,11 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                   widget.onNextPage();
                 }
               : null,
-          child: Text('다음'),
+          child: Text('다음', style: TextStyle(fontSize: 20)),
           style: ElevatedButton.styleFrom(
             minimumSize: Size(double.infinity, 50),
+            backgroundColor: Color.fromARGB(255, 224, 73, 81),
+            foregroundColor: Colors.white,
           ),
         ),
       ),

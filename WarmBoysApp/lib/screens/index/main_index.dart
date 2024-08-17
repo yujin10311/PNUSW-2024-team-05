@@ -119,7 +119,7 @@ class _MainIndexState extends State<MainIndex> {
                     child: Container(
                       padding: EdgeInsets.all(2),
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 174, 63, 86),
+                        color: Color.fromARGB(255, 224, 73, 81),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       constraints: BoxConstraints(
@@ -140,7 +140,7 @@ class _MainIndexState extends State<MainIndex> {
             label: '교환',
           ),
         ],
-        selectedItemColor: Color.fromARGB(255, 174, 63, 86),
+        selectedItemColor: Color.fromARGB(255, 224, 73, 81),
         unselectedItemColor: Colors.grey,
         showUnselectedLabels: true,
       ),

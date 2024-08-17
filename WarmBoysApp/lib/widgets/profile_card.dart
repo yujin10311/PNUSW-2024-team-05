@@ -28,8 +28,9 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
         child: Row(
           children: [
             (imgUrl != '')
@@ -71,6 +72,20 @@ class ProfileCard extends StatelessWidget {
                       Text(username,
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  Text(
+                    '${city} > ${gu} > ${dong}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      RatingStars(rating: rating),
+                      Text(
+                        "${rating.toStringAsFixed(2)} (${ratingCount})",
+                        style: TextStyle(fontSize: 16),
+                      ),
                       SizedBox(width: 5),
                       TextButton(
                         onPressed: () {
@@ -89,23 +104,9 @@ class ProfileCard extends StatelessWidget {
                         child: Text(
                           '리뷰 보기',
                           style: TextStyle(
-                            color: Color.fromARGB(255, 174, 63, 86),
+                            color: Color.fromARGB(255, 224, 73, 81),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    '${city} > ${gu} > ${dong}',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      RatingStars(rating: rating),
-                      Text(
-                        "${rating.toStringAsFixed(2)} (${ratingCount})",
-                        style: TextStyle(fontSize: 16),
                       ),
                     ],
                   ),

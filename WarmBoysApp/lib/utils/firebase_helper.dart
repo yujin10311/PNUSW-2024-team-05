@@ -245,6 +245,7 @@ class FirebaseHelper {
           'startTime': (postData['startTime'] as Timestamp).toDate(),
           'endTime': (postData['endTime'] as Timestamp).toDate(),
           'credit': postData['credit'] ?? 0,
+          'addInfo': userData['addInfo'] ?? '',
         });
       }
     }

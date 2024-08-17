@@ -31,7 +31,7 @@ class _ExchangeScreenState extends State<ExchangeScreen>
     final memberType = userInfo['memberType'];
 
     return Scaffold(
-      appBar: CustomAppBar(title: "교환 페이지"),
+      appBar: CustomAppBar(title: "교환"),
       body: FutureBuilder<List<Map<String, dynamic>>>(
           future: _exchangePosts,
           builder: (context, snapshot) {
@@ -51,73 +51,87 @@ class _ExchangeScreenState extends State<ExchangeScreen>
                 },
                 child: Column(
                   children: [
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '내 크레딧',
-                          style: TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Container(
-                          width: 100,
-                          alignment: Alignment.centerRight,
-                          padding: EdgeInsets.all(4.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(3),
-                              border: Border.all(
-                                  color: Colors.pink[100]!, width: 3)),
-                          child: Text(myCredit.toString()),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    memberType == '메이트' ? SizedBox(height: 20) : Container(),
+                    memberType == '메이트'
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '내 크레딧',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                width: 12,
+                              ),
+                              Container(
+                                width: 100,
+                                alignment: Alignment.centerRight,
+                                padding: EdgeInsets.all(4.0),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(3),
+                                    border: Border.all(
+                                        color: Color.fromARGB(255, 224, 73, 81),
+                                        width: 3)),
+                                child: Text(myCredit.toString(),
+                                    style: TextStyle(fontSize: 16)),
+                              )
+                            ],
+                          )
+                        : Container(),
+                    memberType == '메이트'
+                        ? SizedBox(
+                            height: 20,
+                          )
+                        : Container(),
                     Expanded(
                       child: ListView.builder(
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
                           var data = snapshot.data![index];
                           return GestureDetector(
-                            child: Card(
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(data['imgUrl']),
-                                  radius: 30,
-                                ),
-                                title: Text(
-                                  data['goodsName'],
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      data['inc'],
-                                    ),
-                                    Text(
-                                      data['supportReason'],
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                                trailing: Column(
-                                  children: [
-                                    Text(
-                                      '${data['needCredit']} 크레딧',
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    SizedBox(height: 10),
-                                    Text(
-                                      '(${data['currentHeadcounts']} / ${data['maxHeadcounts']})',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                  ],
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Card(
+                                color: Colors.white,
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundImage:
+                                        NetworkImage(data['imgUrl']),
+                                    radius: 30,
+                                  ),
+                                  title: Text(
+                                    data['goodsName'],
+                                  ),
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(data['inc'],
+                                          style:
+                                              TextStyle(color: Colors.black54)),
+                                      Text(
+                                        data['supportReason'],
+                                        style: TextStyle(color: Colors.black54),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                  trailing: Column(
+                                    children: [
+                                      Text(
+                                        '${data['needCredit']} 크레딧',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        '(${data['currentHeadcounts']} / ${data['maxHeadcounts']})',
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

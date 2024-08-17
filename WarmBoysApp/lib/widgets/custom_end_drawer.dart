@@ -19,11 +19,12 @@ class CustomEndDrawer extends StatelessWidget {
     final uid = Provider.of<CustomAuthProvider>(context).uid;
 
     return Drawer(
+      backgroundColor: Colors.white,
       child: ListView(
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 174, 63, 86),
+              color: Color.fromARGB(255, 224, 73, 81),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

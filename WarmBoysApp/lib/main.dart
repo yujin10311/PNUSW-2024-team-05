@@ -55,6 +55,7 @@ class MyApp extends StatelessWidget {
                 activityType: args['activityType'],
                 startTime: args['startTime'],
                 endTime: args['endTime'],
+                addInfo: args['addInfo'],
               ),
             );
           } else if (settings.name == '/activity_screen') {

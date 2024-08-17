@@ -1,6 +1,9 @@
+// cayenne(lightest) Color.fromARGB(255,252,237,238)
+
 // // 색상 리스트
 // // 기본
-// 시그니처: Color.fromARGB(255, 174, 63, 86),
+
+// cayenne Color.fromARGB(255, 224, 73, 81)
 // 카드 배경: Color.fromARGB(255, 252, 246, 24),
 // title 텍스트: Color.fromARGB(255, 68, 68, 68),
 // subtitle 텍스트: Color.fromARGB(255, 195, 195, 195),
@@ -96,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: '홈페이지',
+        title: '홈',
         leading: null, // '뒤로 가기 버튼' 제거
       ),
       body: Column(
@@ -129,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String walkingType = userInfo?['walkingType'] ?? '';
                         String petInfo = userInfo?['petInfo'] ?? '';
                         String symptomInfo = userInfo?['symptomInfo'] ?? '';
+                        String addInfo = userInfo?['addInfo'] ?? '';
                         // 공고 정보
                         String postId = '';
                         String city = userInfo?['city'] ?? '';
@@ -163,11 +167,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               'activityType': activityType,
                               'startTime': startTime,
                               'endTime': endTime,
+                              'addInfo': addInfo,
                             });
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: Color.fromARGB(255, 174, 63, 86),
+                        backgroundColor: Color.fromARGB(255, 224, 73, 81),
                         elevation: 5,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
@@ -194,7 +199,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () => _selectDateRange(context),
                     child: Text('기간 선택', style: TextStyle(fontSize: 16)),
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Color.fromARGB(255, 174, 63, 86),
+                      foregroundColor: Color.fromARGB(255, 224, 73, 81),
+                      backgroundColor: Colors.white,
                       elevation: 2,
                     ),
                   ),
@@ -265,6 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: GestureDetector(
                       child: Card(
+                        color: Colors.white,
                         margin: const EdgeInsets.symmetric(vertical: 10),
                         elevation: 5,
                         shadowColor: Colors.black87,
@@ -302,9 +309,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.35, // 너비는 고정, 높이는 부모의 높이를 따르도록 설정
-                                          height:
-                                              memberType == '메이트' ? 310 : 270,
+                                              0.3, // 너비는 고정, 높이는 부모의 높이를 따르도록 설정
+                                          height: 270,
                                           decoration: BoxDecoration(
                                             image: DecorationImage(
                                               image: NetworkImage(
@@ -326,13 +332,52 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.all(24),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 30),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      postcard['seniorName'],
-                                      style: TextStyle(fontSize: 22),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          postcard['seniorName'],
+                                          style: TextStyle(fontSize: 22),
+                                        ),
+                                        memberType == '메이트'
+                                            ? SizedBox(width: 3)
+                                            : Container(),
+                                        memberType == '메이트'
+                                            ? IconButton(
+                                                onPressed: () async {
+                                                  final chatId =
+                                                      await FirebaseHelper
+                                                          .CreateChatRoomWithUserId(
+                                                    postcard['seniorUid'],
+                                                  );
+                                                  if (chatId != null) {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ChatScreen(
+                                                                chatId: chatId),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                                icon: Icon(
+                                                  Icons.chat, // 채팅 모양 아이콘
+                                                  size: 24.0, // 아이콘 크기
+                                                  color: Color.fromARGB(255,
+                                                      224, 73, 81), // 아이콘 색상
+                                                ),
+                                                tooltip:
+                                                    '채팅하기', // 아이콘에 툴팁 제공 (선택 사항)
+                                              )
+                                            : Container(),
+                                      ],
                                     ),
                                     SizedBox(height: 5),
                                     Row(
@@ -387,82 +432,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                           color: Colors.black54),
                                     ),
                                     SizedBox(height: 5),
-                                    memberType == '메이트'
-                                        ? Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "크레딧: ${postcard['credit'].toString()}",
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        memberType == '시니어'
-                                                            ? 16
-                                                            : 14,
-                                                    color: Colors.black54),
-                                              ),
-                                              SizedBox(height: 14),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 18),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(3),
-                                                      ),
-                                                      backgroundColor:
-                                                          Color.fromARGB(
-                                                              255, 174, 63, 86),
-                                                      foregroundColor:
-                                                          Colors.white,
-                                                      elevation: 2,
-                                                    ),
-                                                    onPressed: () async {
-                                                      final chatId =
-                                                          await FirebaseHelper
-                                                              .CreateChatRoomWithUserId(
-                                                        postcard['seniorUid'],
-                                                      );
-                                                      if (chatId != null) {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                ChatScreen(
-                                                                    chatId:
-                                                                        chatId),
-                                                          ),
-                                                        );
-                                                      }
-                                                    },
-                                                    child: Text(
-                                                      '대화하기',
-                                                      style: TextStyle(
-                                                          fontSize: 18),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          )
-                                        : Row(
-                                            children: [
-                                              Text(
-                                                "크레딧: ${postcard['credit'].toString()}",
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.black54),
-                                              ),
-                                            ],
-                                          ),
+                                    Row(
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Text(
+                                              "크레딧: ${postcard['credit'].toString()}",
+                                              style: TextStyle(
+                                                  fontSize: memberType == '메이트'
+                                                      ? 14
+                                                      : 16,
+                                                  color: Colors.black54),
+                                            ),
+                                            SizedBox(height: 14),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
@@ -497,6 +483,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String activityType = postcard['activityType'];
                         DateTime startTime = postcard['startTime'];
                         DateTime endTime = postcard['endTime'];
+                        String addInfo = postcard['addInfo'];
 
                         // PostScreen으로 라우트
                         Navigator.pushNamed(context, '/post_screen',
@@ -522,6 +509,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               'activityType': activityType,
                               'startTime': startTime,
                               'endTime': endTime,
+                              'addInfo': addInfo,
                             });
                       },
                     ),

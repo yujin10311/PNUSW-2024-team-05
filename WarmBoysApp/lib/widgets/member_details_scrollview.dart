@@ -58,18 +58,19 @@ class _MemberDetailsCard extends StatelessWidget {
         icon = Icons.help_outline;
     }
     return Card(
+      color: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(3.0),
       ),
-      elevation: 4,
+      elevation: 1,
       margin: EdgeInsets.symmetric(horizontal: 8),
       child: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Icon(icon, size: 40),
+            Icon(icon, size: 60),
             SizedBox(height: 10),
-            Text(type, style: TextStyle(fontSize: 14)),
+            Text(type, style: TextStyle(fontSize: 16)),
           ],
         ),
       ),

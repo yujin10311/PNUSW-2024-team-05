@@ -75,13 +75,13 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildInfoRow('성함:', _username, fontSize: 16.0),
+              _buildInfoRow('성함:', _username, fontSize: 18.0),
               SizedBox(height: 10),
-              _buildInfoRow('나이:', _age, fontSize: 16.0),
+              _buildInfoRow('나이:', _age, fontSize: 18.0),
               SizedBox(height: 10),
-              _buildInfoRow('연락처:', _phoneNum, fontSize: 16.0),
+              _buildInfoRow('연락처:', _phoneNum, fontSize: 18.0),
               SizedBox(height: 10),
-              _buildInfoRow('비상 연락망:', _phoneNum2, fontSize: 16.0),
+              _buildInfoRow('비상 연락망:', _phoneNum2, fontSize: 18.0),
               SizedBox(height: 10),
               _buildLocationSection(),
               SizedBox(height: 10),
@@ -100,15 +100,18 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: ElevatedButton(
           onPressed: () async {
             widget.onNextPage();
           },
-          child: Text('다음'),
+          child: Text('다음', style: TextStyle(fontSize: 20)),
           style: ElevatedButton.styleFrom(
             minimumSize: Size(double.infinity, 50),
+            backgroundColor: Color.fromARGB(255, 224, 73, 81),
+            foregroundColor: Colors.white,
           ),
         ),
       ),
@@ -125,7 +128,7 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
         ),
         Text(
           value,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 16),
         ),
       ],
     );
@@ -155,7 +158,7 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
                     SizedBox(height: 5),
                     Text(
                       activity,
-                      style: TextStyle(fontSize: 12),
+                      style: TextStyle(fontSize: 16),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -174,11 +177,13 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
       children: [
         Text(
           '지역:',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         Text(
           '$_city > $_gu > $_dong',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 16,
+          ),
         ),
       ],
     );
@@ -190,7 +195,7 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
       children: [
         Text(
           '상세 주소:',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 10),
         Container(
@@ -216,7 +221,7 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '회원 상세 정보',
+          '회원 주거 환경',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 10),
@@ -295,7 +300,7 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: Text(symptom, style: TextStyle(fontSize: 14)),
+                child: Text(symptom, style: TextStyle(fontSize: 16)),
               );
             }).toList(),
           ),
@@ -319,7 +324,7 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(8.0),
           ),
-          child: Text(_walkingType, style: TextStyle(fontSize: 14)),
+          child: Text(_walkingType, style: TextStyle(fontSize: 16)),
         ),
       ],
     );
@@ -343,7 +348,7 @@ class _RegisterSeniorScreen5State extends State<RegisterSeniorScreen5> {
           ),
           child: Text(
             _addInfo,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: 16),
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),

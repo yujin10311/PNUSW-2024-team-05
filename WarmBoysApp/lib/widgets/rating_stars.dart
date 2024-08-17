@@ -17,13 +17,13 @@ class RatingStars extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         for (int i = 0; i < fullStars; i++)
-          Icon(Icons.star, color: Color.fromARGB(255, 174, 63, 86), size: 16),
+          Icon(Icons.star, color: Color.fromARGB(255, 224, 73, 81), size: 16),
         if (hasHalfStar)
           Icon(Icons.star_half,
-              color: Color.fromARGB(255, 174, 63, 86), size: 16),
+              color: Color.fromARGB(255, 224, 73, 81), size: 16),
         for (int i = 0; i < emptyStars; i++)
           Icon(Icons.star_border,
-              color: Color.fromARGB(255, 174, 63, 86), size: 16),
+              color: Color.fromARGB(255, 224, 73, 81), size: 16),
       ],
     );
   }

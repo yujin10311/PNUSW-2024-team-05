@@ -122,8 +122,9 @@ class _RegisterMateScreen4State extends State<RegisterMateScreen4> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: ElevatedButton(
           onPressed: _hasCompletedCard
               ? () async {
@@ -131,9 +132,11 @@ class _RegisterMateScreen4State extends State<RegisterMateScreen4> {
                   widget.onNextPage();
                 }
               : null,
-          child: Text('다음'),
+          child: Text('다음', style: TextStyle(fontSize: 20)),
           style: ElevatedButton.styleFrom(
             minimumSize: Size(double.infinity, 50),
+            backgroundColor: Color.fromARGB(255, 224, 73, 81),
+            foregroundColor: Colors.white,
           ),
         ),
       ),
@@ -196,8 +199,9 @@ class _RegisterMateScreen4State extends State<RegisterMateScreen4> {
                   children: [
                     CircleAvatar(
                       radius: 20,
-                      backgroundColor:
-                          dayInfo != null ? Colors.blue : Colors.grey,
+                      backgroundColor: dayInfo != null
+                          ? Color.fromARGB(255, 224, 73, 81)
+                          : Colors.grey,
                       child: Text(
                         day,
                         style: TextStyle(color: Colors.white),
@@ -207,14 +211,17 @@ class _RegisterMateScreen4State extends State<RegisterMateScreen4> {
                     Icon(
                       Icons.wb_sunny,
                       size: 30,
-                      color: isMorning || isFullDay ? Colors.blue : Colors.grey,
+                      color: isMorning || isFullDay
+                          ? Color.fromARGB(255, 224, 73, 81)
+                          : Colors.grey,
                     ),
                     SizedBox(height: 5),
                     Icon(
                       Icons.nights_stay,
                       size: 30,
-                      color:
-                          isAfternoon || isFullDay ? Colors.blue : Colors.grey,
+                      color: isAfternoon || isFullDay
+                          ? Color.fromARGB(255, 224, 73, 81)
+                          : Colors.grey,
                     ),
                     SizedBox(height: 5),
                   ],
@@ -394,17 +401,18 @@ class _DayCardState extends State<DayCard> {
                               });
                             }
                           : null,
-                      child: Text('O'),
+                      child: Text('O', style: TextStyle(fontSize: 16)),
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size(40, 40),
                       ),
                     ),
                     ElevatedButton(
                       onPressed: () => widget.onDelete(widget),
-                      child: Text('X'),
+                      child: Text('X', style: TextStyle(fontSize: 16)),
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size(40, 40),
                         backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
                       ),
                     ),
                   ],
