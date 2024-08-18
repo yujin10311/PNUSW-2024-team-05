@@ -40,7 +40,7 @@ class CommunityWriteActivity : AppCompatActivity() {
             val time = getTime()
 
             // push()는 목록을 만들어주며 랜덤한 문자열을 할당한다.
-            mDbRef.child("community").child(senderUid.toString()).push().setValue(ContentModel(title, content, hashtag,time))
+            mDbRef.child("community").push().setValue(ContentModel(senderUid.toString(), title, content, hashtag, time, 0, 0, 0))
 
             // child()는 해당 키 위치로 이동하는 메서드로 child()를 사용하여 key 값의 하위에 값을 저장한다.
             // setValue() 메서드를 사용하여 값을 저장한다.
