@@ -17,4 +17,122 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.95" />
+
+    <ImageButton
+        android:id="@+id/refreshButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="good"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/writebutton"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.95"
+        app:srcCompat="@android:drawable/ic_menu_rotate"
+        tools:ignore="ContentDescription,ImageContrastCheck" />
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/textContent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <TextView
+        android:id="@+id/textContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/textHashtag"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textTitle"
+        app:layout_constraintVertical_bias="0.3" />
+
+    <TextView
+        android:id="@+id/textHashtag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/textE2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textContent"
+        app:layout_constraintVertical_bias="0.8" />
+    <TextView
+        android:id="@+id/textE2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/e2button"
+        app:layout_constraintEnd_toEndOf="@id/textE3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/textE1"
+        app:layout_constraintTop_toTopOf="@id/textHashtag"
+        app:layout_constraintVertical_bias="0.8" />
+    <TextView
+        android:id="@+id/textE1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/e2button"
+        app:layout_constraintEnd_toEndOf="@id/textE2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textHashtag"
+        app:layout_constraintVertical_bias="0.8" />
+    <TextView
+        android:id="@+id/textE3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/e2button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/textE2"
+        app:layout_constraintTop_toTopOf="@id/textHashtag"
+        app:layout_constraintVertical_bias="0.8" />
+    <Button
+        android:id="@+id/e2button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="❤️"
+        android:textColorLink="@color/green"
+        app:layout_constraintBottom_toTopOf="@id/refreshButton"
+        app:layout_constraintEnd_toEndOf="@id/e3button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/e1button"
+        app:layout_constraintTop_toTopOf="@id/textE2"
+        app:layout_constraintVertical_bias="0.8" />
+    <Button
+        android:id="@+id/e1button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="😢"
+        android:textColorLink="@color/green"
+        app:layout_constraintBottom_toTopOf="@id/refreshButton"
+        app:layout_constraintEnd_toEndOf="@id/e2button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textE2"
+        app:layout_constraintVertical_bias="0.8" />
+    <Button
+        android:id="@+id/e3button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="️🥺"
+        android:textColorLink="@color/green"
+        app:layout_constraintBottom_toTopOf="@id/refreshButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/e2button"
+        app:layout_constraintTop_toTopOf="@id/textE2"
+        app:layout_constraintVertical_bias="0.8" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

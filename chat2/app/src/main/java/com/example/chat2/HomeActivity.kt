@@ -56,12 +56,34 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_home)
+        findViewById<TextView>(R.id.comunity_btn).setOnClickListener {
+            val intent = Intent(this, CommunityActivity::class.java)
 
+            this.startActivity(intent)
+
+        }
+        findViewById<TextView>(R.id.chat_btn).setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+
+            this.startActivity(intent)
+
+        }
+        findViewById<TextView>(R.id.character_btn).setOnClickListener {
+            val intent = Intent(this, AvatarActivity::class.java)
+
+            this.startActivity(intent)
+
+        }
+        findViewById<TextView>(R.id.check_btn).setOnClickListener {
+            val intent = Intent(this, SurveyActivity::class.java)
+
+            this.startActivity(intent)
+
+        }
         calendarView = findViewById(R.id.calendarView)
         YDMTextView = findViewById(R.id.YMD_TextView)
         emotionTextView = findViewById(R.id.emotion_TextView)
         surveyscoreTextView = findViewById(R.id.surveyscore_TextView)
-
 
         calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
 // 달력 날짜가 선택되면
@@ -169,39 +191,6 @@ class HomeActivity : AppCompatActivity() {
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
                 insets
-            }
-            findViewById<TextView>(R.id.chat_btn).setOnClickListener {
-                val intent = Intent(this, ChatActivity::class.java)
-
-                this.startActivity(intent)
-            }
-
-            findViewById<TextView>(R.id.comunity_btn).setOnClickListener {
-                val intent = Intent(this, CommunityActivity::class.java)
-
-                this.startActivity(intent)
-
-            }
-
-            findViewById<TextView>(R.id.chat_btn).setOnClickListener {
-                val intent = Intent(this, ChatActivity::class.java)
-
-                this.startActivity(intent)
-
-            }
-
-            findViewById<TextView>(R.id.character_btn).setOnClickListener {
-                val intent = Intent(this, AvatarActivity::class.java)
-
-                this.startActivity(intent)
-
-            }
-
-            findViewById<TextView>(R.id.check_btn).setOnClickListener {
-                val intent = Intent(this, SurveyActivity::class.java)
-
-                this.startActivity(intent)
-
             }
         }
     }
