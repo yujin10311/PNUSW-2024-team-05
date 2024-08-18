@@ -3,21 +3,29 @@ package com.example.chat2
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.chat2.databinding.ActivitySurveyBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import java.time.LocalDate
 
 class SurveyActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivitySurveyBinding
 
+    lateinit var mAuth: FirebaseAuth // 인증 객체
+    lateinit var mDbRef: DatabaseReference // DB 객체
 
     private var currentPosition: Int = 1 //질문 위치
     private var selectedOption: Int = 0 //선택 답변 값
@@ -25,11 +33,20 @@ class SurveyActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var questionList: ArrayList<Question>
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySurveyBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
+
+        // 초기화
+        mAuth = FirebaseAuth.getInstance()
+        mDbRef = FirebaseDatabase.getInstance().reference
+
+        val senderUid = mAuth.currentUser?.uid
+
+
 
         //질문 리스트 가져오기
         questionList = QuestionData.getQuestion()
@@ -82,6 +99,9 @@ class SurveyActivity : AppCompatActivity(), View.OnClickListener {
                     else ->{
                         //결과 액티비티로 넘어가는 코드
                         Toast.makeText(this, "설문이 끝났습니다.",Toast.LENGTH_SHORT).show()
+                        val localDate: LocalDate = LocalDate.now()
+                        mDbRef.child("survey").child(senderUid.toString()).child(localDate.toString()).push()
+                            .setValue(Score(score))
                         val intent = Intent(this@SurveyActivity, ResultActivity::class.java)
                         intent.putExtra("score", score)
                         intent.putExtra("totalSize", 27)

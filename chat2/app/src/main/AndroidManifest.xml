@@ -19,6 +19,12 @@
             android:name=".SurveyActivity"
             android:exported="false" />
         <activity
+            android:name=".CommunityActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CommunityWriteActivity"
+            android:exported="false" />
+        <activity
             android:name=".CheckActivity"
             android:exported="false" />
         <activity

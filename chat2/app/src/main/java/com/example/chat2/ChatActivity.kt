@@ -1,8 +1,10 @@
 package com.example.chat2
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -20,6 +22,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+
 // 너무 어렵고
 class ChatActivity : AppCompatActivity() {
 
@@ -44,10 +48,11 @@ class ChatActivity : AppCompatActivity() {
     private val chatHistory = mutableListOf<Content>()
     private val chat = model.startChat(chatHistory)
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
-
+        val localDate: LocalDate = LocalDate.now()
         enableEdgeToEdge()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -93,21 +98,25 @@ class ChatActivity : AppCompatActivity() {
             // 데이터 저장
             CoroutineScope(Dispatchers.Main).launch() {
                 var response = chat.sendMessage("다음 텍스트에 대해 3줄 이내로 채팅하듯이 심리상담을 해줘 텍스트:$message")
-                mDbRef.child("chats").child(senderRoom).child("message").push()
+                var emotion = chat.sendMessage("지금까지 한 사용자의 심리상담 채팅 내용과 지금 주어진 텍스트를 같이 적용해서 상담자의 감정을 다음 중 하나로 분류해줘 : (행복, 슬픔, 즐거움, 분노, 중립) 다른 설명 없이 '분류한 감정 두글자'만 알려줘. 텍스트:$message")
+
+                mDbRef.child("chats").child(senderRoom).child(localDate.toString()).child("message").push()
                     .setValue(messageObject)//.addOnSuccessListener {
                 // 저장 성공하면(상대방 화면에 -> 이거는 굳이 필요 없을듯)
 //                        mDbRef.child("chats").child(receiverRoom).child("message").push()
 //                            .setValue(Message(response.text, receiverUid))
 //                    }
                 // 입력값 초기화
-                mDbRef.child("chats").child(senderRoom).child("message").push()
-                    .setValue(Message(response.text.toString(), senderUid+"a"))
+
+                mDbRef.child("chats").child(senderRoom).child(localDate.toString()).child("message").push()
+                    .setValue(Message_chat(response.text.toString() , senderUid+"a", emotion.text.toString()))
                 binding.messageEdit.setText("")
             }
         }
 
         // 메시지 가져오기
-        mDbRef.child("chats").child(senderRoom).child("message")
+
+        mDbRef.child("chats").child(senderRoom).child(localDate.toString()).child("message")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     messageList.clear()
