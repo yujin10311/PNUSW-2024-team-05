@@ -75,7 +75,6 @@ class HomeActivity : AppCompatActivity() {
                 month + 1,
                 dayOfMonth
             )  // 날짜를 보여주는 텍스트에 해당 날짜를 넣는다.
-            emotionTextView.text = "감정 분석 결과 : " + "test"
 
 
             lateinit var mAuth: FirebaseAuth // 인증 객체
@@ -86,6 +85,7 @@ class HomeActivity : AppCompatActivity() {
 
             // 접속자 Uid
             val senderUid = mAuth.currentUser?.uid
+            val senderRoom = "gemini"+senderUid
 
 
             // Firebase에서 선택한 날짜의 score 값을 가져오기
@@ -118,6 +118,48 @@ class HomeActivity : AppCompatActivity() {
                             Log.w("FirebaseData", "loadData:onCancelled", error.toException())
                         }
                     })
+
+
+            }
+
+
+            emotionTextView.text = "No Chat"
+            // Firebase에서 선택한 날짜의 감정분석결과 값을 가져오기
+            if (senderUid != null) {
+                mDbRef.child("chats").child(senderRoom).child(formatDate(String.format("%d-%d-%d",year,month + 1,dayOfMonth))).child("message").orderByKey().limitToFirst(2).addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        // 첫 번째 자식 노드 가져오기
+                        if (snapshot.exists()) {
+
+                            val children = snapshot.children.toList()
+                            Log.d("Firebasedata", children.toString())
+
+                            if (children.size > 1) {
+                                val secondchildsnapshot = children[1]
+
+                                val emotionSnapshot = secondchildsnapshot.child("emotion")
+                                val emotion = emotionSnapshot.getValue(String::class.java)
+
+                                if (emotion != null) {
+                                    // emotion 값을 emotionTextView에 표시
+                                    emotionTextView.text = "감정 분석 결과 : " + emotion.toString()
+                                } else {
+                                    // emotion이 없을 때 기본 값 설정 (예: "No Chat")
+                                    emotionTextView.text = "No Chat"
+                                }
+                            } else {
+                                emotionTextView.text = "No Chat"
+                                Log.d("FirebaseData", "No data found for the given date")
+                            }
+                            }
+
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        // 에러 처리
+                        Log.w("FirebaseData", "loadData:onCancelled", error.toException())
+                    }
+                })
 
 
             }
