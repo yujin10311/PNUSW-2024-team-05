@@ -41,9 +41,9 @@ class _RegisterSelectScreen0State extends State<RegisterSelectScreen0> {
             _buildMemberTypeCard(
               context,
               icon: Icons.person,
-              title: '노인을 부양중인 부양자 회원이에요!',
-              subtitle: '시니어 회원가입 >',
-              subtitleColor: Colors.green,
+              title: '청년의 도움이 필요한 시니어 회원이에요!',
+              subtitle: '시니어 회원가입  >',
+              subtitleColor: Color.fromARGB(255, 224, 73, 81),
               onTap: () async {
                 await _saveMemberType('시니어');
                 Navigator.pushNamed(context, '/registerSenior');
@@ -54,8 +54,8 @@ class _RegisterSelectScreen0State extends State<RegisterSelectScreen0> {
               context,
               icon: Icons.person_outline,
               title: '든든한 케어 청년으로 활동하고 싶어요!',
-              subtitle: '케어 메이트 회원가입 >',
-              subtitleColor: Colors.blue,
+              subtitle: '케어 메이트 회원가입  >',
+              subtitleColor: Color.fromARGB(255, 72, 156, 224),
               onTap: () async {
                 await _saveMemberType('메이트');
                 Navigator.pushNamed(context, '/registerMate');
@@ -84,7 +84,7 @@ class _RegisterSelectScreen0State extends State<RegisterSelectScreen0> {
         elevation: 4,
         margin: EdgeInsets.symmetric(horizontal: 20),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 16.0),
+          padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
           child: Row(
             children: [
               Icon(icon, size: 40),
@@ -96,17 +96,21 @@ class _RegisterSelectScreen0State extends State<RegisterSelectScreen0> {
                     Text(
                       title,
                       style: TextStyle(
+                        fontFamily: 'NotoSansKR',
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(255, 68, 68, 68),
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
-                    SizedBox(height: 5),
+                    SizedBox(height: 10),
                     Text(
                       subtitle,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
+                        fontFamily: 'NotoSansKR',
+                        fontWeight: FontWeight.w600,
                         color: subtitleColor,
                       ),
                       overflow: TextOverflow.ellipsis,

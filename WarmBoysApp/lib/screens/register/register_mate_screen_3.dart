@@ -146,7 +146,7 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
       builder: (ctx) {
         final customAuthProvider = Provider.of<CustomAuthProvider>(ctx);
         return AlertDialog(
-          title: const Text("Face Registration", textAlign: TextAlign.center),
+          title: const Text("얼굴이 올바르게 인식되었나요?", textAlign: TextAlign.center),
           alignment: Alignment.center,
           content: SizedBox(
             height: 340,
@@ -244,7 +244,9 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('회원 개인 정보'),
+        title: Text('회원 개인 정보',
+            style: TextStyle(
+                fontFamily: 'NotoSansKR', fontWeight: FontWeight.w400)),
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -259,7 +261,7 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
             children: [
               Center(
                 child: Text(
-                  '사진을 등록해주세요.',
+                  '활동 인증용 사진을 등록해주세요.',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
@@ -281,7 +283,7 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                             size: 100, color: Colors.grey[700]),
                       ),
                     ),
-              SizedBox(height: 10),
+              SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -501,6 +503,7 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(),
+                        hintText: "'-'를 제외하고 작성해주세요.",
                       ),
                       onChanged: (value) {
                         _onFormFieldChanged();
@@ -518,8 +521,7 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                   children: [
                     Row(
                       children: [
-                        Text("피부양자가 추가적으로 알아야 할 내용이 있나요?",
-                            style: TextStyle(fontSize: 16)),
+                        Text("회원님을 소개해주세요.", style: TextStyle(fontSize: 16)),
                         SizedBox(width: 8),
                         Flexible(
                           child: Text("선택",
@@ -530,12 +532,13 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                     ),
                     TextField(
                       controller: _additionalInfoController,
-                      maxLines: 3,
-                      maxLength: 100,
+                      maxLines: 8,
+                      maxLength: 300,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(),
+                        hintText: "시니어가 알아야 할 사항 등을 작성해주세요.",
                       ),
                       onChanged: (value) {
                         _onFormFieldChanged();
@@ -550,8 +553,8 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
         ),
       ),
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+        margin: const EdgeInsets.only(bottom: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ElevatedButton(
           onPressed: _isFormValid
               ? () async {
@@ -559,8 +562,13 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                   widget.onNextPage();
                 }
               : null,
-          child: Text('다음', style: TextStyle(fontSize: 20)),
+          child: Text('다음으로',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'NotoSansKR',
+                  fontWeight: FontWeight.w500)),
           style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 12),
             minimumSize: Size(double.infinity, 50),
             backgroundColor: Color.fromARGB(255, 224, 73, 81),
             foregroundColor: Colors.white,

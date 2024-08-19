@@ -34,12 +34,15 @@ class Recognizer {
     final allRows = await FirebaseHelper.getAllEmbd();
     for (final row in allRows) {
       String uid = row['uid']!;
+      String username = row['username']!;
+      String memberType = row['memberType']!;
       List<double> embd = row['imgEmbd']!
           .split(',')
           .map((e) => double.parse(e))
           .toList()
           .cast<double>();
-      Recognition recognition = Recognition(uid, Rect.zero, embd, 0);
+      Recognition recognition =
+          Recognition(uid, username, memberType, Rect.zero, embd, 0);
       registered.putIfAbsent(uid, () => recognition);
     }
   }
@@ -131,16 +134,21 @@ class Recognizer {
     //TODO looks for the nearest embeeding in the database and returns the pair
     Pair pair = findNearest(outputArray);
     print("pair name= ${pair.name}");
+    print("pair username= ${pair.username}");
+    print("pair memberType= ${pair.memberType}");
     print("distance= ${pair.distance}");
 
-    return Recognition(pair.name, location, outputArray, pair.distance);
+    return Recognition(pair.name, pair.username, pair.memberType, location,
+        outputArray, pair.distance);
   }
 
   //TODO  looks for the nearest embeeding in the database and returns the pair which contain information of registered face with which face is most similar
   findNearest(List<double> emb) {
-    Pair pair = Pair("Unknown", -5);
+    Pair pair = Pair("Unknown", "Unknown", "", -5);
     for (MapEntry<String, Recognition> item in registered.entries) {
       final String name = item.key;
+      final String username = item.value.username;
+      final String memberType = item.value.memberType;
       List<double> knownEmb = item.value.embeddings;
       double distance = 0;
       for (int i = 0; i < emb.length; i++) {
@@ -151,6 +159,8 @@ class Recognizer {
       if (pair.distance == -5 || distance < pair.distance) {
         pair.distance = distance;
         pair.name = name;
+        pair.username = username;
+        pair.memberType = memberType;
       }
     }
     return pair;
@@ -163,6 +173,8 @@ class Recognizer {
 
 class Pair {
   String name;
+  String username;
+  String memberType;
   double distance;
-  Pair(this.name, this.distance);
+  Pair(this.name, this.username, this.memberType, this.distance);
 }

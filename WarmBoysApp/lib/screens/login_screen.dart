@@ -108,17 +108,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text("Welcome",
                         style: TextStyle(
                             fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black54)),
+                            fontFamily: 'NotoSansKR',
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black45)),
                   ],
                 ),
+                SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("따시게",
                         style: TextStyle(
                             fontSize: 40,
-                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Tenada',
                             color: Color.fromARGB(255, 224, 73, 81))),
                   ],
                 ),
@@ -248,13 +250,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 20),
                 // Login Button
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _isButtonDisabled
                           ? Colors.grey
                           : Color.fromARGB(255, 224, 73, 81),
-                      padding: EdgeInsets.symmetric(vertical: 12), // 높이 조절
+                      padding: EdgeInsets.symmetric(vertical: 14), // 높이 조절
                       elevation: 3,
                     ),
                     onPressed: _isButtonDisabled ? null : () => _login(context),
@@ -262,8 +264,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       '로그인',
                       style: TextStyle(
                         color: Colors.white,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.bold,
+                        fontFamily: 'NotoSansKR',
+                        fontWeight: FontWeight.w900,
                         fontSize: 20,
                       ),
                     ),
@@ -271,11 +273,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 // Sign Up Button
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 12), // 높이 조절
+                      padding: EdgeInsets.symmetric(vertical: 14), // 높이 조절
                       elevation: 3,
                     ),
                     onPressed: () {
@@ -287,9 +289,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(
                       '따시게 가입하기',
                       style: TextStyle(
-                        color: Color.fromARGB(255, 225, 98, 104),
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 224, 73, 81),
+                        fontFamily: 'NotoSansKR',
+                        fontWeight: FontWeight.w600,
                         fontSize: 20,
                       ),
                     ),

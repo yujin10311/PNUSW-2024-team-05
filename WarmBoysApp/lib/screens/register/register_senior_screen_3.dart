@@ -156,7 +156,7 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
       builder: (ctx) {
         final customAuthProvider = Provider.of<CustomAuthProvider>(ctx);
         return AlertDialog(
-          title: const Text("인식된 얼굴", textAlign: TextAlign.center),
+          title: const Text("얼굴이 올바르게 인식되었나요?", textAlign: TextAlign.center),
           alignment: Alignment.center,
           content: SizedBox(
             height: 340,
@@ -247,7 +247,9 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('회원 개인 정보'),
+        title: Text('회원 개인 정보',
+            style: TextStyle(
+                fontFamily: 'NotoSansKR', fontWeight: FontWeight.w400)),
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -262,8 +264,11 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
             children: [
               Center(
                 child: Text(
-                  '사진을 등록해주세요.',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  '활동 인증용 사진을 등록해주세요.',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'NotoSansKR',
+                      fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -284,7 +289,7 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                             size: 100, color: Colors.grey[700]),
                       ),
                     ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -299,16 +304,13 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(140, 60),
                         ),
-                        child: Icon(
-                          Icons.camera_alt,
-                          size: 32,
-                        ),
+                        child: Icon(Icons.camera_alt, size: 32),
                       ),
                       SizedBox(height: 5),
                       Text(
                         "사진 촬영",
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 16,
                           color: const Color.fromARGB(255, 106, 106, 106),
                         ),
                       ),
@@ -326,16 +328,13 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(140, 60),
                         ),
-                        child: Icon(
-                          Icons.photo_library,
-                          size: 32,
-                        ),
+                        child: Icon(Icons.photo_library, size: 32),
                       ),
                       SizedBox(height: 5),
                       Text(
                         "갤러리",
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 16,
                           color: const Color.fromARGB(255, 106, 106, 106),
                         ),
                       ),
@@ -352,10 +351,18 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                   children: [
                     Row(
                       children: [
-                        Text("이름", style: TextStyle(fontSize: 16)),
-                        SizedBox(width: 8),
-                        Text("필수",
-                            style: TextStyle(fontSize: 12, color: Colors.red)),
+                        Text("이름",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'NotoSansKR',
+                                fontWeight: FontWeight.w600)),
+                        SizedBox(width: 5),
+                        Text("*",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'NotoSansKR',
+                                fontWeight: FontWeight.w600,
+                                color: Colors.red)),
                       ],
                     ),
                     SizedBox(
@@ -385,10 +392,18 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                   children: [
                     Row(
                       children: [
-                        Text("나이", style: TextStyle(fontSize: 16)),
-                        SizedBox(width: 8),
-                        Text("필수",
-                            style: TextStyle(fontSize: 12, color: Colors.red)),
+                        Text("나이",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'NotoSansKR',
+                                fontWeight: FontWeight.w500)),
+                        SizedBox(width: 5),
+                        Text("*",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'NotoSansKR',
+                                fontWeight: FontWeight.w500,
+                                color: Colors.red)),
                       ],
                     ),
                     Container(
@@ -425,15 +440,22 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                   children: [
                     Row(
                       children: [
-                        Text("성별을 선택해주세요.", style: TextStyle(fontSize: 16)),
-                        SizedBox(width: 8),
+                        Text("성별을 선택해주세요.",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'NotoSansKR',
+                                fontWeight: FontWeight.w500)),
+                        SizedBox(width: 10),
                         Flexible(
                           child: Text("중복 선택 불가",
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.red)),
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'NotoSansKR',
+                                  color: Colors.red)),
                         ),
                       ],
                     ),
+                    SizedBox(height: 16),
                     Row(
                       children: [
                         Expanded(
@@ -444,6 +466,8 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                               });
                             },
                             style: ElevatedButton.styleFrom(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 16.0),
                               backgroundColor: _selectedGender == '남성'
                                   ? Color.fromARGB(255, 224, 73, 81)
                                   : Colors.grey,
@@ -453,7 +477,11 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                                     BorderRadius.circular(8.0), // 모서리 곡률 설정
                               ),
                             ),
-                            child: Text('남성'),
+                            child: Text('남성',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: 'NotoSansKR',
+                                    fontWeight: FontWeight.w500)),
                           ),
                         ),
                         SizedBox(width: 8),
@@ -465,6 +493,8 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                               });
                             },
                             style: ElevatedButton.styleFrom(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 16.0),
                               backgroundColor: _selectedGender == '여성'
                                   ? Color.fromARGB(255, 224, 73, 81)
                                   : Colors.grey,
@@ -474,7 +504,11 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                                     BorderRadius.circular(8.0), // 모서리 곡률 설정
                               ),
                             ),
-                            child: Text('여성'),
+                            child: Text('여성',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: 'NotoSansKR',
+                                    fontWeight: FontWeight.w500)),
                           ),
                         ),
                       ],
@@ -492,20 +526,28 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                     Row(
                       children: [
                         Text("회원님 연락처를 작성해주세요.",
-                            style: TextStyle(fontSize: 16)),
-                        SizedBox(width: 8),
-                        Text("필수",
-                            style: TextStyle(fontSize: 12, color: Colors.red)),
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'NotoSansKR',
+                                fontWeight: FontWeight.w500)),
+                        SizedBox(width: 5),
+                        Text("*",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'NotoSansKR',
+                                fontWeight: FontWeight.w500,
+                                color: Colors.red)),
                       ],
                     ),
+                    SizedBox(height: 16),
                     TextField(
                       controller: _contactController,
                       maxLength: 11,
                       decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(),
-                      ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(),
+                          hintText: "'-'를 제외하고 작성해주세요."),
                       onChanged: (value) {
                         _contact = value;
                         _onFormFieldChanged();
@@ -524,12 +566,20 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                     Row(
                       children: [
                         Text("비상시 연락 가능한 번호가 있나요?",
-                            style: TextStyle(fontSize: 16)),
-                        SizedBox(width: 8),
-                        Text("필수",
-                            style: TextStyle(fontSize: 12, color: Colors.red)),
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'NotoSansKR',
+                                fontWeight: FontWeight.w500)),
+                        SizedBox(width: 5),
+                        Text("*",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'NotoSansKR',
+                                fontWeight: FontWeight.w500,
+                                color: Colors.red)),
                       ],
                     ),
+                    SizedBox(height: 16),
                     TextField(
                       controller: _emergencyContactController,
                       maxLength: 11,
@@ -537,6 +587,7 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(),
+                        hintText: "'-'를 제외하고 작성해주세요.",
                       ),
                       onChanged: (value) {
                         _emergencyContact = value;
@@ -555,22 +606,30 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                   children: [
                     Row(
                       children: [
-                        Text("메이트가 추가적으로 알아야 할 내용이 있나요?",
-                            style: TextStyle(fontSize: 16)),
-                        SizedBox(width: 8),
+                        Text("회원님을 소개해주세요.",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'NotoSansKR',
+                                fontWeight: FontWeight.w500)),
+                        SizedBox(width: 10),
                         Flexible(
                           child: Text("선택",
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.red)),
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'NotoSansKR',
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.red)),
                         ),
                       ],
                     ),
+                    SizedBox(height: 16),
                     TextField(
                       controller: _additionalInfoController,
-                      maxLines: 3,
-                      maxLength: 100,
+                      maxLines: 8,
+                      maxLength: 300,
                       decoration: InputDecoration(
                         filled: true,
+                        hintText: "메이트에게 바라시는 점, 메이트가 알아야 할 사항 등을 작성해주세요.",
                         fillColor: Colors.white,
                         border: OutlineInputBorder(),
                       ),
@@ -587,8 +646,8 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
         ),
       ),
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+        margin: const EdgeInsets.only(bottom: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ElevatedButton(
           onPressed: _isFormValid
               ? () async {
@@ -596,8 +655,13 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                   widget.onNextPage();
                 }
               : null,
-          child: Text('다음', style: TextStyle(fontSize: 20)),
+          child: Text('다음으로',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'NotoSansKR',
+                  fontWeight: FontWeight.w500)),
           style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 12),
             minimumSize: Size(double.infinity, 50),
             backgroundColor: Color.fromARGB(255, 224, 73, 81),
             foregroundColor: Colors.white,

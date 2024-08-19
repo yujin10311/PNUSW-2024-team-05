@@ -17,7 +17,7 @@ class _EducationScreenState extends State<EducationScreen> {
   void initState() {
     super.initState();
     _controller = YoutubePlayerController(
-      initialVideoId: 'iGMnftJNs3A', // 유튜브 영상 ID
+      initialVideoId: 'wpMq6oGhj24', // 유튜브 영상 ID
       flags: YoutubePlayerFlags(
         hideControls: true,
         autoPlay: true,

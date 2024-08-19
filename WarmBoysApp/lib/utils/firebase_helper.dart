@@ -1133,7 +1133,12 @@ class FirebaseHelper {
         String imgEmbd = data['imgEmbd'] as String; // imgEmbd 필드를 가져옴
 
         // uid와 imgEmbd를 매핑한 Map<String, String>을 리스트에 추가
-        embdList.add({'uid': uid, 'imgEmbd': imgEmbd});
+        embdList.add({
+          'uid': uid,
+          'username': data['username'],
+          'memberType': data['memberType'],
+          'imgEmbd': imgEmbd
+        });
       }
     } catch (e) {
       print('Error fetching data from Firestore: $e');
@@ -1299,7 +1304,7 @@ class FirebaseHelper {
           if (mateDoc['mateUid'] == uid) {
             // 조건에 맞는 데이터를 Map으로 저장
             reviews.add({
-              'username': '익명 $index',
+              'username': '익명의 시니어 $index',
               'activityType': doc['activityType'],
               'ratingBySenior': doc['ratingBySenior'],
               'reviewBySenior': doc['reviewBySenior'],
@@ -1321,7 +1326,7 @@ class FirebaseHelper {
       for (var doc in postsSnapshot.docs) {
         // 조건에 맞는 데이터를 Map으로 저장
         reviews.add({
-          'username': '익명 $index',
+          'username': '익명의 메이트 $index',
           'activityType': doc['activityType'],
           'ratingByMate': doc['ratingByMate'],
           'reviewByMate': doc['reviewByMate'],

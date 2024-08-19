@@ -53,7 +53,7 @@ class ReviewScreen extends StatelessWidget {
                             RatingStars(
                                 rating: review['ratingBySenior'].toDouble()),
                             Text(
-                              "${review['ratingBySenior'].toStringAsFixed(2)})",
+                              "${review['ratingBySenior'].toStringAsFixed(2)}",
                               style: TextStyle(fontSize: 16),
                             ),
                           ]),
@@ -66,7 +66,7 @@ class ReviewScreen extends StatelessWidget {
                               RatingStars(
                                   rating: review['ratingByMate'].toDouble()),
                               Text(
-                                "${review['ratingByMate'].toStringAsFixed(2)})",
+                                "${review['ratingByMate'].toStringAsFixed(2)}",
                                 style: TextStyle(fontSize: 16),
                               ),
                             ],

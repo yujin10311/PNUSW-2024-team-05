@@ -116,7 +116,9 @@ class _RegisterSeniorScreen2State extends State<RegisterSeniorScreen2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('어디서 돌봐드릴까요?'),
+        title: Text('어디서 돌봐드릴까요?',
+            style: TextStyle(
+                fontFamily: 'NotoSansKR', fontWeight: FontWeight.w400)),
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -135,7 +137,8 @@ class _RegisterSeniorScreen2State extends State<RegisterSeniorScreen2> {
                     "1. 거주 지역을 선택해 주세요.",
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontFamily: 'NotoSansKR',
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   SizedBox(width: 2),
@@ -205,7 +208,8 @@ class _RegisterSeniorScreen2State extends State<RegisterSeniorScreen2> {
                     "2. 상세 주소를 작성해 주세요.",
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontFamily: 'NotoSansKR',
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   SizedBox(width: 2),
@@ -231,6 +235,10 @@ class _RegisterSeniorScreen2State extends State<RegisterSeniorScreen2> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: '상세 주소를 입력하세요. (30자 이내)',
+                  hintStyle: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'NotoSansKR',
+                      fontWeight: FontWeight.w400),
                 ),
               ),
             ],
@@ -238,8 +246,8 @@ class _RegisterSeniorScreen2State extends State<RegisterSeniorScreen2> {
         ),
       ),
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+        margin: const EdgeInsets.only(bottom: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ElevatedButton(
           onPressed: selectedSubDistrict != null && detailedAddress.isNotEmpty
               ? () async {
@@ -247,8 +255,13 @@ class _RegisterSeniorScreen2State extends State<RegisterSeniorScreen2> {
                   widget.onNextPage();
                 }
               : null,
-          child: Text('다음', style: TextStyle(fontSize: 20)),
+          child: Text('다음으로',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'NotoSansKR',
+                  fontWeight: FontWeight.w500)),
           style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 12),
             minimumSize: Size(double.infinity, 50),
             backgroundColor: Color.fromARGB(255, 224, 73, 81),
             foregroundColor: Colors.white,
@@ -300,7 +313,11 @@ class _RegisterSeniorScreen2State extends State<RegisterSeniorScreen2> {
                 : () => onPressed(item), // 비활성화 여부에 따라 onPressed 설정
             child: Text(
               item,
-              style: TextStyle(overflow: TextOverflow.ellipsis),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'NotoSansKR',
+                  fontWeight: FontWeight.w400,
+                  overflow: TextOverflow.ellipsis),
             ),
           ),
         );

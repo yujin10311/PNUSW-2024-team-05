@@ -51,7 +51,9 @@ class _RegisterMateScreen5State extends State<RegisterMateScreen5> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('가입 정보 상세'),
+        title: Text('가입 정보 상세',
+            style: TextStyle(
+                fontFamily: 'NotoSansKR', fontWeight: FontWeight.w400)),
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -84,14 +86,19 @@ class _RegisterMateScreen5State extends State<RegisterMateScreen5> {
         ),
       ),
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+        margin: const EdgeInsets.only(bottom: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ElevatedButton(
           onPressed: () async {
             widget.onNextPage();
           },
-          child: Text('다음', style: TextStyle(fontSize: 20)),
+          child: Text('다음으로',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'NotoSansKR',
+                  fontWeight: FontWeight.w500)),
           style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 12),
             minimumSize: Size(double.infinity, 50),
             backgroundColor: Color.fromARGB(255, 224, 73, 81),
             foregroundColor: Colors.white,
@@ -282,16 +289,30 @@ class _RegisterMateScreen5State extends State<RegisterMateScreen5> {
 
   IconData _getActivityIcon(String activity) {
     switch (activity) {
-      case '실내활동':
-        return Icons.home;
-      case '실외활동':
-        return Icons.nature;
-      case '밥 챙겨주기':
+      case '실내 오락':
+        return Icons.games;
+      case '실외 활동':
+        return Icons.nature_people;
+      case '식사 지원':
         return Icons.restaurant;
-      case '책 읽기':
+      case '사회적 교류':
+        return Icons.people;
+      case '문화 및 여가':
+        return Icons.theater_comedy;
+      case '정서적 지원':
+        return Icons.favorite;
+      case '지적 활동':
         return Icons.book;
+      case '디지털 교육':
+        return Icons.computer;
+      case '생활 지원':
+        return Icons.cleaning_services;
+      case '예술 및 창작':
+        return Icons.brush;
       case '재능 기부':
         return Icons.volunteer_activism;
+      case '취미 활동':
+        return Icons.local_florist;
       default:
         return Icons.help_outline;
     }

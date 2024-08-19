@@ -157,6 +157,7 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
           backgroundColor:
               isSelected ? Color.fromARGB(255, 224, 73, 81) : Colors.grey,
           foregroundColor: Colors.white,
@@ -164,7 +165,11 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
             borderRadius: BorderRadius.circular(8.0),
           ),
         ),
-        child: Text(text, style: TextStyle(fontSize: 16)),
+        child: Text(text,
+            style: TextStyle(
+                fontSize: 18,
+                fontFamily: 'NotoSansKR',
+                fontWeight: FontWeight.w500)),
       ),
     );
   }
@@ -181,7 +186,11 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
           borderRadius: BorderRadius.circular(8.0),
         ),
       ),
-      child: Text(text, style: TextStyle(fontSize: 16)),
+      child: Text(text,
+          style: TextStyle(
+              fontSize: 18,
+              fontFamily: 'NotoSansKR',
+              fontWeight: FontWeight.w500)),
     );
   }
 
@@ -189,7 +198,9 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('회원 상세 정보'),
+        title: Text('회원 상세 정보',
+            style: TextStyle(
+                fontFamily: 'NotoSansKR', fontWeight: FontWeight.w400)),
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -209,8 +220,11 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Q1) 함께 사는 동거인과 반려동물 정보를 선택해주세요.",
-                      style: TextStyle(fontSize: 16),
+                      "Q1. 함께 사는 동거인과 반려동물 정보를 선택해주세요.",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'NotoSansKR',
+                          fontWeight: FontWeight.w500),
                     ),
                     SizedBox(height: 10),
                     Row(
@@ -224,15 +238,19 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
                     SizedBox(height: 10),
                     _buildPetCard('반려동물', Icons.pets),
                     if (_hasPet) ...[
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       Text(
-                        "Q1-1) 반려동물 종류와 유의사항을 작성해주세요.",
-                        style: TextStyle(fontSize: 16),
+                        "Q1-1. 반려동물 종류와 유의사항을 작성해주세요.",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'NotoSansKR',
+                            fontWeight: FontWeight.w500),
                       ),
+                      SizedBox(height: 10),
                       TextField(
                         controller: TextEditingController(text: _petInfo),
-                        maxLines: 2,
-                        maxLength: 50,
+                        maxLines: 5,
+                        maxLength: 200,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
@@ -254,10 +272,13 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Q2) 집 내부 홈캠 또는 CCTV 설치 유무를 선택해주세요.",
-                      style: TextStyle(fontSize: 16),
+                      "Q2. 집 내부 홈캠 또는 CCTV 설치 유무를 선택해주세요.",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'NotoSansKR',
+                          fontWeight: FontWeight.w500),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 16),
                     Row(
                       children: [
                         _buildElevatedButton('없음', !_selectedCCTVOption, () {
@@ -280,10 +301,13 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Q3) 회원님에게 해당되는 증상을 선택해주세요.",
-                      style: TextStyle(fontSize: 16),
+                      "Q3. 회원님에게 해당되는 증상을 선택해주세요.",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'NotoSansKR',
+                          fontWeight: FontWeight.w500),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 16),
                     GridView.count(
                       shrinkWrap: true,
                       crossAxisCount: 2,
@@ -302,15 +326,19 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
                         _buildSymptomButton('관절질염'),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 20),
                     Text(
-                      "상세증상 기재",
-                      style: TextStyle(fontSize: 16),
+                      "Q3-1.상세증상 기재",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'NotoSansKR',
+                          fontWeight: FontWeight.w500),
                     ),
+                    SizedBox(height: 16),
                     TextField(
                       controller: TextEditingController(text: _symptomInfo),
-                      maxLines: 2,
-                      maxLength: 50,
+                      maxLines: 8,
+                      maxLength: 300,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -331,10 +359,13 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Q4) 회원님의 거동 상태를 선택해주세요.",
-                      style: TextStyle(fontSize: 16),
+                      "Q4. 회원님의 거동 상태를 선택해주세요.",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'NotoSansKR',
+                          fontWeight: FontWeight.w500),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 16),
                     Row(
                       children: [
                         _buildElevatedButton(
@@ -352,21 +383,26 @@ class _RegisterSeniorScreen4State extends State<RegisterSeniorScreen4> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.3),
             ],
           ),
         ),
       ),
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+        margin: const EdgeInsets.only(bottom: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ElevatedButton(
           onPressed: () async {
             await _saveFormData();
             widget.onNextPage();
           },
-          child: Text('다음', style: TextStyle(fontSize: 20)),
+          child: Text('다음으로',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'NotoSansKR',
+                  fontWeight: FontWeight.w500)),
           style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 12),
             minimumSize: Size(double.infinity, 50),
             backgroundColor: Color.fromARGB(255, 224, 73, 81),
             foregroundColor: Colors.white,

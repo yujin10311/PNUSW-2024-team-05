@@ -327,15 +327,16 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(vertical: 16),
               backgroundColor: widget.memberType == '메이트' && _canApply
-                  ? Color.fromARGB(255, 245, 174, 168)
+                  ? Color.fromARGB(255, 224, 73, 81)
                   : Colors.grey,
-              foregroundColor: Colors.black,
+              foregroundColor: Colors.white,
             ),
             child: Text(
               '신청하기',
               style: TextStyle(
-                fontSize: 18,
-              ),
+                  fontSize: 18,
+                  fontFamily: 'NotoSansKR',
+                  fontWeight: FontWeight.w500),
             ),
           ),
         ),

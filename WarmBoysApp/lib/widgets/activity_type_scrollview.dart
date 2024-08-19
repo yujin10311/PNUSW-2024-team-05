@@ -10,16 +10,30 @@ class ActivityTypeScrollView extends StatelessWidget {
 
   IconData _getActivityIcon(String activity) {
     switch (activity) {
-      case '실내활동':
-        return Icons.home;
-      case '실외활동':
-        return Icons.nature;
-      case '밥 챙겨주기':
+      case '실내 오락':
+        return Icons.games;
+      case '실외 활동':
+        return Icons.nature_people;
+      case '식사 지원':
         return Icons.restaurant;
-      case '책 읽기':
+      case '사회적 교류':
+        return Icons.people;
+      case '문화 및 여가':
+        return Icons.theater_comedy;
+      case '정서적 지원':
+        return Icons.favorite;
+      case '지적 활동':
         return Icons.book;
+      case '디지털 교육':
+        return Icons.computer;
+      case '생활 지원':
+        return Icons.cleaning_services;
+      case '예술 및 창작':
+        return Icons.brush;
       case '재능 기부':
         return Icons.volunteer_activism;
+      case '취미 활동':
+        return Icons.local_florist;
       default:
         return Icons.help_outline;
     }

@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
@@ -135,6 +136,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
       Recognition recognition = recognizer.recognize(croppedFace, boundingBox);
       if (recognition.distance > 1.25) {
         recognition.name = "Unknown";
+        recognition.username = "Unknown";
       }
       recognitions.add(recognition);
     }
@@ -173,7 +175,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
   }
 
   drawRectangleAroundFaces() async {
-    final painter = FacePainter(facesList: recognitions, imageFile: image);
+    final painter = FacePainter(
+        facesList: recognitions, imageFile: image, faceAuth: faceAuth);
     final pictureRecorder = ui.PictureRecorder();
     final canvas = Canvas(pictureRecorder);
 
@@ -275,7 +278,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Column(
@@ -348,6 +351,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         TextField(
                           controller: _reportController,
                           maxLines: 10,
+                          maxLength: 1000,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: "보고서를 작성하세요...",
@@ -477,7 +481,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                           child: Text(
                             '얼굴 인증이 성공했습니다.',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: ui.Color.fromARGB(255, 7, 183, 33),
                             ),
@@ -488,7 +492,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                           child: Text(
                             '메이트와 시니어의 얼굴이 포함된 사진을 촬영해주세요.',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: const ui.Color.fromARGB(255, 255, 17, 0),
                             ),
@@ -568,6 +572,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         TextField(
                           controller: _reportController,
                           maxLines: 10,
+                          maxLength: 1000,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: "보고서를 작성하세요...",
@@ -600,6 +605,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         TextField(
                           controller: _reviewController,
                           maxLines: 5,
+                          maxLength: 300,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: "리뷰를 작성하세요...",
@@ -705,7 +711,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
 class FacePainter extends CustomPainter {
   List<Recognition> facesList;
   dynamic imageFile;
-  FacePainter({required this.facesList, @required this.imageFile});
+  bool faceAuth;
+  FacePainter(
+      {required this.facesList,
+      @required this.imageFile,
+      required this.faceAuth});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -714,15 +724,20 @@ class FacePainter extends CustomPainter {
     }
 
     Paint p = Paint();
-    p.color = Colors.red;
+    p.color = faceAuth ? Colors.green : Colors.red;
     p.style = PaintingStyle.stroke;
-    p.strokeWidth = 3;
+    p.strokeWidth = 5;
 
     for (Recognition face in facesList) {
       canvas.drawRect(face.location, p);
 
       TextSpan textSpan = TextSpan(
-          text: face.name, style: TextStyle(color: Colors.white, fontSize: 40));
+          text: '${face.username}<${face.memberType}>',
+          style: TextStyle(
+              color: faceAuth ? Colors.green : Colors.red,
+              fontFamily: 'NotoSansKR',
+              fontWeight: FontWeight.w600,
+              fontSize: 80));
       TextPainter tp =
           TextPainter(text: textSpan, textDirection: TextDirection.ltr);
       tp.layout();

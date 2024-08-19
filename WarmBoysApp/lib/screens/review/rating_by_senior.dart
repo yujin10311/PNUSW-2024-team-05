@@ -90,6 +90,7 @@ class _RatingBySeniorPageState extends State<RatingBySeniorPage> {
                         border: OutlineInputBorder(),
                       ),
                       maxLines: 5,
+                      maxLength: 300,
                       onChanged: (text) {
                         setState(() {}); // 텍스트가 변경될 때마다 상태 업데이트
                       },
