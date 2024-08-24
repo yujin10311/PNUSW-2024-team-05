@@ -100,9 +100,9 @@ class FirebaseHelper {
 
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     String imgUrl = "";
-    if (customAuthProvider.image != null) {
+    if (customAuthProvider.profileImage != null) {
       final ref = FirebaseStorage.instance.ref().child('프로필 사진/$uid.jpg');
-      await ref.putFile(customAuthProvider.image!);
+      await ref.putFile(customAuthProvider.profileImage!);
       imgUrl = await ref.getDownloadURL();
     }
 
@@ -118,6 +118,7 @@ class FirebaseHelper {
       'imgEmbd': prefs['_imgEmbd'],
       'phoneNum': prefs['_phoneNum'] ?? '',
       'phoneNum2': prefs['_phoneNum2'] ?? '',
+      'residentNumber': prefs['_residentNumber'] ?? '',
       'city': prefs['_city'] ?? '',
       'gu': prefs['_gu'] ?? '',
       'dong': prefs['_dong'] ?? '',
@@ -146,10 +147,16 @@ class FirebaseHelper {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     String imgUrl = "";
-    if (customAuthProvider.image != null) {
+    String schoolCertImgUrl = "";
+    if (customAuthProvider.profileImage != null) {
       final ref = FirebaseStorage.instance.ref().child('프로필 사진/$uid.jpg');
-      await ref.putFile(customAuthProvider.image!);
+      await ref.putFile(customAuthProvider.profileImage!);
       imgUrl = await ref.getDownloadURL();
+    }
+    if (customAuthProvider.schoolCertImage != null) {
+      final ref = FirebaseStorage.instance.ref().child('학생증 사진/$uid.jpg');
+      await ref.putFile(customAuthProvider.schoolCertImage!);
+      schoolCertImgUrl = await ref.getDownloadURL();
     }
 
     final Map<String, dynamic> userData = {
@@ -162,7 +169,11 @@ class FirebaseHelper {
       'gender': prefs['_gender'] ?? '',
       'imgUrl': imgUrl,
       'imgEmbd': prefs['_imgEmbd'],
+      'university': prefs['_university'] ?? '',
+      'department': prefs['_department'] ?? '',
+      'schoolCertImgUrl': schoolCertImgUrl,
       'phoneNum': prefs['_phoneNum'] ?? '',
+      'residentNumber': prefs['_residentNumber'] ?? '',
       'city': prefs['_city'] ?? '',
       'gu': prefs['_gu'] ?? '',
       'dong': prefs['_dong'] ?? '',
