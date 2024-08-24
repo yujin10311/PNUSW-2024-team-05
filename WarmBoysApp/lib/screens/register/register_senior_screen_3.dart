@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:warm_boys/utils/recognition.dart';
 import 'package:warm_boys/utils/recognizer.dart';
+import 'package:flutter/services.dart';
 
 // 회원가입 스크린 3(시니어)
 class RegisterSeniorScreen3 extends StatefulWidget {
@@ -45,6 +46,9 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
   TextEditingController _contactController = TextEditingController();
   TextEditingController _emergencyContactController = TextEditingController();
   TextEditingController _additionalInfoController = TextEditingController();
+  late TextEditingController _resiFrontNumController;
+  late TextEditingController _resiBackNumController;
+  late String? _residentNumber;
 
   List<String> _ageOptions = List.generate(
       56, (index) => '${65 + index}세(${DateTime.now().year - (65 + index)}년생)');
@@ -200,6 +204,8 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
   @override
   void initState() {
     super.initState();
+    _resiFrontNumController = TextEditingController();
+    _resiBackNumController = TextEditingController();
     _loadFormData();
     imagePicker = ImagePicker();
 
@@ -219,6 +225,15 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
     _contact = await SharedPreferencesHelper.getByKey('_phoneNum');
     _emergencyContact = await SharedPreferencesHelper.getByKey('_phoneNum2');
     _additionalInfo = await SharedPreferencesHelper.getByKey('_addInfo');
+    _residentNumber =
+        await SharedPreferencesHelper.getByKey('_residentNumber') ?? '';
+    if (_residentNumber != '') {
+      _resiFrontNumController.text = _residentNumber!.substring(0, 6);
+      _resiBackNumController.text = _residentNumber!.substring(6, 7);
+    } else {
+      _resiFrontNumController.text = '';
+      _resiBackNumController.text = '';
+    }
 
     setState(() {
       _nameController.text = _name ?? '';
@@ -236,6 +251,8 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
     await SharedPreferencesHelper.saveData(
         '_phoneNum2', _emergencyContact ?? '');
     await SharedPreferencesHelper.saveData('_addInfo', _additionalInfo ?? '');
+    await SharedPreferencesHelper.saveData('_residentNumber',
+        '${_resiFrontNumController.text}${_resiBackNumController.text}');
   }
 
   void _onFormFieldChanged() {
@@ -369,6 +386,10 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                       width: 150,
                       child: TextField(
                         controller: _nameController,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'[ㄱ-ㅎㅏ-ㅣ가-힣]')), // 문자만 허용
+                        ],
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
@@ -525,6 +546,80 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                   children: [
                     Row(
                       children: [
+                        Text("주민등록번호를 작성해주세요.",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'NotoSansKR',
+                                fontWeight: FontWeight.w500)),
+                        SizedBox(width: 5),
+                        Text("*",
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.red,
+                                fontFamily: 'NotoSansKR',
+                                fontWeight: FontWeight.w500)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 60,
+                          child: TextField(
+                            controller: _resiFrontNumController,
+                            maxLength: 6,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(),
+                              counterText: '',
+                            ),
+                            onChanged: (value) {
+                              _onFormFieldChanged();
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text("-", style: TextStyle(fontSize: 20)),
+                        SizedBox(width: 10),
+                        Expanded(
+                          flex: 10,
+                          child: TextField(
+                            controller: _resiBackNumController,
+                            maxLength: 1,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(),
+                              counterText: '',
+                            ),
+                            onChanged: (value) {
+                              _onFormFieldChanged();
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text("******",
+                            style: TextStyle(
+                              fontSize: 20,
+                            )),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                color: Colors.grey[200],
+                padding: EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
                         Text("회원님 연락처를 작성해주세요.",
                             style: TextStyle(
                                 fontSize: 16,
@@ -543,6 +638,10 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                     TextField(
                       controller: _contactController,
                       maxLength: 11,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
@@ -583,6 +682,10 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                     TextField(
                       controller: _emergencyContactController,
                       maxLength: 11,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
