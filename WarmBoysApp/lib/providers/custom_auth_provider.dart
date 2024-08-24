@@ -9,14 +9,18 @@ class CustomAuthProvider with ChangeNotifier {
   UserCredential? _userCredential;
   String? _uid;
   Map<String, dynamic>? _userInfo;
-  File? _image;
+  File? _profileImage;
+  File? _schoolCertImage;
   Uint8List? _profileImageBytes;
+  Uint8List? _schoolCertImageBytes;
 
   UserCredential? get userCredential => _userCredential;
   Map<String, dynamic>? get userInfo => _userInfo;
   String? get uid => _uid;
-  File? get image => _image;
+  File? get profileImage => _profileImage;
+  File? get schoolCertImage => _schoolCertImage;
   Uint8List? get profileImageBytes => _profileImageBytes;
+  Uint8List? get schoolCertImageBytes => _schoolCertImageBytes;
 
   void setUserCredential(UserCredential userCredential) {
     _userCredential = userCredential;
@@ -50,6 +54,18 @@ class CustomAuthProvider with ChangeNotifier {
     }
   }
 
+  Future<void> _downloadAndStoreSchoolCertImage(String imageUrl) async {
+    try {
+      final response = await http.get(Uri.parse(imageUrl));
+      if (response.statusCode == 200) {
+        _schoolCertImageBytes = response.bodyBytes;
+        notifyListeners();
+      }
+    } catch (e) {
+      print('Failed to download profile image: $e');
+    }
+  }
+
   Future<void> logOut() async {
     await FirebaseAuth.instance.signOut();
     _userCredential = null;
@@ -57,13 +73,23 @@ class CustomAuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setImage(File? image) {
-    _image = image;
+  void setProfileImage(File? image) {
+    _profileImage = image;
     notifyListeners();
   }
 
-  void clearImageFile() {
-    _image = null;
+  void clearProfileImage() {
+    _profileImage = null;
+    notifyListeners();
+  }
+
+  void setSchoolCertImage(File? image) {
+    _schoolCertImage = image;
+    notifyListeners();
+  }
+
+  void clearSchoolCertImage() {
+    _schoolCertImage = null;
     notifyListeners();
   }
 }
