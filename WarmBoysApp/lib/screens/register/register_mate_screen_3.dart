@@ -172,7 +172,7 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                 ),
                 ElevatedButton(
                     onPressed: () async {
-                      customAuthProvider.setImage(_image);
+                      customAuthProvider.setProfileImage(_image);
                       SharedPreferencesHelper.saveData(
                           '_imgEmbd', recognition.embeddings.join(','));
                       this._imgEmbd = recognition.embeddings.join(',');
@@ -201,9 +201,8 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
     _resiBackNumController = TextEditingController();
     _phoneNumberController = TextEditingController();
     _additionalInfoController = TextEditingController();
-    _loadFormData();
-
     imagePicker = ImagePicker();
+    _loadFormData();
 
     // 얼굴 검출기 초기화
     final options =
@@ -225,6 +224,8 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
   }
 
   Future<void> _loadFormData() async {
+    final customAuthProvider =
+        Provider.of<CustomAuthProvider>(context, listen: false);
     _nameController.text =
         await SharedPreferencesHelper.getByKey('_username') ?? '';
     _selectedAge = await SharedPreferencesHelper.getByKey('_age');
@@ -242,7 +243,11 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
         await SharedPreferencesHelper.getByKey('_phoneNum') ?? '';
     _additionalInfoController.text =
         await SharedPreferencesHelper.getByKey('_addInfo') ?? '';
-    setState(() {});
+    _imgEmbd = await SharedPreferencesHelper.getByKey('_imgEmbd') ?? '';
+    _image = customAuthProvider.profileImage;
+    setState(() {
+      _onFormFieldChanged();
+    });
   }
 
   Future<void> _saveFormData() async {
