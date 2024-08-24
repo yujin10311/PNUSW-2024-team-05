@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:warm_boys/providers/custom_auth_provider.dart';
 import '../../utils/shared_preferences_helper.dart';
 
 // 회원가입 스크린 0(가입 유형 선택)
@@ -25,7 +27,11 @@ class _RegisterSelectScreen0State extends State<RegisterSelectScreen0> {
   }
 
   Future<bool> _onWillPop(BuildContext context) async {
+    final customAuthProvider =
+        Provider.of<CustomAuthProvider>(context, listen: false);
     await SharedPreferencesHelper.clearAll();
+    customAuthProvider.clearProfileImage();
+    customAuthProvider.clearSchoolCertImage();
     return true; // true를 반환하여 pop 실행
   }
 
