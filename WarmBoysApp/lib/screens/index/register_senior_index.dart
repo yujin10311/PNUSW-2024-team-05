@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../register/register_senior_screen_1.dart';
 import '../register/register_senior_screen_2.dart';
 import '../register/register_senior_screen_3.dart';
@@ -6,6 +7,7 @@ import '../register/register_senior_screen_4.dart';
 import '../register/register_senior_screen_5.dart';
 import '../register/register_emailpassword_screen_6.dart';
 import '../../utils/shared_preferences_helper.dart';
+import '../../providers/custom_auth_provider.dart';
 
 class RegisterSeniorIndex extends StatefulWidget {
   @override
@@ -46,13 +48,17 @@ class _RegisterSeniorIndexState extends State<RegisterSeniorIndex> {
   }
 
   void _previousPage() async {
+    final customAuthProvider =
+        Provider.of<CustomAuthProvider>(context, listen: false);
     if (_currentIndex > 0) {
       setState(() {
         _currentIndex--;
       });
     } else {
       await SharedPreferencesHelper.clearAll();
-      print("SharedPreference 초기화 완료");
+      customAuthProvider.clearProfileImage();
+      customAuthProvider.clearSchoolCertImage();
+      print("이미지, SharedPreference 초기화 완료");
       Navigator.pop(context);
     }
   }
