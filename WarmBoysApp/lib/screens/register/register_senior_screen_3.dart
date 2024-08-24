@@ -180,7 +180,7 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                 ),
                 ElevatedButton(
                     onPressed: () async {
-                      customAuthProvider.setImage(_image);
+                      customAuthProvider.setProfileImage(_image);
                       SharedPreferencesHelper.saveData(
                           '_imgEmbd', recognition.embeddings.join(','));
                       this._imgEmbd = recognition.embeddings.join(',');
@@ -219,6 +219,8 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
   }
 
   Future<void> _loadFormData() async {
+    final customAuthProvider =
+        Provider.of<CustomAuthProvider>(context, listen: false);
     _name = await SharedPreferencesHelper.getByKey('_username');
     _selectedAge = await SharedPreferencesHelper.getByKey('_age');
     _selectedGender = await SharedPreferencesHelper.getByKey('_gender') ?? '남성';
@@ -234,12 +236,15 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
       _resiFrontNumController.text = '';
       _resiBackNumController.text = '';
     }
+    _imgEmbd = await SharedPreferencesHelper.getByKey('_imgEmbd') ?? '';
+    _image = customAuthProvider.profileImage;
 
     setState(() {
       _nameController.text = _name ?? '';
       _contactController.text = _contact ?? '';
       _emergencyContactController.text = _emergencyContact ?? '';
       _additionalInfoController.text = _additionalInfo ?? '';
+      _onFormFieldChanged();
     });
   }
 
@@ -388,7 +393,7 @@ class _RegisterSeniorScreen3State extends State<RegisterSeniorScreen3> {
                         controller: _nameController,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.allow(
-                              RegExp(r'[ㄱ-ㅎㅏ-ㅣ가-힣]')), // 문자만 허용
+                              RegExp(r'[ㄱ-ㅎㅏ-ㅣ가-힣]')), // 한글만 허용
                         ],
                         decoration: InputDecoration(
                           filled: true,
