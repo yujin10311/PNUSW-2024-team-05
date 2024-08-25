@@ -1,9 +1,6 @@
 
 package com.example.chat2
 
-// import kotlinx.android.synthetic.main.activity_main.*
-// import org.jetbrains.anko.toast
-
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
@@ -49,9 +46,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var emotionTextView: TextView
     private lateinit var surveyscoreTextView: TextView
 
-
     @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("DefaultLocale")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -109,7 +104,11 @@ class HomeActivity : AppCompatActivity() {
             val senderUid = mAuth.currentUser?.uid
             val senderRoom = "gemini"+senderUid
 
-
+            findViewById<TextView>(R.id.diary_btn).setOnClickListener {
+                val intent = Intent(this, DiaryActivity::class.java)
+                intent.putExtra("YMD", formatDate(String.format("%d-%d-%d",year,month + 1,dayOfMonth)))
+                this.startActivity(intent)
+            }
             // Firebase에서 선택한 날짜의 score 값을 가져오기
             if (senderUid != null) {
                 mDbRef.child("survey").child(senderUid).child(formatDate(String.format("%d-%d-%d",year,month + 1,dayOfMonth))).orderByKey().limitToFirst(1).addListenerForSingleValueEvent(object : ValueEventListener {
@@ -183,10 +182,7 @@ class HomeActivity : AppCompatActivity() {
                     }
                 })
 
-
             }
-
-
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -194,6 +190,4 @@ class HomeActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }
