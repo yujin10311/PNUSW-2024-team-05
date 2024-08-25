@@ -26,6 +26,10 @@ class ProfileMateScreen extends StatelessWidget {
             .toList();
     final _dayTime = jsonDecode(userInfo['dayTime']);
     final _addInfo = userInfo['addInfo'];
+    final _university = userInfo['university'];
+    final _department = userInfo['department'];
+    final _schoolCert = userInfo['schoolCert'];
+    final _schoolCertImgUrl = userInfo['schoolCertImgUrl'];
 
     print(_dayTime['월']);
 
@@ -206,6 +210,138 @@ class ProfileMateScreen extends StatelessWidget {
                       ),
                     ],
                   )
+                ],
+              ),
+              Divider(
+                color: Color.fromARGB(255, 234, 234, 234),
+                thickness: 2,
+              ),
+              SizedBox(height: 36),
+              Text(
+                "내 학적",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[500]),
+              ),
+              SizedBox(height: 10),
+              Divider(
+                color: Color.fromARGB(255, 234, 234, 234),
+                thickness: 2,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "대학",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    _university,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
+              Divider(
+                color: Color.fromARGB(255, 234, 234, 234),
+                thickness: 2,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "학과",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    _department,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
+              Divider(
+                color: Color.fromARGB(255, 234, 234, 234),
+                thickness: 2,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "인증 여부",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    _schoolCert ? '인증되었습니다.' : '인증되지 않았습니다.',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal,
+                      color: _schoolCert ? Colors.black : Colors.red,
+                    ),
+                  ),
+                ],
+              ),
+              Divider(
+                color: Color.fromARGB(255, 234, 234, 234),
+                thickness: 2,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "학생증",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                backgroundColor: Colors.transparent,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .pop(); // 클릭 시 다이얼로그 닫기
+                                  },
+                                  child: Center(
+                                    child: Image.network(_schoolCertImgUrl),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          "이미지 보기",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 4, 0, 255)),
+                        ),
+                      )
+                    ],
+                  ),
                 ],
               ),
               Divider(
