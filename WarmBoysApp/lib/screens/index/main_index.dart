@@ -2,10 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import '../main/home_screen.dart';
 import '../main/matching_screen.dart';
 import '../main/chatting_screen.dart';
 import '../main/exchange_screen.dart';
+import '../main/service_screen.dart';
+import '../../providers/custom_auth_provider.dart';
 
 class MainIndex extends StatefulWidget {
   static final GlobalKey<_MainIndexState> globalKey =
@@ -82,6 +85,12 @@ class _MainIndexState extends State<MainIndex> {
 
   @override
   Widget build(BuildContext context) {
+    final customAuthProvider =
+        Provider.of<CustomAuthProvider>(context, listen: false);
+    final _memberType = customAuthProvider.userInfo!['memberType'];
+    if (_memberType == '시니어') {
+      _pages[3] = ServiceScreen();
+    }
     return Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -132,13 +141,21 @@ class _MainIndexState extends State<MainIndex> {
             ),
             label: '채팅',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.card_giftcard,
-              size: 30,
-            ),
-            label: '교환',
-          ),
+          _memberType == '메이트'
+              ? BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.card_giftcard,
+                    size: 30,
+                  ),
+                  label: '교환',
+                )
+              : BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.volunteer_activism,
+                    size: 30,
+                  ),
+                  label: '서비스',
+                ),
         ],
         selectedItemColor: Color.fromARGB(255, 224, 73, 81),
         unselectedItemColor: Colors.grey,
