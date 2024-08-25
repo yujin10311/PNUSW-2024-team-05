@@ -54,18 +54,6 @@ class CustomAuthProvider with ChangeNotifier {
     }
   }
 
-  Future<void> _downloadAndStoreSchoolCertImage(String imageUrl) async {
-    try {
-      final response = await http.get(Uri.parse(imageUrl));
-      if (response.statusCode == 200) {
-        _schoolCertImageBytes = response.bodyBytes;
-        notifyListeners();
-      }
-    } catch (e) {
-      print('Failed to download profile image: $e');
-    }
-  }
-
   Future<void> logOut() async {
     await FirebaseAuth.instance.signOut();
     _userCredential = null;
