@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../widgets/member_symptom_scrollview.dart';
 import '../../widgets/member_details_scrollview.dart';
 import '../../widgets/autowrap_text_box.dart';
 import '../../utils/firebase_helper.dart';
 import '../../widgets/profile_card.dart';
+import '../../providers/custom_auth_provider.dart';
 
 class PostScreen extends StatefulWidget {
   final String memberType;
@@ -840,8 +842,20 @@ class _PostScreenState extends State<PostScreen> {
   }
 
   Widget _buildMateApplyButton() {
+    final customAuthProvider =
+        Provider.of<CustomAuthProvider>(context, listen: false);
+    bool _schoolCert = customAuthProvider.userInfo!['schoolCert'];
+
     if (checkStat == 'postNotExists') {
       return Text('공고가 존재하지 않습니다.');
+    } else if (_schoolCert == false) {
+      return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+        ),
+        onPressed: null,
+        child: Text('학생 인증이 필요합니다.', style: TextStyle(fontSize: 18)),
+      );
     } else if (checkStat == 'canApply') {
       return ElevatedButton(
         style: ElevatedButton.styleFrom(
