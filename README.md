@@ -147,11 +147,23 @@
 #### 2.3. 사용기술
 | 이름                  | 버전    |
 |:---------------------:|:-------:|
-| Flutter               | 3.8.0   |
-| Django                | 3.2.9   |
-| Django Rest Framework | 3.12.0  |
-| Node.js               | 16.16.0 |
-| Vue.js                | 2.5.13  |
+| flutter             | 3.22.2  |
+| cupertino_icons | 1.0.6 |
+| firebase_core | 3.2.0 |
+| firebase_auth | 5.1.2 |
+| firebase_storage | 12.1.2 |
+| cloud_firestore | 5.1.0 |
+| provider | 6.0.0 |
+| youtube_player_flutter | 8.0.0 |
+| firebase_messaging | 15.0.3 |
+| table_calendar | 3.1.2 |
+| image_picker | 1.0.4 |
+| image | 4.1.3 |
+| google_mlkit_face_detection | 0.11.0 |
+| google_mlkit_commons | 0.7.1 |
+| tflite_flutter | 0.10.4 |
+| flutter_email_sender | 6.0.3 |
+
 <br/>
 
 
@@ -195,7 +207,7 @@
   > 시니어와 메이트 2가지 타입의 유저가 앱을 직접 사용했을 때의 행동흐름을 도식화하여 보여줍니다.
   1. 회원가입 유저 플로우차트
       > 유저타입별 회원가입시 행동흐름을 보여주는 플로우차트입니다.
-      <img width="600px" alt="유저회원가입플로우차트" src="docs/readmeAssets/유저회원가입플로우차트.png" /><br>
+      <img width="800px" alt="유저회원가입플로우차트" src="docs/readmeAssets/유저회원가입플로우차트.png" /><br>
   2. 매칭과 활동 유저 플로우차트
       > 유저타입별 매칭과 활동을 진행시 행동흐름을 보여주는 플로우차트입니다.
       <img width="800px" alt="유저매칭플로우차트" src="docs/readmeAssets/유저매칭플로우차트.png" />
@@ -207,7 +219,7 @@
 #### 3.2. 기능설명
 ##### ` 메인 페이지 `
 - 상단 배너
-  - 3초에 마다 자동으로 내용이 넘어갑니다. <br/>
+  - 3초 마다 자동으로 내용이 넘어갑니다. <br/>
     ![상단 배너](https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/4640389f-dcaf-4b78-916e-188c8e9c6ee7)
 
 - 공지사항
