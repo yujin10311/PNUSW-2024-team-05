@@ -162,7 +162,9 @@ class _PostScreenState extends State<PostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("공고 상세"),
+        title: Text("공고 상세",
+            style: TextStyle(
+                fontFamily: 'NotoSansKR', fontWeight: FontWeight.w400)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
