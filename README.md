@@ -105,7 +105,7 @@
     -	기존 기관 서비스는 제한된 프로그램과 자원봉사자만을 제공했지만, 이 플랫폼에서는 이용자가 희망하는 서비스와 봉사자를 직접 선택할 수 있습니다.
     -	이를 통해 이용자의 개별적인 요구사항을 더욱 효과적으로 충족시킬 수 있습니다.
     -	Ex) 금정구종합사회복지관의 재가노인지원서비스센터 지원서비스 <br> https://www.kumjungswc.or.kr/center/sub1.php
-    <img width="800px" alt="일상생활지원서비스" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%EB%8F%84.png">
+    <img width="800px" alt="일상생활지원서비스" src="docs/readmeAssets/일상생활지원서비스.png">
 3. 간소화된 심사 절차
     -	기존 기관 서비스는 까다로운 심사 절차를 거쳐야 했지만, 이 플랫폼은 간소화된 심사 절차를 통해 신속하게 서비스를 제공받을 수 있습니다.
     -	서비스 제공을 희망하는 청년들은 간단한 인증 심사 절차를 통해 프로그램에 참여할 수 있습니다.
