@@ -195,10 +195,10 @@
   > 시니어와 메이트 2가지 타입의 유저가 앱을 직접 사용했을 때의 행동흐름을 도식화하여 보여줍니다.
   1. 회원가입 유저 플로우차트
       > 유저타입별 회원가입시 행동흐름을 보여주는 플로우차트입니다.
-  <img width="600px" alt="유저회원가입플로우차트" src="docs/readmeAssets/유저회원가입플로우차트.png" />
+      <img width="600px" alt="유저회원가입플로우차트" src="docs/readmeAssets/유저회원가입플로우차트.png" />
   2. 매칭과 활동 유저 플로우차트
       > 유저타입별 매칭과 활동을 진행시 행동흐름을 보여주는 플로우차트입니다.
-  <img width="800px" alt="유저매칭플로우차트" src="docs/readmeAssets/유저매칭플로우차트.png" />
+      <img width="800px" alt="유저매칭플로우차트" src="docs/readmeAssets/유저매칭플로우차트.png" />
   <br>
   
 
