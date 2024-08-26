@@ -385,6 +385,8 @@ class _MatchingScreenState extends State<MatchingScreen>
           controller: _tabController,
           indicatorColor: Color.fromARGB(255, 224, 73, 81), // 선택된 탭의 하단 라인 색상
           labelColor: Color.fromARGB(255, 224, 73, 81), // 선택된 탭의 텍스트 색상
+          labelStyle:
+              TextStyle(fontFamily: 'NotoSansKR', fontWeight: FontWeight.w400),
           unselectedLabelColor: Colors.grey, // 선택되지 않은 탭의 텍스트 색상
           tabs: [
             Tab(text: '매칭 전'),
@@ -404,7 +406,12 @@ class _MatchingScreenState extends State<MatchingScreen>
               } else if (snapshot.hasError) {
                 return Center(child: Text('오류가 발생했습니다: ${snapshot.error}'));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('매칭 전 공고가 없습니다.'));
+                return Center(
+                    child: Text('매칭 전 공고가 없습니다.',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'NotoSansKR',
+                            fontWeight: FontWeight.w400)));
               } else {
                 final posts = snapshot.data!;
                 return RefreshIndicator(
@@ -706,7 +713,12 @@ class _MatchingScreenState extends State<MatchingScreen>
               } else if (snapshot.hasError) {
                 return Center(child: Text('오류가 발생했습니다: ${snapshot.error}'));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('매칭 후 공고가 없습니다.'));
+                return Center(
+                    child: Text('매칭 후 공고가 없습니다.',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'NotoSansKR',
+                            fontWeight: FontWeight.w400)));
               } else {
                 final posts = snapshot.data!;
                 return RefreshIndicator(
@@ -1069,7 +1081,10 @@ class _MatchingScreenState extends State<MatchingScreen>
           controller: _tabController,
           indicatorColor: Color.fromARGB(255, 224, 73, 81), // 선택된 탭의 하단 라인 색상
           labelColor: Color.fromARGB(255, 224, 73, 81),
-          labelStyle: TextStyle(fontSize: 18),
+          labelStyle: TextStyle(
+              fontSize: 18,
+              fontFamily: 'NotoSansKR',
+              fontWeight: FontWeight.w400),
           tabs: [
             Tab(text: '매칭 전'),
             Tab(text: '매칭 후'),
@@ -1088,7 +1103,12 @@ class _MatchingScreenState extends State<MatchingScreen>
               } else if (snapshot.hasError) {
                 return Center(child: Text('오류가 발생했습니다: ${snapshot.error}'));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('매칭 전 공고가 없습니다.'));
+                return Center(
+                    child: Text('매칭 전 공고가 없습니다.',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'NotoSansKR',
+                            fontWeight: FontWeight.w400)));
               } else {
                 final posts = snapshot.data!;
                 return RefreshIndicator(
@@ -1331,7 +1351,12 @@ class _MatchingScreenState extends State<MatchingScreen>
               } else if (snapshot.hasError) {
                 return Center(child: Text('오류가 발생했습니다: ${snapshot.error}'));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('매칭 후 공고가 없습니다.'));
+                return Center(
+                    child: Text('매칭 후 공고가 없습니다.',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'NotoSansKR',
+                            fontWeight: FontWeight.w400)));
               } else {
                 final posts = snapshot.data!;
                 return RefreshIndicator(
