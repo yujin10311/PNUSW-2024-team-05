@@ -1,5 +1,6 @@
 package com.example.chat2
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 class DiaryActivity: AppCompatActivity() {
     private lateinit var binding: ActivityDiaryBinding
@@ -36,6 +38,8 @@ class DiaryActivity: AppCompatActivity() {
         binding = ActivityDiaryBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
+
+
         val ydm = intent.getStringExtra("YMD").toString()
         receiverName = "gemini"//intent.getStringExtra("name").toString()
         receiverUid = "gemini"//intent.getStringExtra("uId").toString()
@@ -61,9 +65,11 @@ class DiaryActivity: AppCompatActivity() {
                     index = index + 1
                 }
                 CoroutineScope(Dispatchers.Main).launch() {
-                    var diary = chat.sendMessage("다음 텍스트는 심리상담 챗봇과 상담한 사용자의 채팅 내용이야. 이것을 일기 형식(제목, 내용)으로 바꾸는데 직접 형식을 언급하지 마. 그리고 챗봇에 대한 내용은 빼줘. 텍스트:$msg")
+                        var diary = chat.sendMessage("다음 텍스트는 심리상담 챗봇과 상담한 사용자의 채팅 내용이야. 이것을 일기 형식(제목, 내용)으로 바꾸는데 직접 형식을 언급하지 마. 그리고 챗봇에 대한 내용은 빼줘. 텍스트:$msg")
+
                     binding.diaryText.text = diary.text.toString()
                 }
+
             }
             override fun onCancelled(error: DatabaseError) {
             }
