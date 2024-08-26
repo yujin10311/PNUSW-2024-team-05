@@ -333,11 +333,14 @@ class ProfileMateScreen extends StatelessWidget {
                           );
                         },
                         child: Text(
-                          "이미지 보기",
+                          "확인하기",
                           style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 4, 0, 255)),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 4, 0, 255),
+                            decoration: TextDecoration.underline,
+                            decorationColor: Color.fromARGB(255, 4, 0, 255),
+                          ),
                         ),
                       )
                     ],
