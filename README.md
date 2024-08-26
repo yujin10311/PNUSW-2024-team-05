@@ -110,23 +110,23 @@
     -	기존 기관 서비스는 까다로운 심사 절차를 거쳐야 했지만, 이 플랫폼은 간소화된 심사 절차를 통해 신속하게 서비스를 제공받을 수 있습니다.
     -	서비스 제공을 희망하는 청년들은 간단한 인증 심사 절차를 통해 프로그램에 참여할 수 있습니다.
     -	Ex) 금정구 노인맞춤돌봄서비스 지원사업의 까다로운 대상 심사 <br> https://www.geumjeong.go.kr/index.geumjmenuCd=DOM_000000126005001004
-    <img width="800px" alt="노인맞춤돌봄서비스" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%EB%8F%84.png">
+    <img width="800px" alt="노인맞춤돌봄서비스" src="docs/readmeAssets/노인맞춤돌봄서비스.png">
     -	Ex) 금정구노인복지관의 자원봉사 참여 프로세스 / https://www.geumjeongsilver.kr/support/sub2.php
         >	금정구노인복지관에 절차 소요 기간을 문의
-    <img width="800px" alt="자원봉사참여방법" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%EB%8F%84.png">
+    <img width="800px" alt="자원봉사참여방법" src="docs/readmeAssets/자원봉사참여방법.png">
 4.	시간적 제약 없는 서비스
     -	시니어와 청년의 매칭 시스템을 통해 양측이 원하는 시간을 조정하여 서비스를 이용할 수 있습니다.
     -	기존 기관 서비스는 제한적인 운영 시간으로 인해 이용에 어려움이 있었지만, 이 플랫폼은 24시간 언제든 서비스를 이용할 수 있습니다.
     -	Ex) 금정구종합사회복지관의 재가노인지원서비스센터 이용절차 / https://www.kumjungswc.or.kr/center/sub1.php
         >	금정구종합사회복지관에 절차 소요 기간을 문의
-    <img width="800px" alt="이용절차" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%EB%8F%84.png">
+    <img width="800px" alt="이용절차" src="docs/readmeAssets/이용절차.png">
 5.	비용 효율성
     - 기업 서비스의 경우 비용이 높았지만, 이 플랫폼은 이용자와 봉사자 간의 직접 연결을 통해 보다 저렴한 비용으로 서비스를 제공할 수 있습니다.
     -	간단한 저비용 돌봄 친구 서비스를 이용하기 위해서라도 고비용 전문 돌봄 서비스를 이용할 수밖에 없는 비용 구조로 부양 가구에는 서비스를 자주 이용하기에는 부담이 있습니다.
     -	Ex) (BAYADA)업체를 통한 방문요양 서비스 이용 요금 / https://www.geumjeong.go.kr/index.geumj?menuCd=DOM_000000126005001004
         >	공단부담과 본인부담으로 나누어져 있으며 가산 항목 / 서비스를 제공받을 수 있는 한도액(장기요양 등급별로 지정) -> 등급이 낮을 수록 한도액이 낮음
-    <img width="800px" alt="방문요양서비스이용요금" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%EB%8F%84.png">
-    <img width="800px" alt="방문요양서비스이용요금2" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%EB%8F%84.png">
+    <img width="800px" alt="방문요양서비스이용요금" src="docs/readmeAssets/방문요양서비스이용요금.png">
+    <img width="800px" alt="방문요양서비스이용요금2" src="docs/readmeAssets/방문요양서비스이용요금2.png">
 6. 청년들의 사회참여 유도
     -	우리나라는 빠르게 초고령사회에 진입하고 있습니다. 청년들의 적극적인 참여를 통해서 청년들은 사회적 책임감을 기르고, 시니어들은 필요한 서비스를 제공받을 수 있습니다.
     -	청년들과 노인들의 소통 기회 창출을 통해 청년들은 노인들의 경험과 지혜를 배우고 노인들은 청년들의 활력과 새로운 아이디어를 접할 수 있습니다. 이를 통해 세대 간 갈등을 완화하고 조화로운 사회를 구성할 수 있습니다.
@@ -141,7 +141,7 @@
 
 ### 2.상세설계
 #### 2.1. 시스템 구성도
-<img width="800px" alt="시스템 구성도" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%EB%8F%84.png">
+<img width="800px" alt="시스템구성도" src="docs/readmeAssets/시스템구성도.png">
 <br/>
 
 #### 2.3. 사용기술
@@ -157,53 +157,50 @@
 
 ### 3. 개발결과
 #### 3.1. 전체시스템 흐름도
+- IA(Information Architecture)
+  > 전체적인 시스템 구조의 정보를 간단히 도식화하여 보여줍니다. <br/>
+  <img width="800px" alt="따시게IA" src="docs/readmeAssets/따시게 IA.png" />
+
 - 시스템 플로우 차트
-  > 테스크의 흐름에 따른 데이터 처리를 도식화하여 보여줍니다.
+  > 테스크의 흐름과 이에 따른 데이터 처리를 도식화하여 보여줍니다.
+  <br><br>
+  > 참고) 시스템 플로우차트 컴포넌트
+  <img width="800px" alt="플로우차트컴포넌트" src="docs/readmeAssets/플로우차트컴포넌트.png" />
   1. 시작 단계
       > 앱의 시작단계부터 회원가입 및 로그인을 거쳐 메인화면까지 도달하는 시스템 플로우차트입니다.
-      <img width="800px" alt="시작 단계" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%8B%9C%EC%9E%91%20%EB%B0%8F%20%EB%A1%9C%EA%B7%B8%EC%9D%B8%20%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%B0%A8%ED%8A%B8.png" />
+      <img width="800px" alt="시작단계" src="docs/readmeAssets/시작 및 로그인 플로우차트.png" />
 
   2. 홈페이지
       > 앱의 홈페이지에서 다룰 수 있는 공고 쓰기와 열람, 매칭 신청등을 표기한 시스템 플로우차트입니다.
-      <img width="800px" alt="홈페이지" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4%20%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%B0%A8%ED%8A%B8.png" />
+      <img width="800px" alt="홈페이지" src="docs/readmeAssets/메인화면 플로우차트.png" />
 
   3. 매칭페이지
       > 주고 받은 매칭을 관리하는 매칭페이지의 시스템 플로우차트입니다.
-      <img width="800px" alt="매칭페이지" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EB%A7%A4%EC%B9%AD%ED%8E%98%EC%9D%B4%EC%A7%80%20%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%B0%A8%ED%8A%B8.png" />
+      <img width="800px" alt="매칭페이지" src="docs/readmeAssets/매칭페이지 플로우차트.png" />
 
   4. 매칭후 활동
       > 진행되는 매칭에 대해 보고서 작성 중심으로 작동하는 앱의 매칭후 활동 시스템 플로우차트입니다.
-      <img width="800px" alt="매칭후활동" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EB%A7%A4%EC%B9%AD%20%ED%9B%84%20%ED%99%9C%EB%8F%99%20%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%B0%A8%ED%8A%B8.png" />
+      <img width="800px" alt="매칭후활동" src="docs/readmeAssets/매칭 후 활동 플로우차트.png" />
 
   5. 교환페이지
       > 매칭의 보상으로 받는 크래딧을 교환하는 교환페이지의 시스템 플로우차트입니다.
-      <img width="800px" alt="교환페이지" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EB%A7%A4%EC%B9%AD%20%ED%9B%84%20%ED%99%9C%EB%8F%99%20%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%B0%A8%ED%8A%B8.png" />
+      <img width="800px" alt="교환페이지" src="docs/readmeAssets/교환페이지 플로우차트.png" />
   
   6. 채팅페이지
       > 매칭등에 필요한 채팅기능을 담당하는 채팅페이지의 시스템 플로우차트입니다.
-      <img width="300px" alt="채팅페이지" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%B1%84%ED%8C%85%ED%8E%98%EC%9D%B4%EC%A7%80%20%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%B0%A8%ED%8A%B8.png" />
+      <img width="300px" alt="채팅페이지" src="docs/readmeAssets/채팅페이지 플로우차트.png" />
+      <br>
 
-    <hr><hr><hr><hr><hr><hr><hr><hr><hr>
-
-- 유저 플로우 차트
-  > 코딩 역량강화 플랫폼의 회원가입 부분만 작성했습니다. <br/>
-  > 사용자의 행동 흐름을 도식화하여 보여줍니다.
-  <img width="400px" alt="유저 플로우 차트" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/c8de7c98-efd8-4f64-a39a-720faabccd78" />
-
-- 테스크 플로우 차트
-  > 코딩 역량강화 플랫폼의 로그인 부분만 작성했습니다. <br/>
-  > 주요 테스크의 프로세스를 도식화하여 보여줍니다.
-  <img width="400px" alt="테스크 플로우 차트" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/b83502a9-032d-4453-8687-428d54643610" />
-
-- 시스템 플로우 차트
-  > 코딩 역량강화 플랫폼의 로그인 부분만 작성했습니다. <br/>
-  > 테스크의 흐름에 따른 데이터 처리를 도식화하여 보여줍니다.
-  <img width="600px" alt="시스템 플로우 차트" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/1bfb66f0-446c-4450-8a81-a78bfe5ac9ce" />
-
+- 유저 플로우차트
+  > 시니어와 메이트 2가지 타입의 유저가 앱을 직접 사용했을 때의 행동흐름을 도식화하여 보여줍니다.
+  1. 회원가입 유저 플로우차트
+      >유저타입별 회원가입시 행동흐름을 보여주는 플로우차트입니다.
+  <img width="600px" alt="유저회원가입플로우차트" src="docs/readmeAssets/유저회원가입플로우차트.png" />
+  2. 매칭과 활동 유저 플로우차트
+      >유저타입별 매칭과 활동을 진행시 행동흐름을 보여주는 플로우차트입니다.
+  <img width="800px" alt="유저매칭플로우차트" src="docs/readmeAssets/유저매칭플로우차트.png" />
+  <br>
   
-- IA(Information Architecture)
-  > 정보나 시스템의 구조를 도식화하여 보여줍니다. <br/>
-  <img width="600px" alt="IA" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/07d842fe-fb73-4079-97a3-58b2495ff331" />
 
 <br/>
 
