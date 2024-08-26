@@ -98,7 +98,40 @@
 <br/>
 
 #### 1.4. 기존 서비스(상품) 대비 차별성
-> 주요한 차이점은 서비스 대상에서 차이가 납니다. 기존 대부분의 간병인 매칭 서비스의 경우 전문적인 교육과 훈련, 지식을 갖춘 전문 간병인이 필요한 만큼 연로하시거나 건강상의 문제가 있는 노인이 대상이라면 따시게의 타깃은 55 ~ 64세 사이의 연소노인, 65 ~ 74세 사이의 중고령노인이 주요한 대상입니다. 건강상의 큰 문제점은 없거나 혹은 경미한 수준의 건강상의 문제가 있으신 분들, 또 자녀분들의 학업이나 직장으로 인해 은퇴 후 집에 혼자 있는 시간이 많은 노인들과 그 부양가구 분들의 걱정과 부담을 덜어드리기 위해서 존재합니다. 
+1. 개인 - 개인 직접 연결 서비스
+    - 기존 서비스는 기관을 통해 서비스를 제공받아야 했지만, 이 플랫폼은 개인 간 직접 연결을 통해 서비스를 제공합니다.
+    - 이를 통해 이용자가 직접 자신에게 맞는 봉사자를 선택할 수 있습니다.
+2. 선택 가능한 봉사자와 서비스
+    -	기존 기관 서비스는 제한된 프로그램과 자원봉사자만을 제공했지만, 이 플랫폼에서는 이용자가 희망하는 서비스와 봉사자를 직접 선택할 수 있습니다.
+    -	이를 통해 이용자의 개별적인 요구사항을 더욱 효과적으로 충족시킬 수 있습니다.
+    -	Ex) 금정구종합사회복지관의 재가노인지원서비스센터 지원서비스 <br> https://www.kumjungswc.or.kr/center/sub1.php
+    <img width="800px" alt="일상생활지원서비스" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%EB%8F%84.png">
+3. 간소화된 심사 절차
+    -	기존 기관 서비스는 까다로운 심사 절차를 거쳐야 했지만, 이 플랫폼은 간소화된 심사 절차를 통해 신속하게 서비스를 제공받을 수 있습니다.
+    -	서비스 제공을 희망하는 청년들은 간단한 인증 심사 절차를 통해 프로그램에 참여할 수 있습니다.
+    -	Ex) 금정구 노인맞춤돌봄서비스 지원사업의 까다로운 대상 심사 <br> https://www.geumjeong.go.kr/index.geumjmenuCd=DOM_000000126005001004
+    <img width="800px" alt="노인맞춤돌봄서비스" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%EB%8F%84.png">
+    -	Ex) 금정구노인복지관의 자원봉사 참여 프로세스 / https://www.geumjeongsilver.kr/support/sub2.php
+        >	금정구노인복지관에 절차 소요 기간을 문의
+    <img width="800px" alt="자원봉사참여방법" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%EB%8F%84.png">
+4.	시간적 제약 없는 서비스
+    -	시니어와 청년의 매칭 시스템을 통해 양측이 원하는 시간을 조정하여 서비스를 이용할 수 있습니다.
+    -	기존 기관 서비스는 제한적인 운영 시간으로 인해 이용에 어려움이 있었지만, 이 플랫폼은 24시간 언제든 서비스를 이용할 수 있습니다.
+    -	Ex) 금정구종합사회복지관의 재가노인지원서비스센터 이용절차 / https://www.kumjungswc.or.kr/center/sub1.php
+        >	금정구종합사회복지관에 절차 소요 기간을 문의
+    <img width="800px" alt="이용절차" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%EB%8F%84.png">
+5.	비용 효율성
+    - 기업 서비스의 경우 비용이 높았지만, 이 플랫폼은 이용자와 봉사자 간의 직접 연결을 통해 보다 저렴한 비용으로 서비스를 제공할 수 있습니다.
+    -	간단한 저비용 돌봄 친구 서비스를 이용하기 위해서라도 고비용 전문 돌봄 서비스를 이용할 수밖에 없는 비용 구조로 부양 가구에는 서비스를 자주 이용하기에는 부담이 있습니다.
+    -	Ex) (BAYADA)업체를 통한 방문요양 서비스 이용 요금 / https://www.geumjeong.go.kr/index.geumj?menuCd=DOM_000000126005001004
+        >	공단부담과 본인부담으로 나누어져 있으며 가산 항목 / 서비스를 제공받을 수 있는 한도액(장기요양 등급별로 지정) -> 등급이 낮을 수록 한도액이 낮음
+    <img width="800px" alt="방문요양서비스이용요금" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%EB%8F%84.png">
+    <img width="800px" alt="방문요양서비스이용요금2" src="https://github.com/pnusw-hackathon/PNUSW-2024-team-03/blob/main/docs/readmeAssets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%EB%8F%84.png">
+6. 청년들의 사회참여 유도
+    -	우리나라는 빠르게 초고령사회에 진입하고 있습니다. 청년들의 적극적인 참여를 통해서 청년들은 사회적 책임감을 기르고, 시니어들은 필요한 서비스를 제공받을 수 있습니다.
+    -	청년들과 노인들의 소통 기회 창출을 통해 청년들은 노인들의 경험과 지혜를 배우고 노인들은 청년들의 활력과 새로운 아이디어를 접할 수 있습니다. 이를 통해 세대 간 갈등을 완화하고 조화로운 사회를 구성할 수 있습니다.
+    -	청년들은 활용 가능한 시간을 할애하여 서비스를 제공하므로 합당한 보상을 받게 됩니다. 이를 통해 학업과 생계에 도움이 될 수 있습니다.
+
 <br/>
 
 #### 1.5. 사회적가치 도입 계획
