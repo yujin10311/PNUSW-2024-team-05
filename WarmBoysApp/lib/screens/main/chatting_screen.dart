@@ -33,7 +33,12 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   return Center(child: CircularProgressIndicator());
                 }
                 if (!chatSnapshot.hasData || chatSnapshot.data!.docs.isEmpty) {
-                  return Center(child: Text('No chats found.'));
+                  return Center(
+                      child: Text('채팅이 없습니다.',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'NotoSansKR',
+                              fontWeight: FontWeight.w400)));
                 }
                 final chatDocs = chatSnapshot.data!.docs;
                 chatDocs.sort((a, b) {
@@ -85,14 +90,19 @@ class _ChattingScreenState extends State<ChattingScreen> {
                             title: Text(
                               userName,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
+                                  fontSize: 16,
+                                  fontFamily: 'NotoSansKR',
+                                  fontWeight: FontWeight.w500),
                             ),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   chatData['lastMessage'],
-                                  style: TextStyle(fontSize: 14),
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'NotoSansKR',
+                                      fontWeight: FontWeight.w400),
                                 ),
                                 Text(
                                   chatData['lastMessageTime'] != null
