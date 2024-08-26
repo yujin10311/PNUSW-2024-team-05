@@ -1548,6 +1548,47 @@ class FirebaseHelper {
     return results;
   }
 
+  static Future<Map<String, List<Map<String, dynamic>>>>
+      queryServicePosts() async {
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    Map<String, List<Map<String, dynamic>>> results = {};
+
+    try {
+      QuerySnapshot exchangeSnapshot =
+          await _firestore.collection('services').get();
+
+      for (var doc in exchangeSnapshot.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        String category = data['category'] as String;
+
+        Map<String, dynamic> exchangeData = {
+          'docId': doc.id,
+          'content': data['content'] as String,
+          'duration': data['duration'] as String,
+          'imgUrl': data['imgUrl'] as String,
+          'inc': data['inc'] as String,
+          'location': data['location'] as String,
+          'name': data['name'] as String,
+          'note': data['note'] as String,
+          'target': data['target'] as String,
+          'tel': data['tel'] as String,
+          'url': data['url'] as String,
+        };
+
+        if (!results.containsKey(category)) {
+          results[category] = [];
+        }
+
+        results[category]!.add(exchangeData);
+      }
+    } catch (e) {
+      print('Error querying exchange posts: $e');
+    }
+
+    return results;
+  }
+
   static Future<bool> applyExchange(
       String uid, int myCredit, String exchangeId) async {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
