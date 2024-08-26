@@ -15,7 +15,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       leading: leading,
-      title: Text(title),
+      title: Text(title,
+          style:
+              TextStyle(fontFamily: 'NotoSansKR', fontWeight: FontWeight.w400)),
       actions: [
         CustomAlarmButton(),
         IconButton(
