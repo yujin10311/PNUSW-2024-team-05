@@ -52,7 +52,7 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "공고 정보",
+                "상품 정보",
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -64,6 +64,27 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
                 thickness: 2,
               ),
               SizedBox(height: 5),
+              Center(
+                child: Container(
+                  height: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(widget.post['goodsImgUrl']),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Divider(
+                  color: Color.fromARGB(255, 234, 234, 234),
+                  thickness: 2,
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Column(
@@ -72,14 +93,14 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "  기업명",
+                          "  상품명",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
                           ),
                         ),
                         Text(
-                          '${widget.post['inc']}  ',
+                          '${widget.post['goodsName']}  ',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
@@ -95,14 +116,14 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "  상품명",
+                          "  기업명",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
                           ),
                         ),
                         Text(
-                          '${widget.post['goodsName']}  ',
+                          '${widget.post['inc']}  ',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
@@ -186,7 +207,7 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 42),
               Text(
                 "기업 소개",
                 style: TextStyle(
@@ -202,16 +223,17 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
               SizedBox(height: 5),
               Card(
                 margin: EdgeInsets.all(5.0),
+                color: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Container(
                           height: MediaQuery.of(context).size.width * 0.8,
                           width: MediaQuery.of(context).size.width * 0.8,
@@ -220,29 +242,42 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
                               image: NetworkImage(widget.post['imgUrl']),
                               fit: BoxFit.cover,
                             ),
-                            borderRadius: BorderRadius.circular(10.0),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
                       ),
-                      SizedBox(height: 16.0),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(16.0),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200], // 배경색
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: Text(
-                          widget.post['incIntroduction'],
-                          style: TextStyle(fontSize: 16),
-                          overflow: TextOverflow.visible,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 16.0),
+                  ],
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Column(
+                  children: [
+                    Divider(
+                      color: Color.fromARGB(255, 234, 234, 234),
+                      thickness: 2,
+                    ),
+                    Text(
+                      widget.post['incIntroduction'],
+                      style: TextStyle(
+                        fontSize: 16,
+                        height: 1.5,
+                        fontFamily: 'NotoSansKR',
+                        fontWeight: FontWeight.w400,
+                      ),
+                      overflow: TextOverflow.visible,
+                    ),
+                    Divider(
+                      color: Color.fromARGB(255, 234, 234, 234),
+                      thickness: 2,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 42),
               Text(
                 "지원 사업 의의",
                 style: TextStyle(
@@ -256,29 +291,26 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
                 thickness: 2,
               ),
               SizedBox(height: 5),
-              Card(
-                margin: EdgeInsets.all(5.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200], // 배경색
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Text(
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Column(
+                  children: [
+                    Text(
                       widget.post['supportReason'].replaceAll('\\n', '\n'),
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(
+                          fontSize: 16,
+                          height: 1.5,
+                          fontFamily: 'NotoSansKR',
+                          fontWeight: FontWeight.w400),
                       overflow: TextOverflow.visible,
                       textAlign: TextAlign.left,
                       softWrap: true,
                     ),
-                  ),
+                    Divider(
+                      color: Color.fromARGB(255, 234, 234, 234),
+                      thickness: 2,
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.3),
