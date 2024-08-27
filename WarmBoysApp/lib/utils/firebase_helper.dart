@@ -1511,23 +1511,24 @@ class FirebaseHelper {
     return results;
   }
 
-  static Future<List<Map<String, dynamic>>> queryExchangePosts() async {
+  static Future<Map<String, List<Map<String, dynamic>>>>
+      queryExchangePosts() async {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    List<Map<String, dynamic>> results = [];
+    Map<String, List<Map<String, dynamic>>> results = {};
 
     try {
-      // 'exchanges' 컬렉션에서 문서들을 가져옴
       QuerySnapshot exchangeSnapshot =
           await _firestore.collection('exchanges').get();
 
       for (var doc in exchangeSnapshot.docs) {
-        // 문서 데이터를 가져와서 필요한 필드를 추출
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-        // 필요한 필드들을 Map에 추가
+        String category = data['category'] as String;
+
         Map<String, dynamic> exchangeData = {
           'docId': doc.id,
           'goodsName': data['goodsName'] as String,
+          'goodsImgUrl': data['goodsImgUrl'] as String ?? '',
           'maxHeadcounts': data['maxHeadcounts'] as int,
           'currentHeadcounts': data['currentHeadcounts'] as int,
           'needCredit': data['needCredit'] as int,
@@ -1537,14 +1538,15 @@ class FirebaseHelper {
           'incUrl': data['incUrl'] as String,
           'supportReason': data['supportReason'] as String,
         };
+        if (!results.containsKey(category)) {
+          results[category] = [];
+        }
 
-        // 결과 리스트에 추가
-        results.add(exchangeData);
+        results[category]!.add(exchangeData);
       }
     } catch (e) {
       print('Error querying exchange posts: $e');
     }
-
     return results;
   }
 
@@ -1554,15 +1556,15 @@ class FirebaseHelper {
     Map<String, List<Map<String, dynamic>>> results = {};
 
     try {
-      QuerySnapshot exchangeSnapshot =
+      QuerySnapshot serviceSnapshot =
           await _firestore.collection('services').get();
 
-      for (var doc in exchangeSnapshot.docs) {
+      for (var doc in serviceSnapshot.docs) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
         String category = data['category'] as String;
 
-        Map<String, dynamic> exchangeData = {
+        Map<String, dynamic> serviceData = {
           'docId': doc.id,
           'content': data['content'] as String,
           'duration': data['duration'] as String,
@@ -1580,10 +1582,10 @@ class FirebaseHelper {
           results[category] = [];
         }
 
-        results[category]!.add(exchangeData);
+        results[category]!.add(serviceData);
       }
     } catch (e) {
-      print('Error querying exchange posts: $e');
+      print('Error querying service posts: $e');
     }
 
     return results;
