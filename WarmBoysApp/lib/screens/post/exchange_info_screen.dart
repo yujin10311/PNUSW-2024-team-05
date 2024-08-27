@@ -323,7 +323,7 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
         child: SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: widget.memberType == '메이트' && _canApply
+            onPressed: _canApply
                 ? () async {
                     final customAuthProvider =
                         Provider.of<CustomAuthProvider>(context, listen: false);
@@ -358,9 +358,8 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
                 : null,
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(vertical: 16),
-              backgroundColor: widget.memberType == '메이트' && _canApply
-                  ? Color.fromARGB(255, 224, 73, 81)
-                  : Colors.grey,
+              backgroundColor:
+                  _canApply ? Color.fromARGB(255, 224, 73, 81) : Colors.grey,
               foregroundColor: Colors.white,
             ),
             child: Text(
