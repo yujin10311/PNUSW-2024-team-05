@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../providers/custom_auth_provider.dart';
 import '../../utils/firebase_helper.dart';
 import '../post/exchange_info_screen.dart';
+import '../post/exchange_donation_info_screen.dart';
 
 class ExchangeScreen extends StatefulWidget {
   @override
@@ -39,6 +40,8 @@ class _ExchangeScreenState extends State<ExchangeScreen>
     final uid = customAuthProvider.uid!;
     final myCredit = userInfo!['credit'] ?? 0;
     final memberType = userInfo['memberType'];
+    final university =
+        userInfo['university'].substring(0, userInfo['university'].length - 2);
 
     return Scaffold(
       appBar: CustomAppBar(title: "교환"),
@@ -47,43 +50,196 @@ class _ExchangeScreenState extends State<ExchangeScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '내 크레딧',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  width: 12,
-                ),
-                Container(
-                  width: 100,
-                  alignment: Alignment.centerRight,
-                  padding: EdgeInsets.all(4.0),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3),
-                      border: Border.all(
-                          color: Color.fromARGB(255, 224, 73, 81), width: 3)),
-                  child:
-                      Text(myCredit.toString(), style: TextStyle(fontSize: 16)),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            SizedBox(height: 25),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text("복지 재단 장학금",
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Card(
+                    elevation: 1,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12.0),
+                        topRight: Radius.circular(12.0),
+                        bottomLeft: Radius.circular(12.0),
+                        bottomRight: Radius.circular(12.0),
+                      ),
+                    ),
+                    child: Container(
+                      height: MediaQuery.of(context).size.width * 0.435,
+                      width: MediaQuery.of(context).size.width * 0.435,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12.0),
+                          topRight: Radius.circular(12.0),
+                          bottomLeft: Radius.circular(12.0),
+                          bottomRight: Radius.circular(12.0),
+                        ),
+                        gradient: LinearGradient(
+                          colors: [
+                            const Color.fromARGB(255, 255, 204, 128),
+                            Colors.orange,
+                            Color.fromARGB(255, 224, 73, 81),
+                            Color.fromARGB(255, 224, 42, 51),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment:
+                              MainAxisAlignment.center, // 세로 가운데 정렬
+                          children: [
+                            Text(
+                              "1365",
+                              style: TextStyle(
+                                fontSize: 34,
+                                color: Colors.white,
+                                fontFamily: 'Tenada',
+                              ),
+                            ),
+                            Text(
+                              " 봉사시간\n 인증하기",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  height: 1.5,
+                                  color: Colors.white,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    elevation: 1,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12.0),
+                        topRight: Radius.circular(12.0),
+                        bottomLeft: Radius.circular(12.0),
+                        bottomRight: Radius.circular(12.0),
+                      ),
+                    ),
+                    child: Container(
+                      height: MediaQuery.of(context).size.width * 0.435,
+                      width: MediaQuery.of(context).size.width * 0.435,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12.0),
+                          topRight: Radius.circular(12.0),
+                          bottomLeft: Radius.circular(12.0),
+                          bottomRight: Radius.circular(12.0),
+                        ),
+                        gradient: LinearGradient(
+                          colors: [
+                            const Color.fromARGB(255, 90, 173, 240),
+                            Color.fromARGB(255, 3, 129, 231),
+                            Color.fromARGB(255, 59, 75, 255),
+                            Color.fromARGB(255, 71, 93, 233),
+                            Color.fromARGB(255, 59, 75, 255),
+                            Color.fromARGB(255, 3, 129, 231),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment:
+                              MainAxisAlignment.center, // 세로 가운데 정렬
+                          children: [
+                            Text(
+                              "${university}",
+                              style: TextStyle(
+                                fontSize: 34,
+                                color: Colors.white,
+                                fontFamily: 'Tenada',
+                              ),
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              "봉사시간\n인증하기",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  height: 1.5,
+                                  color: Colors.white,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Card(
+                elevation: 1,
+                color: Color.fromARGB(255, 50, 50, 50).withOpacity(0.8),
+                child: Container(
+                  height: 150,
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '"${userInfo['username']}" 님의 크레딧',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  fontFamily: 'NotoSansKR',
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  myCredit.toString(),
+                                  style: TextStyle(
+                                    fontSize: 44,
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    fontFamily: 'NotoSansKR',
+                                    fontWeight: FontWeight.w700,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 64),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text("복지재단 후원",
                   style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 18,
+                      color: const Color.fromARGB(137, 4, 4, 4),
+                      fontSize: 21,
                       fontFamily: 'NotoSansKR',
                       fontWeight: FontWeight.w600)),
             ),
-            SizedBox(height: 3),
+            SizedBox(height: 20),
             FutureBuilder<List<Map<String, dynamic>>>(
               future: _exchange_0,
               builder: (context, snapshot) {
@@ -193,7 +349,7 @@ class _ExchangeScreenState extends State<ExchangeScreen>
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            ExchangeInfoScreen(
+                                            ExchangeDonationInfoScreen(
                                                 uid: uid,
                                                 myCredit: myCredit,
                                                 memberType: memberType,
@@ -212,17 +368,17 @@ class _ExchangeScreenState extends State<ExchangeScreen>
                 }
               },
             ),
-            SizedBox(height: 25),
+            SizedBox(height: 60),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text("협력 기업 상품",
+              child: Text("협력기업 상품",
                   style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 18,
+                      color: const Color.fromARGB(137, 4, 4, 4),
+                      fontSize: 21,
                       fontFamily: 'NotoSansKR',
                       fontWeight: FontWeight.w600)),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 30),
             FutureBuilder<List<Map<String, dynamic>>>(
               future: _exchange_1,
               builder: (context, snapshot) {
@@ -234,7 +390,7 @@ class _ExchangeScreenState extends State<ExchangeScreen>
                   return Center(child: Text('존재하는 교환이 없습니다.'));
                 } else {
                   return Container(
-                    height: MediaQuery.of(context).size.height * 0.65,
+                    height: MediaQuery.of(context).size.height * 0.7,
                     child: RefreshIndicator(
                       onRefresh: () async {
                         setState(
