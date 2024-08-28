@@ -4,13 +4,13 @@ import '../../utils/firebase_helper.dart';
 import '../index/main_index.dart';
 import '../../providers/custom_auth_provider.dart';
 
-class ExchangeInfoScreen extends StatefulWidget {
+class ExchangeGoodsInfoScreen extends StatefulWidget {
   final String uid;
   final int myCredit;
   final String memberType;
   final Map<String, dynamic> post;
 
-  ExchangeInfoScreen({
+  ExchangeGoodsInfoScreen({
     required this.uid,
     required this.myCredit,
     required this.memberType,
@@ -18,10 +18,11 @@ class ExchangeInfoScreen extends StatefulWidget {
   });
 
   @override
-  _ExchangeInfoScreenState createState() => _ExchangeInfoScreenState();
+  _ExchangeGoodsInfoScreenState createState() =>
+      _ExchangeGoodsInfoScreenState();
 }
 
-class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
+class _ExchangeGoodsInfoScreenState extends State<ExchangeGoodsInfoScreen> {
   bool _canApply = false; // _canApply 변수 선언
 
   @override
@@ -40,7 +41,9 @@ class _ExchangeInfoScreenState extends State<ExchangeInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("교환 상세"),
+        title: Text("상품 교환",
+            style: TextStyle(
+                fontFamily: 'NotoSansKR', fontWeight: FontWeight.w400)),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
