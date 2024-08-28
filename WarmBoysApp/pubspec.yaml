@@ -54,6 +54,7 @@ dependencies:
   url_launcher: ^6.3.0
   syncfusion_flutter_xlsio: ^26.2.11
   share_plus: ^10.0.0
+  flutter_launcher_icons: ^0.13.1
 
 
   
@@ -85,6 +86,7 @@ flutter:
     - assets/logos/company.png
     - assets/images/default_profile.png
     - assets/icons/profile_blank.png
+    - assets/icons/app.png
     - assets/icons/home.png
     - assets/icons/matching.png
     - assets/icons/exchange.png
@@ -155,6 +157,10 @@ flutter:
     #     - asset: fonts/TrajanPro.ttf
     #     - asset: fonts/TrajanPro_Bold.ttf
     #       weight: 700
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/app.png"
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
