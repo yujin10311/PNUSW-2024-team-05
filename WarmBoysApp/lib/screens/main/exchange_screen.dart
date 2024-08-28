@@ -4,8 +4,9 @@ import '../../widgets/custom_end_drawer.dart';
 import 'package:provider/provider.dart';
 import '../../providers/custom_auth_provider.dart';
 import '../../utils/firebase_helper.dart';
-import '../post/exchange_info_screen.dart';
+import '../post/exchange_goods_info_screen.dart';
 import '../post/exchange_donation_info_screen.dart';
+import '../post/exchange_volunteer_info_screen.dart';
 
 class ExchangeScreen extends StatefulWidget {
   @override
@@ -55,124 +56,150 @@ class _ExchangeScreenState extends State<ExchangeScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Card(
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(12.0),
-                        topRight: Radius.circular(12.0),
-                        bottomLeft: Radius.circular(12.0),
-                        bottomRight: Radius.circular(12.0),
-                      ),
-                    ),
-                    child: Container(
-                      height: MediaQuery.of(context).size.width * 0.435,
-                      width: MediaQuery.of(context).size.width * 0.435,
-                      decoration: BoxDecoration(
+                  GestureDetector(
+                    child: Card(
+                      elevation: 1,
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(12.0),
                           topRight: Radius.circular(12.0),
                           bottomLeft: Radius.circular(12.0),
                           bottomRight: Radius.circular(12.0),
                         ),
-                        gradient: LinearGradient(
-                          colors: [
-                            const Color.fromARGB(255, 255, 204, 128),
-                            Colors.orange,
-                            Color.fromARGB(255, 224, 73, 81),
-                            Color.fromARGB(255, 224, 42, 51),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
                       ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment:
-                              MainAxisAlignment.center, // 세로 가운데 정렬
-                          children: [
-                            Text(
-                              "1365",
-                              style: TextStyle(
-                                fontSize: 34,
-                                color: Colors.white,
-                                fontFamily: 'Tenada',
-                              ),
-                            ),
-                            Text(
-                              " 봉사시간\n 인증하기",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  height: 1.5,
+                      child: Container(
+                        height: MediaQuery.of(context).size.width * 0.435,
+                        width: MediaQuery.of(context).size.width * 0.435,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(12.0),
+                            topRight: Radius.circular(12.0),
+                            bottomLeft: Radius.circular(12.0),
+                            bottomRight: Radius.circular(12.0),
+                          ),
+                          gradient: LinearGradient(
+                            colors: [
+                              const Color.fromARGB(255, 255, 204, 128),
+                              Colors.orange,
+                              Color.fromARGB(255, 224, 73, 81),
+                              Color.fromARGB(255, 224, 42, 51),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment:
+                                MainAxisAlignment.center, // 세로 가운데 정렬
+                            children: [
+                              Text(
+                                "1365",
+                                style: TextStyle(
+                                  fontSize: 34,
                                   color: Colors.white,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ],
+                                  fontFamily: 'Tenada',
+                                ),
+                              ),
+                              Text(
+                                "봉사시간\n신청하기",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    height: 1.5,
+                                    color: Colors.white,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
+                    onTap: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ExchangeVolunteerInfoScreen(
+                            inc: '1365',
+                          ),
+                        ),
+                      )
+                    },
                   ),
-                  Card(
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(12.0),
-                        topRight: Radius.circular(12.0),
-                        bottomLeft: Radius.circular(12.0),
-                        bottomRight: Radius.circular(12.0),
-                      ),
-                    ),
-                    child: Container(
-                      height: MediaQuery.of(context).size.width * 0.435,
-                      width: MediaQuery.of(context).size.width * 0.435,
-                      decoration: BoxDecoration(
+                  GestureDetector(
+                    child: Card(
+                      elevation: 1,
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(12.0),
                           topRight: Radius.circular(12.0),
                           bottomLeft: Radius.circular(12.0),
                           bottomRight: Radius.circular(12.0),
                         ),
-                        gradient: LinearGradient(
-                          colors: [
-                            const Color.fromARGB(255, 90, 173, 240),
-                            Color.fromARGB(255, 3, 129, 231),
-                            Color.fromARGB(255, 59, 75, 255),
-                            Color.fromARGB(255, 71, 93, 233),
-                            Color.fromARGB(255, 59, 75, 255),
-                            Color.fromARGB(255, 3, 129, 231),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
                       ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment:
-                              MainAxisAlignment.center, // 세로 가운데 정렬
-                          children: [
-                            Text(
-                              "${university}",
-                              style: TextStyle(
-                                fontSize: 34,
-                                color: Colors.white,
-                                fontFamily: 'Tenada',
-                              ),
-                            ),
-                            SizedBox(height: 2),
-                            Text(
-                              "봉사시간\n인증하기",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  height: 1.5,
+                      child: Container(
+                        height: MediaQuery.of(context).size.width * 0.435,
+                        width: MediaQuery.of(context).size.width * 0.435,
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(12.0),
+                            topRight: Radius.circular(12.0),
+                            bottomLeft: Radius.circular(12.0),
+                            bottomRight: Radius.circular(12.0),
+                          ),
+                          gradient: LinearGradient(
+                            colors: [
+                              const Color.fromARGB(255, 90, 173, 240),
+                              Color.fromARGB(255, 3, 129, 231),
+                              Color.fromARGB(255, 59, 75, 255),
+                              Color.fromARGB(255, 71, 93, 233),
+                              Color.fromARGB(255, 59, 75, 255),
+                              Color.fromARGB(255, 3, 129, 231),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment:
+                                MainAxisAlignment.center, // 세로 가운데 정렬
+                            children: [
+                              Text(
+                                "${university}",
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: 34,
                                   color: Colors.white,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ],
+                                  fontFamily: 'Tenada',
+                                ),
+                              ),
+                              SizedBox(height: 2),
+                              Text(
+                                "봉사시간\n신청하기",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    height: 1.5,
+                                    color: Colors.white,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
+                    onTap: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ExchangeVolunteerInfoScreen(
+                            inc: userInfo['university'],
+                          ),
+                        ),
+                      )
+                    },
                   ),
                 ],
               ),
@@ -229,7 +256,7 @@ class _ExchangeScreenState extends State<ExchangeScreen>
                 ),
               ),
             ),
-            SizedBox(height: 64),
+            SizedBox(height: 36),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text("복지재단 후원",
@@ -368,7 +395,7 @@ class _ExchangeScreenState extends State<ExchangeScreen>
                 }
               },
             ),
-            SizedBox(height: 60),
+            SizedBox(height: 36),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text("협력기업 상품",
@@ -459,7 +486,7 @@ class _ExchangeScreenState extends State<ExchangeScreen>
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            ExchangeInfoScreen(
+                                            ExchangeGoodsInfoScreen(
                                                 uid: uid,
                                                 myCredit: myCredit,
                                                 memberType: memberType,
