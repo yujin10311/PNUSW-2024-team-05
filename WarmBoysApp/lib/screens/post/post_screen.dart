@@ -743,15 +743,14 @@ class _PostScreenState extends State<PostScreen> {
             child: DropdownButton<String>(
               value: selectedActivityType,
               items: [
+                '디지털 교육',
+                '병원 동행',
                 '실내 오락',
                 '실외 활동',
-                '식사 지원',
                 '사회적 교류',
                 '문화 및 여가',
                 '정서적 지원',
                 '지적 활동',
-                '디지털 교육',
-                '생활 지원',
                 '예술 및 창작',
                 '재능 기부',
                 '취미 활동'
