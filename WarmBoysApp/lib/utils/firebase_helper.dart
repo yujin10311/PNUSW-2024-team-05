@@ -342,6 +342,8 @@ class FirebaseHelper {
         'reviewByMate': null,
         'ratingBySenior': null,
         'reviewBySenior': null,
+        'volunteer1365': 'notApplied',
+        'volunteerUniv': 'notApplied',
       });
       print('Post added successfully');
       return true; // 성공 시 true 반환
@@ -1478,14 +1480,21 @@ class FirebaseHelper {
               DateTime endTimeTemp = DateTime(
                   1, 1, 1, ((postData['endTime'] as Timestamp).toDate()).hour);
 
+              int hourDiff =
+                  ((postData['endTime'] as Timestamp).toDate()).hour -
+                      ((postData['startTime'] as Timestamp).toDate()).hour;
+
               // posts 문서의 정보
               seniorData.addAll({
+                'postId': postDoc.id,
+                'status': postData['status'],
                 'timeDiff': dateDifferenceToString(
                     (postData['endTime'] as Timestamp).toDate()),
                 'date': DateFormat('yy.MM.dd')
                     .format((postData['startTime'] as Timestamp).toDate()),
                 'startTime': dateToString[startTimeTemp],
                 'endTime': dateToString[endTimeTemp],
+                'hourDiff': hourDiff,
                 'activityCity': postData['city'],
                 'activityGu': postData['gu'],
                 'activityDong': postData['dong'],
@@ -1496,6 +1505,8 @@ class FirebaseHelper {
                 'endReport': postData['endReport'],
                 'credit': postData['credit'],
                 'sort': (postData['endTime'] as Timestamp).toDate(),
+                'volunteer1365': postData['volunteer1365'],
+                'volunteerUniv': postData['volunteerUniv'],
               });
 
               results.add(seniorData);
@@ -1685,6 +1696,30 @@ class FirebaseHelper {
     } catch (e) {
       print('Error checking apply exchange: $e');
       return false; // 오류 발생 시 false 반환
+    }
+  }
+
+  static Future<bool> applyVolunteerTime(
+      List<Map<String, String>> dataList) async {
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    try {
+      for (var data in dataList) {
+        String postId = data['postId']!;
+        String inc = data['inc']!;
+
+        DocumentReference postRef = _firestore.collection('posts').doc(postId);
+
+        if (inc == '1365') {
+          await postRef.update({'volunteer1365': 'applied'});
+        } else if (inc == 'univ') {
+          await postRef.update({'volunteerUniv': 'applied'});
+        }
+      }
+      return true;
+    } catch (e) {
+      print('Error applying volunteer time: $e');
+      return false;
     }
   }
 }
