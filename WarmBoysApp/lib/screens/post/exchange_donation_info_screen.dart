@@ -42,7 +42,9 @@ class _ExchangeDonationInfoScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("교환 상세"),
+        title: Text("후원금 교환",
+            style: TextStyle(
+                fontFamily: 'NotoSansKR', fontWeight: FontWeight.w400)),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
