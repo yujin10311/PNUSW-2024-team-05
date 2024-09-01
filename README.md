@@ -319,8 +319,8 @@ $ flutter run # 가상모바일 디바이스 or 실제 휴대폰 usb디버깅(an
 
 | 안성수 | 홍태근 | 정솔빈 | 임정근 | 김상준 | 하수형 |
 |:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
-|<img width="100px" alt="MEMBER1" src="https://avatars.githubusercontent.com/u/67642811?v=4" /> | <img width="100px" alt="MEMBER2" src="https://avatars.githubusercontent.com/u/79072462?v=4" /> | <img width="100px" alt="MEMBER3" src="https://avatars.githubusercontent.com/u/108869351?v=4" /> | <img width="100px" alt="MEMBER4" src="https://avatars.githubusercontent.com/u/102662177?v=4" /> | 
-| member1@pusan.ac.kr | member2@gmail.com | member3@naver.com | member4@naver.com | 
+|<img width="100px" alt="안성수" src="https://avatars.githubusercontent.com/u/67642811?v=4" /> | <img width="100px" alt="홍태근" src="https://avatars.githubusercontent.com/u/79072462?v=4" /> | <img width="100px" alt="정솔빈" src="https://avatars.githubusercontent.com/u/108869351?v=4" /> | <img width="100px" alt="임정근" src="https://avatars.githubusercontent.com/u/102662177?v=4" /> | <img width="100px" alt="김상준" src="[https://avatars.githubusercontent.com/u/102662177?v=4](https://avatars.githubusercontent.com/u/133668870?v=4)" /> | <img width="100px" alt="하수형" src="[https://avatars.githubusercontent.com/u/102662177?v=4](https://avatars.githubusercontent.com/u/179922893?v=4)" /> 
+| member1@pusan.ac.kr | member2@gmail.com | member3@naver.com | member4@naver.com | member5@naver.com | member6@naver.com | 
 | 정보컴퓨터공학과 <br/> 백엔드 개발 | IT응용공학과 <br/> 프론트엔드 개발 |  IT응용공학과 <br/> 프론트엔드 개발 | IT응용공학과 <br/> 기획 | 언어정보학과 <br/> 기획 | 기계공학과 <br/> 기획 | 
 
 <br/>
