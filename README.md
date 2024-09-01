@@ -179,7 +179,7 @@
   <img width="800px" alt="플로우차트컴포넌트" src="docs/readmeAssets/플로우차트컴포넌트.png" /><br>
   1. 시작 단계
       > 앱의 시작단계부터 회원가입 및 로그인을 거쳐 메인화면까지 도달하는 시스템 플로우차트입니다.
-      <img width="800px" alt="시작단계" src="docs/readmeAssets/시작 및 로그인 플로우차트.png" />
+      <img width="800px" alt="시작단계" src="docs/readmeAssets/시작단계.png" />
 
   2. 홈페이지
       > 앱의 홈페이지에서 다룰 수 있는 공고 쓰기와 열람, 매칭 신청등을 표기한 시스템 플로우차트입니다.
@@ -194,13 +194,21 @@
       <img width="800px" alt="매칭후활동" src="docs/readmeAssets/매칭 후 활동 플로우차트.png" />
 
   5. 교환페이지
-      > 매칭의 보상으로 받는 크래딧을 교환하는 교환페이지의 시스템 플로우차트입니다.
-      <img width="800px" alt="교환페이지" src="docs/readmeAssets/교환페이지 플로우차트.png" />
+      > 매이트가 매칭의 보상으로 받는 크래딧을 교환하는 교환페이지의 시스템 플로우차트입니다.
+      <img width="800px" alt="교환페이지" src="docs/readmeAssets/교환페이지.png" />
+
+  6. 서비스페이지
+      > 시니어가 받을 수 있는 유용한 서비스 정보를 모아서 손쉽게 볼 수 있는 서비스페이지의 시스템 플로우차트입니다.
+      <img width="800px" alt="서비스페이지" src="docs/readmeAssets/서비스페이지.png" />
   
-  6. 채팅페이지
+  7. 채팅페이지
       > 매칭등에 필요한 채팅기능을 담당하는 채팅페이지의 시스템 플로우차트입니다.
       <img width="300px" alt="채팅페이지" src="docs/readmeAssets/채팅페이지 플로우차트.png" />
-      <br>
+
+  8. 부가기능
+      > 앱의 다양한 부가기능들을 정리한 부가기능 시스템 플로우차트입니다.
+      <img width="800px" alt="교환페이지" src="docs/readmeAssets/부가기능.png" />
+    <br>
 
 - 유저 플로우차트
   > 시니어와 메이트 2가지 타입의 유저가 앱을 직접 사용했을 때의 행동흐름을 도식화하여 보여줍니다.
@@ -271,20 +279,18 @@
 
 #### 3.4. 디렉토리 구조
 ```
-├── build/                      # webpack 설정 파일
-├── config/                     # 프로젝트 설정 파일
-├── deplay/                     # 배포 설정 파일
-├── src/                        # 소스 코드
-│   ├── assets/                 # 이미지, 폰트 등의 정적 파일
-│   ├── pages/                  # 화면에 나타나는 페이지
-│   │   ├── page1/              # 페이지1
-│   │   ├── page2/              # 페이지2
-│   │   ├── components/         # 여러 페이지에서 공통적으로 사용되는 컴포넌트
-│   ├── router/                 # 라우터
-│   ├── store/                  # global state store
-│   ├── styles/                 # 스타일
-│   ├── utils/                  # 유틸리티
-├── static/                     # 정적 파일
+├── docs/                       # 따시게 관련문서
+├── function/                   # firebase function 설정 파일
+├── WarmBoysApp/                # 따시게 flutter 프로젝트
+│   ├── assets/                 # 이미지, 폰트, 아이콘 등의 정적 파일
+│   ├── lib/                    # 소스코드
+│   │   ├── screens/            # 실제 기능하는 주요 페이지들
+│   │   ├── utils/              # 복잡한 기능, 연결등을 간소화 하는 함수파일모음
+│   │   ├── widgets/             # 여러 페이지에서 사용되는 위젯 컴포넌트
+│   │   ├── providers/          # firebase 로그인시 사용자 인증을 담당
+│   ├── build/                  # 앱의 공통적인 설정과 파이어베이스 연결등을 담당
+│   ├── android/                # 안드로이드 앱으로 빌드시 필요한 세팅 담당
+│   ├── ios/                    # ios 앱으로 빌드시 필요한 세팅 담당
 ```
 <br/>
 
@@ -294,13 +300,10 @@
 - 위의 사용 기술 참고
 
 ```bash
-$ git clone https://github.com/test/test.git
-$ cd test/frontend
-$ npm i
-$ export NODE_ENV="development" # windows: set NODE_ENV=development
-$ npm run build:dll
-$ export TARGET="http://localhost:8000"  # windows: set NODE_ENV=http://localhost:8000
-$ npm run dev
+$ git clone https://github.com/pnusw-hackathon/PNUSW-2024-team-03.git
+$ cd PNUSW-2024-team-03/WarmBoysApp
+$ flutter pub get
+$ flutter run # 가상모바일 디바이스 or 실제 휴대폰 usb디버깅(android/ios)
 ```
 <br/>
 
