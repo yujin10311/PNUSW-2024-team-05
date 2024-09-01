@@ -2,7 +2,7 @@
 #### 1.1. 개발배경 및 필요성
 - 개발배경
   > 대한민국의 고령화 문제가 심화되고 있다. 베이비붐의 사회 은퇴 시기와 더불어, 저출산이 지속되며 대한민국의 노인 인구 증가 속도는 OECD 회원국 중 가장 빠른 것으로 나타난다. 2024년 기준 대한민국의 65세 이상 고령 인구는 973만명으로, 전체 인구의 19%에 달하고, 고령 인구는 지속적으로 증가하여 '36년에는 1574만명이 될 것으로 통계청은 예상했다. 특히, 우리 부산 광역시의 경우 이미 고령 인구 비율이 60%를 초과한 초고령사회에 진입했으며, 한국고용정보원에서 발간한 자료에 따르면, 부산광역시의 고령화는 다른 어느 지자체들보다도 빠르게 진행되고 있음을 나타냈다.
-  <img width="300px" alt="대한민국 노령인구" src="docs/readmeAssets/대한민국 노령인구.png">
+  <img width="300px" alt="대한민국 고령인구" src="docs/readmeAssets/대한민국 고령인구.png">
 
 
 - 개발필요성
@@ -315,8 +315,8 @@ $ npm run dev
 
 | 안성수 | 홍태근 | 정솔빈 | 임정근 | 김상준 | 하수형 |
 |:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
-|<img width="100px" alt="MEMBER1" src="https://avatars.githubusercontent.com/u/67642811?v=4" /> | <img width="100px" alt="MEMBER2" src="https://avatars.githubusercontent.com/u/79072462?v=4" /> | <img width="100px" alt="MEMBER3" src="https://avatars.githubusercontent.com/u/108869351?v=4" /> | <img width="100px" alt="MEMBER3" src="https://avatars.githubusercontent.com/u/102662177?v=4" /> | 
-| member1@pusan.ac.kr | member2@gmail.com | member3@naver.com |
+|<img width="100px" alt="MEMBER1" src="https://avatars.githubusercontent.com/u/67642811?v=4" /> | <img width="100px" alt="MEMBER2" src="https://avatars.githubusercontent.com/u/79072462?v=4" /> | <img width="100px" alt="MEMBER3" src="https://avatars.githubusercontent.com/u/108869351?v=4" /> | <img width="100px" alt="MEMBER4" src="https://avatars.githubusercontent.com/u/102662177?v=4" /> | 
+| member1@pusan.ac.kr | member2@gmail.com | member3@naver.com | member4@naver.com | 
 | 정보컴퓨터공학과 <br/> 백엔드 개발 | IT응용공학과 <br/> 프론트엔드 개발 |  IT응용공학과 <br/> 프론트엔드 개발 | IT응용공학과 <br/> 기획 | 언어정보학과 <br/> 기획 | 기계공학과 <br/> 기획 | 
 
 <br/>
