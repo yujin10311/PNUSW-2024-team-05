@@ -180,6 +180,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         '+ 내 공고 작성하기',
                         style: TextStyle(
                           fontSize: 18,
+                          fontFamily: 'NotoSansKR',
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
@@ -197,7 +199,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () => _selectDateRange(context),
-                    child: Text('기간 선택', style: TextStyle(fontSize: 16)),
+                    child: Text('기간 선택',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'NotoSansKR',
+                          fontWeight: FontWeight.w400,
+                        )),
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Color.fromARGB(255, 224, 73, 81),
                       backgroundColor: Colors.white,
@@ -217,7 +224,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value),
+                        child: Text(value,
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'NotoSansKR',
+                                fontWeight: FontWeight.w400)),
                       );
                     }).toList(),
                   ),
@@ -251,7 +262,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value),
+                        child: Text(value,
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'NotoSansKR',
+                                fontWeight: FontWeight.w400)),
                       );
                     }).toList(),
                   ),
@@ -343,7 +358,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         Text(
                                           postcard['seniorName'],
-                                          style: TextStyle(fontSize: 22),
+                                          style: TextStyle(
+                                              fontSize: 22,
+                                              fontFamily: 'NotoSansKR',
+                                              fontWeight: FontWeight.w400),
                                         ),
                                         memberType == '메이트'
                                             ? SizedBox(width: 3)
@@ -379,7 +397,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             : Container(),
                                       ],
                                     ),
-                                    SizedBox(height: 5),
+                                    SizedBox(height: 10),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -403,6 +421,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           style: TextStyle(
                                               fontSize:
                                                   memberType == '시니어' ? 16 : 14,
+                                              fontFamily: 'NotoSansKR',
+                                              fontWeight: FontWeight.w400,
                                               color: Colors.black54),
                                         ),
                                       ],
@@ -413,6 +433,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       style: TextStyle(
                                           fontSize:
                                               memberType == '시니어' ? 16 : 14,
+                                          fontFamily: 'NotoSansKR',
+                                          fontWeight: FontWeight.w400,
                                           color: Colors.black54),
                                     ),
                                     SizedBox(height: 5),
@@ -421,6 +443,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       style: TextStyle(
                                           fontSize:
                                               memberType == '시니어' ? 16 : 14,
+                                          fontFamily: 'NotoSansKR',
+                                          fontWeight: FontWeight.w400,
                                           color: Colors.black54),
                                     ),
                                     SizedBox(height: 5),
@@ -429,6 +453,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       style: TextStyle(
                                           fontSize:
                                               memberType == '시니어' ? 16 : 14,
+                                          fontFamily: 'NotoSansKR',
+                                          fontWeight: FontWeight.w400,
                                           color: Colors.black54),
                                     ),
                                     SizedBox(height: 5),
@@ -442,6 +468,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   fontSize: memberType == '메이트'
                                                       ? 14
                                                       : 16,
+                                                  fontFamily: 'NotoSansKR',
+                                                  fontWeight: FontWeight.w400,
                                                   color: Colors.black54),
                                             ),
                                             SizedBox(height: 14),

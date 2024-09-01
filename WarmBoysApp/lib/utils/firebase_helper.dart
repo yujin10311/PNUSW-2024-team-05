@@ -100,9 +100,9 @@ class FirebaseHelper {
 
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     String imgUrl = "";
-    if (customAuthProvider.image != null) {
+    if (customAuthProvider.profileImage != null) {
       final ref = FirebaseStorage.instance.ref().child('프로필 사진/$uid.jpg');
-      await ref.putFile(customAuthProvider.image!);
+      await ref.putFile(customAuthProvider.profileImage!);
       imgUrl = await ref.getDownloadURL();
     }
 
@@ -118,6 +118,7 @@ class FirebaseHelper {
       'imgEmbd': prefs['_imgEmbd'],
       'phoneNum': prefs['_phoneNum'] ?? '',
       'phoneNum2': prefs['_phoneNum2'] ?? '',
+      'residentNumber': prefs['_residentNumber'] ?? '',
       'city': prefs['_city'] ?? '',
       'gu': prefs['_gu'] ?? '',
       'dong': prefs['_dong'] ?? '',
@@ -146,10 +147,16 @@ class FirebaseHelper {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     String imgUrl = "";
-    if (customAuthProvider.image != null) {
+    String schoolCertImgUrl = "";
+    if (customAuthProvider.profileImage != null) {
       final ref = FirebaseStorage.instance.ref().child('프로필 사진/$uid.jpg');
-      await ref.putFile(customAuthProvider.image!);
+      await ref.putFile(customAuthProvider.profileImage!);
       imgUrl = await ref.getDownloadURL();
+    }
+    if (customAuthProvider.schoolCertImage != null) {
+      final ref = FirebaseStorage.instance.ref().child('학생증 사진/$uid.jpg');
+      await ref.putFile(customAuthProvider.schoolCertImage!);
+      schoolCertImgUrl = await ref.getDownloadURL();
     }
 
     final Map<String, dynamic> userData = {
@@ -162,7 +169,11 @@ class FirebaseHelper {
       'gender': prefs['_gender'] ?? '',
       'imgUrl': imgUrl,
       'imgEmbd': prefs['_imgEmbd'],
+      'university': prefs['_university'] ?? '',
+      'department': prefs['_department'] ?? '',
+      'schoolCertImgUrl': schoolCertImgUrl,
       'phoneNum': prefs['_phoneNum'] ?? '',
+      'residentNumber': prefs['_residentNumber'] ?? '',
       'city': prefs['_city'] ?? '',
       'gu': prefs['_gu'] ?? '',
       'dong': prefs['_dong'] ?? '',
@@ -331,6 +342,8 @@ class FirebaseHelper {
         'reviewByMate': null,
         'ratingBySenior': null,
         'reviewBySenior': null,
+        'volunteer1365': 'notApplied',
+        'volunteerUniv': 'notApplied',
       });
       print('Post added successfully');
       return true; // 성공 시 true 반환
@@ -1467,14 +1480,21 @@ class FirebaseHelper {
               DateTime endTimeTemp = DateTime(
                   1, 1, 1, ((postData['endTime'] as Timestamp).toDate()).hour);
 
+              int hourDiff =
+                  ((postData['endTime'] as Timestamp).toDate()).hour -
+                      ((postData['startTime'] as Timestamp).toDate()).hour;
+
               // posts 문서의 정보
               seniorData.addAll({
+                'postId': postDoc.id,
+                'status': postData['status'],
                 'timeDiff': dateDifferenceToString(
                     (postData['endTime'] as Timestamp).toDate()),
                 'date': DateFormat('yy.MM.dd')
                     .format((postData['startTime'] as Timestamp).toDate()),
                 'startTime': dateToString[startTimeTemp],
                 'endTime': dateToString[endTimeTemp],
+                'hourDiff': hourDiff,
                 'activityCity': postData['city'],
                 'activityGu': postData['gu'],
                 'activityDong': postData['dong'],
@@ -1485,6 +1505,8 @@ class FirebaseHelper {
                 'endReport': postData['endReport'],
                 'credit': postData['credit'],
                 'sort': (postData['endTime'] as Timestamp).toDate(),
+                'volunteer1365': postData['volunteer1365'],
+                'volunteerUniv': postData['volunteerUniv'],
               });
 
               results.add(seniorData);
@@ -1500,23 +1522,24 @@ class FirebaseHelper {
     return results;
   }
 
-  static Future<List<Map<String, dynamic>>> queryExchangePosts() async {
+  static Future<Map<String, List<Map<String, dynamic>>>>
+      queryExchangePosts() async {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    List<Map<String, dynamic>> results = [];
+    Map<String, List<Map<String, dynamic>>> results = {};
 
     try {
-      // 'exchanges' 컬렉션에서 문서들을 가져옴
       QuerySnapshot exchangeSnapshot =
           await _firestore.collection('exchanges').get();
 
       for (var doc in exchangeSnapshot.docs) {
-        // 문서 데이터를 가져와서 필요한 필드를 추출
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-        // 필요한 필드들을 Map에 추가
+        String category = data['category'] as String;
+
         Map<String, dynamic> exchangeData = {
           'docId': doc.id,
           'goodsName': data['goodsName'] as String,
+          'goodsImgUrl': data['goodsImgUrl'] as String ?? '',
           'maxHeadcounts': data['maxHeadcounts'] as int,
           'currentHeadcounts': data['currentHeadcounts'] as int,
           'needCredit': data['needCredit'] as int,
@@ -1526,12 +1549,54 @@ class FirebaseHelper {
           'incUrl': data['incUrl'] as String,
           'supportReason': data['supportReason'] as String,
         };
+        if (!results.containsKey(category)) {
+          results[category] = [];
+        }
 
-        // 결과 리스트에 추가
-        results.add(exchangeData);
+        results[category]!.add(exchangeData);
       }
     } catch (e) {
       print('Error querying exchange posts: $e');
+    }
+    return results;
+  }
+
+  static Future<Map<String, List<Map<String, dynamic>>>>
+      queryServicePosts() async {
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    Map<String, List<Map<String, dynamic>>> results = {};
+
+    try {
+      QuerySnapshot serviceSnapshot =
+          await _firestore.collection('services').get();
+
+      for (var doc in serviceSnapshot.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        String category = data['category'] as String;
+
+        Map<String, dynamic> serviceData = {
+          'docId': doc.id,
+          'content': data['content'] as String,
+          'duration': data['duration'] as String,
+          'imgUrl': data['imgUrl'] as String,
+          'inc': data['inc'] as String,
+          'location': data['location'] as String,
+          'name': data['name'] as String,
+          'note': data['note'] as String,
+          'target': data['target'] as String,
+          'tel': data['tel'] as String,
+          'url': data['url'] as String,
+        };
+
+        if (!results.containsKey(category)) {
+          results[category] = [];
+        }
+
+        results[category]!.add(serviceData);
+      }
+    } catch (e) {
+      print('Error querying service posts: $e');
     }
 
     return results;
@@ -1631,6 +1696,30 @@ class FirebaseHelper {
     } catch (e) {
       print('Error checking apply exchange: $e');
       return false; // 오류 발생 시 false 반환
+    }
+  }
+
+  static Future<bool> applyVolunteerTime(
+      List<Map<String, String>> dataList) async {
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    try {
+      for (var data in dataList) {
+        String postId = data['postId']!;
+        String inc = data['inc']!;
+
+        DocumentReference postRef = _firestore.collection('posts').doc(postId);
+
+        if (inc == '1365') {
+          await postRef.update({'volunteer1365': 'applied'});
+        } else if (inc == 'univ') {
+          await postRef.update({'volunteerUniv': 'applied'});
+        }
+      }
+      return true;
+    } catch (e) {
+      print('Error applying volunteer time: $e');
+      return false;
     }
   }
 }

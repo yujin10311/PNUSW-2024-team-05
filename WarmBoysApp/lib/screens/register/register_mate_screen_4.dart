@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:warm_boys/providers/custom_auth_provider.dart';
 import '../../utils/shared_preferences_helper.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
-// 회원가입 스크린 4(메이트)
 class RegisterMateScreen4 extends StatefulWidget {
   final VoidCallback onNextPage;
   final VoidCallback onPreviousPage;
@@ -13,68 +16,110 @@ class RegisterMateScreen4 extends StatefulWidget {
 }
 
 class _RegisterMateScreen4State extends State<RegisterMateScreen4> {
-  List<DayCard> _dayCards = [];
-  List<String> _daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
-  Set<String> _usedDays = Set();
-  Map<String, dynamic> _dayTime = {};
+  final TextEditingController _universityController = TextEditingController();
+  final TextEditingController _departmentController = TextEditingController();
+  late ImagePicker imagePicker;
+  File? _image;
 
-  bool get _hasCompletedCard {
-    return _dayCards.any((card) => card.isCompleted);
-  }
+  // 대학교 목록
+  final List<String> _universities = [
+    '경남정보대학교',
+    '경성대학교',
+    '고신대학교',
+    '한국해양대학교',
+    '동명대학교',
+    '동서대학교',
+    '동아대학교',
+    '동의대학교',
+    '부경대학교',
+    '부산가톨릭대학교',
+    '부산경상대학교',
+    '부산과학기술대학교',
+    '부산교육대학교',
+    '부산대학교',
+    '부산보건대학교',
+    '부산여자대학교',
+    '부산예술대학교',
+    '부산외국어대학교',
+    '신라대학교',
+    '영산대학교',
+    '인제대학교',
+    '대동대학교',
+    '동의과학대학교',
+    '한국폴리텍VII대학',
+  ];
 
-  @override
-  void initState() {
-    super.initState();
-    _loadDayTimeData();
-  }
-
-  Future<void> _loadDayTimeData() async {
-    Map<String, dynamic>? dayTimeMap =
-        await SharedPreferencesHelper.getJson('_dayTime');
-    if (dayTimeMap != null) {
+  _imgFromCamera() async {
+    XFile? pickedFile = await imagePicker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
       setState(() {
-        _dayTime = dayTimeMap;
-        _dayCards = dayTimeMap.keys.map((day) {
-          Map<String, String> times = Map<String, String>.from(dayTimeMap[day]);
-          _usedDays.add(day);
-          return DayCard(
-            daysOfWeek: _daysOfWeek,
-            usedDays: _usedDays,
-            onComplete: _completeDayCard,
-            onDelete: _deleteDayCard,
-            selectedDay: day,
-            startTime: DateTime.parse(
-                times['startTime'] ?? DateTime.now().toIso8601String()),
-            endTime: DateTime.parse(
-                times['endTime'] ?? DateTime.now().toIso8601String()),
-            isCompleted: true,
-          );
-        }).toList();
+        _image = File(pickedFile.path);
       });
     }
   }
 
-  Future<void> _saveDayTimeData() async {
-    Map<String, Map<String, String>> dayTimeMap = {};
-    for (DayCard card in _dayCards) {
-      if (card.isCompleted) {
-        dayTimeMap[card.selectedDay!] = {
-          'startTime': card.startTime!.toIso8601String(),
-          'endTime': card.endTime!.toIso8601String(),
-        };
-      }
+  _imgFromGallery() async {
+    XFile? pickedFile =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
     }
-    await SharedPreferencesHelper.saveJson('_dayTime', dayTimeMap);
+  }
+
+  Future<void> _loadFormData() async {
+    final customAuthProvider =
+        Provider.of<CustomAuthProvider>(context, listen: false);
+    _universityController.text =
+        await SharedPreferencesHelper.getByKey('_university') ?? '';
+    _departmentController.text =
+        await SharedPreferencesHelper.getByKey('_department') ?? '';
+    _image = customAuthProvider.schoolCertImage;
     setState(() {
-      _dayTime = dayTimeMap;
+      _onFormFieldChanged();
     });
+  }
+
+  Future<void> _saveFormData() async {
+    await SharedPreferencesHelper.saveData(
+        '_university', _universityController.text);
+    await SharedPreferencesHelper.saveData(
+        '_department', _departmentController.text);
+  }
+
+  void _onFormFieldChanged() {
+    setState(() {});
+  }
+
+  bool get _isFormValid {
+    return _universityController.text.isNotEmpty &&
+        _departmentController.text.isNotEmpty &&
+        _universities.contains(_universityController.text) &&
+        _image != null;
+  }
+
+  @override
+  void initState() {
+    _loadFormData();
+    imagePicker = ImagePicker();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _universityController.dispose();
+    _departmentController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final customAuthProvider =
+        Provider.of<CustomAuthProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('언제 활동할 수 있나요?',
+        title: Text('소속을 인증해 주세요.',
             style: TextStyle(
                 fontFamily: 'NotoSansKR', fontWeight: FontWeight.w400)),
         automaticallyImplyLeading: false,
@@ -87,40 +132,190 @@ class _RegisterMateScreen4State extends State<RegisterMateScreen4> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            _buildAvailableTimeSection(),
-            SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _dayCards.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == _dayCards.length) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (_usedDays.length < _daysOfWeek.length) {
-                            setState(() {
-                              _dayCards.add(DayCard(
-                                daysOfWeek: _daysOfWeek,
-                                usedDays: _usedDays,
-                                onComplete: _completeDayCard,
-                                onDelete: _deleteDayCard,
-                              ));
-                            });
-                          }
-                        },
-                        child: Text('+', style: TextStyle(fontSize: 24)),
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(60, 40),
-                        ),
-                      ),
-                    );
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "1. 소속",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(width: 5),
+                Text(
+                  "*",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 15),
+            Autocomplete<String>(
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                if (textEditingValue.text.isEmpty) {
+                  return const Iterable<String>.empty();
+                }
+                return _universities.where((String university) {
+                  return university.contains(textEditingValue.text);
+                });
+              },
+              onSelected: (String selection) {
+                _universityController.text = selection;
+                _onFormFieldChanged();
+              },
+              fieldViewBuilder: (BuildContext context,
+                  TextEditingController fieldTextEditingController,
+                  FocusNode fieldFocusNode,
+                  VoidCallback onFieldSubmitted) {
+                fieldTextEditingController.text = _universityController.text;
+                fieldTextEditingController.selection =
+                    TextSelection.fromPosition(
+                  TextPosition(offset: fieldTextEditingController.text.length),
+                );
+
+                fieldTextEditingController.addListener(() {
+                  if (_universityController.text !=
+                      fieldTextEditingController.text) {
+                    _universityController.text =
+                        fieldTextEditingController.text;
+                    _onFormFieldChanged();
                   }
-                  return _dayCards[index];
-                },
-              ),
+                });
+
+                return TextField(
+                  controller: fieldTextEditingController,
+                  focusNode: fieldFocusNode,
+                  decoration: InputDecoration(
+                    labelText: '대학교',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  onChanged: (value) {
+                    _onFormFieldChanged();
+                  },
+                );
+              },
             ),
             SizedBox(height: 20),
+
+            // 학과 입력 섹션
+            TextField(
+              controller: _departmentController,
+              decoration: InputDecoration(
+                labelText: '학과',
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+              onChanged: (value) {
+                _onFormFieldChanged();
+              },
+            ),
+            SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "2. 학생증 사진",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(width: 5),
+                Text(
+                  "*",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 15),
+            _image != null
+                ? Center(
+                    child: Container(
+                    width: 300,
+                    height: 200,
+                    child: Image.file(_image!),
+                  ))
+                : Center(
+                    child: Container(
+                      width: 300,
+                      height: 200,
+                      color: Colors.grey[300],
+                      child: Center(
+                          child: Text("학생증 사진을 등록해주세요.",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'NotoSansKR',
+                                  fontWeight: FontWeight.w400))),
+                    ),
+                  ),
+            SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        _imgFromCamera();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(140, 60),
+                      ),
+                      child: Icon(
+                        Icons.camera_alt,
+                        size: 32,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      "사진 촬영",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: const Color.fromARGB(255, 106, 106, 106),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(width: 15),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        _imgFromGallery();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(140, 60),
+                      ),
+                      child: Icon(
+                        Icons.photo_library,
+                        size: 32,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      "갤러리",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: const Color.fromARGB(255, 106, 106, 106),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -128,9 +323,12 @@ class _RegisterMateScreen4State extends State<RegisterMateScreen4> {
         margin: const EdgeInsets.only(bottom: 40),
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ElevatedButton(
-          onPressed: _hasCompletedCard
+          onPressed: _isFormValid
               ? () async {
-                  await _saveDayTimeData();
+                  await _saveFormData();
+                  if (_image != null) {
+                    customAuthProvider.setSchoolCertImage(_image);
+                  }
                   widget.onNextPage();
                 }
               : null,
@@ -145,288 +343,6 @@ class _RegisterMateScreen4State extends State<RegisterMateScreen4> {
             backgroundColor: Color.fromARGB(255, 224, 73, 81),
             foregroundColor: Colors.white,
           ),
-        ),
-      ),
-    );
-  }
-
-  void _completeDayCard(DayCard card) {
-    setState(() {
-      if (card.selectedDay != null) {
-        _usedDays.add(card.selectedDay!);
-      }
-      _saveDayTimeData();
-    });
-  }
-
-  void _deleteDayCard(DayCard card) {
-    setState(() {
-      _dayCards.remove(card);
-      if (card.selectedDay != null) {
-        _usedDays.remove(card.selectedDay!);
-      }
-      _saveDayTimeData();
-    });
-  }
-
-  Widget _buildAvailableTimeSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '활동 가능 시간',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 10),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: _daysOfWeek.map((day) {
-              final dayInfo = _dayTime[day];
-              final startTime =
-                  dayInfo != null ? DateTime.parse(dayInfo['startTime']) : null;
-              final endTime =
-                  dayInfo != null ? DateTime.parse(dayInfo['endTime']) : null;
-              final isMorning = startTime != null &&
-                  endTime != null &&
-                  startTime.hour < 12 &&
-                  endTime.hour < 12;
-              final isAfternoon = startTime != null &&
-                  endTime != null &&
-                  startTime.hour >= 12 &&
-                  endTime.hour >= 12;
-              final isFullDay = startTime != null &&
-                  endTime != null &&
-                  startTime.hour < 12 &&
-                  endTime.hour >= 12;
-
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundColor: dayInfo != null
-                          ? Color.fromARGB(255, 224, 73, 81)
-                          : Colors.grey,
-                      child: Text(
-                        day,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Icon(
-                      Icons.wb_sunny,
-                      size: 30,
-                      color: isMorning || isFullDay
-                          ? Color.fromARGB(255, 224, 73, 81)
-                          : Colors.grey,
-                    ),
-                    SizedBox(height: 5),
-                    Icon(
-                      Icons.nights_stay,
-                      size: 30,
-                      color: isAfternoon || isFullDay
-                          ? Color.fromARGB(255, 224, 73, 81)
-                          : Colors.grey,
-                    ),
-                    SizedBox(height: 5),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class DayCard extends StatefulWidget {
-  final List<String> daysOfWeek;
-  final Set<String> usedDays;
-  final Function(DayCard) onComplete;
-  final Function(DayCard) onDelete;
-
-  String? selectedDay;
-  DateTime? startTime;
-  DateTime? endTime;
-  bool isCompleted = false;
-
-  DayCard({
-    required this.daysOfWeek,
-    required this.usedDays,
-    required this.onComplete,
-    required this.onDelete,
-    this.selectedDay,
-    this.startTime,
-    this.endTime,
-    this.isCompleted = false,
-  });
-
-  @override
-  _DayCardState createState() => _DayCardState();
-}
-
-class _DayCardState extends State<DayCard> {
-  List<String> _startTimes = [
-    '오전 9시',
-    '오전 10시',
-    '오전 11시',
-    '정오',
-    '오후 1시',
-    '오후 2시',
-    '오후 3시',
-    '오후 4시',
-    '오후 5시',
-    '오후 6시',
-    '오후 7시',
-    '오후 8시',
-  ];
-
-  List<String> _getEndTimes(String startTime) {
-    int startIndex = _startTimes.indexOf(startTime) + 1;
-    return _startTimes.sublist(startIndex);
-  }
-
-  bool get _canComplete {
-    return widget.selectedDay != null &&
-        widget.startTime != null &&
-        widget.endTime != null;
-  }
-
-  String _timeToString(DateTime time) {
-    int hour = time.hour;
-    if (hour == 12) return '정오';
-    String period = hour < 12 ? '오전' : '오후';
-    if (hour > 12) hour -= 12;
-    return '$period $hour시';
-  }
-
-  DateTime _stringToTime(String time) {
-    if (time == '정오') return DateTime(0, 1, 1, 12);
-    List<String> parts = time.split(' ');
-    int hour = int.parse(parts[1].replaceAll('시', ''));
-    if (parts[0] == '오후' && hour < 12) hour += 12;
-    return DateTime(0, 1, 1, hour);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (widget.isCompleted) ...[
-                  Text(widget.selectedDay ?? '요일'),
-                  Text(_timeToString(widget.startTime!)),
-                  Text('~'),
-                  Text(_timeToString(widget.endTime!)),
-                ] else ...[
-                  DropdownButton<String>(
-                    hint: Text('요일'),
-                    value: widget.selectedDay,
-                    onChanged: (String? newValue) {
-                      if (!widget.isCompleted &&
-                          newValue != null &&
-                          !widget.usedDays.contains(newValue)) {
-                        setState(() {
-                          widget.selectedDay = newValue;
-                        });
-                      }
-                    },
-                    items: widget.daysOfWeek
-                        .where((day) => !widget.usedDays.contains(day))
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(width: 8),
-                  DropdownButton<String>(
-                    hint: Text('시작 시간'),
-                    value: widget.startTime != null
-                        ? _timeToString(widget.startTime!)
-                        : null,
-                    onChanged: (String? newValue) {
-                      if (!widget.isCompleted && newValue != null) {
-                        setState(() {
-                          widget.startTime = _stringToTime(newValue);
-                          widget.endTime = null;
-                        });
-                      }
-                    },
-                    items: _startTimes
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(width: 8),
-                  DropdownButton<String>(
-                    hint: Text('종료 시간'),
-                    value: widget.endTime != null
-                        ? _timeToString(widget.endTime!)
-                        : null,
-                    onChanged: (String? newValue) {
-                      if (!widget.isCompleted &&
-                          widget.startTime != null &&
-                          newValue != null) {
-                        setState(() {
-                          widget.endTime = _stringToTime(newValue);
-                        });
-                      }
-                    },
-                    items: widget.startTime == null
-                        ? []
-                        : _getEndTimes(_timeToString(widget.startTime!))
-                            .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                  ),
-                ],
-                SizedBox(width: 8),
-                Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: _canComplete
-                          ? () {
-                              setState(() {
-                                widget.isCompleted = true;
-                                widget.onComplete(widget);
-                              });
-                            }
-                          : null,
-                      child: Text('O', style: TextStyle(fontSize: 16)),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(40, 40),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () => widget.onDelete(widget),
-                      child: Text('X', style: TextStyle(fontSize: 16)),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(40, 40),
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
         ),
       ),
     );

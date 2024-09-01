@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:warm_boys/utils/recognition.dart';
 import 'package:warm_boys/utils/recognizer.dart';
+import 'package:flutter/services.dart';
 
 // 회원가입 스크린 3(메이트)
 class RegisterMateScreen3 extends StatefulWidget {
@@ -29,6 +30,9 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
   late TextEditingController _nameController;
   late TextEditingController _phoneNumberController;
   late TextEditingController _additionalInfoController;
+  late TextEditingController _resiFrontNumController;
+  late TextEditingController _resiBackNumController;
+  late String? _residentNumber;
 
   // 얼굴 등록 관련 변수
   late ImagePicker imagePicker;
@@ -46,6 +50,8 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
     return _nameController.text.isNotEmpty &&
         _selectedAge != null &&
         _phoneNumberController.text.isNotEmpty &&
+        _resiFrontNumController.text.isNotEmpty &&
+        _resiBackNumController.text.isNotEmpty &&
         _image != null &&
         _imgEmbd != null;
   }
@@ -166,7 +172,7 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                 ),
                 ElevatedButton(
                     onPressed: () async {
-                      customAuthProvider.setImage(_image);
+                      customAuthProvider.setProfileImage(_image);
                       SharedPreferencesHelper.saveData(
                           '_imgEmbd', recognition.embeddings.join(','));
                       this._imgEmbd = recognition.embeddings.join(',');
@@ -191,11 +197,12 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
   void initState() {
     super.initState();
     _nameController = TextEditingController();
+    _resiFrontNumController = TextEditingController();
+    _resiBackNumController = TextEditingController();
     _phoneNumberController = TextEditingController();
     _additionalInfoController = TextEditingController();
-    _loadFormData();
-
     imagePicker = ImagePicker();
+    _loadFormData();
 
     // 얼굴 검출기 초기화
     final options =
@@ -209,27 +216,46 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
   @override
   void dispose() {
     _nameController.dispose();
+    _resiFrontNumController.dispose();
+    _resiBackNumController.dispose();
     _phoneNumberController.dispose();
     _additionalInfoController.dispose();
     super.dispose();
   }
 
   Future<void> _loadFormData() async {
+    final customAuthProvider =
+        Provider.of<CustomAuthProvider>(context, listen: false);
     _nameController.text =
         await SharedPreferencesHelper.getByKey('_username') ?? '';
     _selectedAge = await SharedPreferencesHelper.getByKey('_age');
     _selectedGender = await SharedPreferencesHelper.getByKey('_gender') ?? '남성';
+    _residentNumber =
+        await SharedPreferencesHelper.getByKey('_residentNumber') ?? '';
+    if (_residentNumber != '') {
+      _resiFrontNumController.text = _residentNumber!.substring(0, 6);
+      _resiBackNumController.text = _residentNumber!.substring(6, 7);
+    } else {
+      _resiFrontNumController.text = '';
+      _resiBackNumController.text = '';
+    }
     _phoneNumberController.text =
         await SharedPreferencesHelper.getByKey('_phoneNum') ?? '';
     _additionalInfoController.text =
         await SharedPreferencesHelper.getByKey('_addInfo') ?? '';
-    setState(() {});
+    _imgEmbd = await SharedPreferencesHelper.getByKey('_imgEmbd') ?? '';
+    _image = customAuthProvider.profileImage;
+    setState(() {
+      _onFormFieldChanged();
+    });
   }
 
   Future<void> _saveFormData() async {
     await SharedPreferencesHelper.saveData('_username', _nameController.text);
     await SharedPreferencesHelper.saveData('_age', _selectedAge ?? '');
     await SharedPreferencesHelper.saveData('_gender', _selectedGender);
+    await SharedPreferencesHelper.saveData('_residentNumber',
+        '${_resiFrontNumController.text}${_resiBackNumController.text}');
     await SharedPreferencesHelper.saveData(
         '_phoneNum', _phoneNumberController.text);
     await SharedPreferencesHelper.saveData(
@@ -361,6 +387,10 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                       width: 150,
                       child: TextField(
                         controller: _nameController,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'[ㄱ-ㅎㅏ-ㅣ가-힣]')), // 문자만 허용
+                        ],
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
@@ -489,6 +519,76 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                   children: [
                     Row(
                       children: [
+                        Text("주민등록번호를 작성해주세요.", style: TextStyle(fontSize: 16)),
+                        SizedBox(width: 8),
+                        Text("필수",
+                            style: TextStyle(fontSize: 12, color: Colors.red)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 60,
+                          child: TextField(
+                            controller: _resiFrontNumController,
+                            maxLength: 6,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(),
+                              counterText: '',
+                            ),
+                            onChanged: (value) {
+                              _onFormFieldChanged();
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text("-", style: TextStyle(fontSize: 20)),
+                        SizedBox(width: 10),
+                        Expanded(
+                          flex: 10,
+                          child: TextField(
+                            controller: _resiBackNumController,
+                            maxLength: 1,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(),
+                              counterText: '',
+                            ),
+                            onChanged: (value) {
+                              _onFormFieldChanged();
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text("******",
+                            style: TextStyle(
+                              fontSize: 20,
+                            )),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                color: Colors.grey[200],
+                padding: EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
                         Text("회원님 휴대폰 번호를 작성해주세요.",
                             style: TextStyle(fontSize: 16)),
                         SizedBox(width: 8),
@@ -499,6 +599,10 @@ class _RegisterMateScreen3State extends State<RegisterMateScreen3> {
                     TextField(
                       controller: _phoneNumberController,
                       maxLength: 11,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,

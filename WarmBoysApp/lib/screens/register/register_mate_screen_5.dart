@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../utils/shared_preferences_helper.dart';
 
-// 회원가입 스크린 5(메이트)
+// 회원가입 스크린 4(메이트)
 class RegisterMateScreen5 extends StatefulWidget {
   final VoidCallback onNextPage;
   final VoidCallback onPreviousPage;
@@ -13,45 +13,68 @@ class RegisterMateScreen5 extends StatefulWidget {
 }
 
 class _RegisterMateScreen5State extends State<RegisterMateScreen5> {
-  String _username = '';
-  String _age = '';
-  String _phoneNum = '';
-  String _city = '';
-  String _gu = '';
-  String _dong = '';
-  String _detailedAddress = '';
-  List<String> _activityType = [];
-  String _addInfo = '';
+  List<DayCard> _dayCards = [];
+  List<String> _daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+  Set<String> _usedDays = Set();
   Map<String, dynamic> _dayTime = {};
+
+  bool get _hasCompletedCard {
+    return _dayCards.any((card) => card.isCompleted);
+  }
 
   @override
   void initState() {
     super.initState();
-    _loadData();
-    SharedPreferencesHelper.printAll();
+    _loadDayTimeData();
   }
 
-  Future<void> _loadData() async {
-    _username = await SharedPreferencesHelper.getByKey('_username') ?? '';
-    _age = await SharedPreferencesHelper.getByKey('_age') ?? '';
-    _phoneNum = await SharedPreferencesHelper.getByKey('_phoneNum') ?? '';
-    _city = await SharedPreferencesHelper.getByKey('_city') ?? '';
-    _gu = await SharedPreferencesHelper.getByKey('_gu') ?? '';
-    _dong = await SharedPreferencesHelper.getByKey('_dong') ?? '';
-    _detailedAddress =
-        await SharedPreferencesHelper.getByKey('_detailedAddress') ?? '';
-    _activityType =
-        await SharedPreferencesHelper.getStringList('_activityType') ?? [];
-    _addInfo = await SharedPreferencesHelper.getByKey('_addInfo') ?? '';
-    _dayTime = await SharedPreferencesHelper.getJson('_dayTime') ?? {};
-    setState(() {});
+  Future<void> _loadDayTimeData() async {
+    Map<String, dynamic>? dayTimeMap =
+        await SharedPreferencesHelper.getJson('_dayTime');
+    if (dayTimeMap != null) {
+      setState(() {
+        _dayTime = dayTimeMap;
+        _dayCards = dayTimeMap.keys.map((day) {
+          Map<String, String> times = Map<String, String>.from(dayTimeMap[day]);
+          _usedDays.add(day);
+          return DayCard(
+            daysOfWeek: _daysOfWeek,
+            usedDays: _usedDays,
+            onComplete: _completeDayCard,
+            onDelete: _deleteDayCard,
+            selectedDay: day,
+            startTime: DateTime.parse(
+                times['startTime'] ?? DateTime.now().toIso8601String()),
+            endTime: DateTime.parse(
+                times['endTime'] ?? DateTime.now().toIso8601String()),
+            isCompleted: true,
+          );
+        }).toList();
+      });
+    }
+  }
+
+  Future<void> _saveDayTimeData() async {
+    Map<String, Map<String, String>> dayTimeMap = {};
+    for (DayCard card in _dayCards) {
+      if (card.isCompleted) {
+        dayTimeMap[card.selectedDay!] = {
+          'startTime': card.startTime!.toIso8601String(),
+          'endTime': card.endTime!.toIso8601String(),
+        };
+      }
+    }
+    await SharedPreferencesHelper.saveJson('_dayTime', dayTimeMap);
+    setState(() {
+      _dayTime = dayTimeMap;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('가입 정보 상세',
+        title: Text('언제 활동할 수 있나요?',
             style: TextStyle(
                 fontFamily: 'NotoSansKR', fontWeight: FontWeight.w400)),
         automaticallyImplyLeading: false,
@@ -62,36 +85,55 @@ class _RegisterMateScreen5State extends State<RegisterMateScreen5> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildInfoRow('성함:', _username, fontSize: 16.0),
-              SizedBox(height: 10),
-              _buildInfoRow('나이:', _age, fontSize: 16.0),
-              SizedBox(height: 10),
-              _buildInfoRow('연락처:', _phoneNum, fontSize: 16.0),
-              SizedBox(height: 10),
-              _buildInfoRow('지역:', '$_city > $_gu > $_dong', fontSize: 16.0),
-              SizedBox(height: 10),
-              _buildDetailedAddressSection(),
-              SizedBox(height: 30),
-              _buildActivitySection(),
-              SizedBox(height: 30),
-              _buildAvailableTimeSection(),
-              SizedBox(height: 30),
-              _buildAdditionalInfoSection(),
-            ],
-          ),
+        child: Column(
+          children: [
+            _buildAvailableTimeSection(),
+            SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _dayCards.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == _dayCards.length) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_usedDays.length < _daysOfWeek.length) {
+                            setState(() {
+                              _dayCards.add(DayCard(
+                                daysOfWeek: _daysOfWeek,
+                                usedDays: _usedDays,
+                                onComplete: _completeDayCard,
+                                onDelete: _deleteDayCard,
+                              ));
+                            });
+                          }
+                        },
+                        child: Text('+', style: TextStyle(fontSize: 24)),
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(60, 40),
+                        ),
+                      ),
+                    );
+                  }
+                  return _dayCards[index];
+                },
+              ),
+            ),
+            SizedBox(height: 20),
+          ],
         ),
       ),
       bottomNavigationBar: Container(
         margin: const EdgeInsets.only(bottom: 40),
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ElevatedButton(
-          onPressed: () async {
-            widget.onNextPage();
-          },
+          onPressed: _hasCompletedCard
+              ? () async {
+                  await _saveDayTimeData();
+                  widget.onNextPage();
+                }
+              : null,
           child: Text('다음으로',
               style: TextStyle(
                   fontSize: 20,
@@ -108,84 +150,23 @@ class _RegisterMateScreen5State extends State<RegisterMateScreen5> {
     );
   }
 
-  Widget _buildInfoRow(String label, String value, {double fontSize = 18.0}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
-        ),
-        Text(
-          value,
-          style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
-        ),
-      ],
-    );
+  void _completeDayCard(DayCard card) {
+    setState(() {
+      if (card.selectedDay != null) {
+        _usedDays.add(card.selectedDay!);
+      }
+      _saveDayTimeData();
+    });
   }
 
-  Widget _buildDetailedAddressSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '상세 주소:',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 10),
-        Container(
-          padding: EdgeInsets.all(8.0),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          child: Text(
-            _detailedAddress,
-            style: TextStyle(fontSize: 16),
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildActivitySection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '제공 서비스',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 10),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: _activityType.map((activity) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(
-                  children: [
-                    Icon(
-                      _getActivityIcon(activity),
-                      size: 40,
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      activity,
-                      style: TextStyle(fontSize: 12),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-      ],
-    );
+  void _deleteDayCard(DayCard card) {
+    setState(() {
+      _dayCards.remove(card);
+      if (card.selectedDay != null) {
+        _usedDays.remove(card.selectedDay!);
+      }
+      _saveDayTimeData();
+    });
   }
 
   Widget _buildAvailableTimeSection() {
@@ -259,64 +240,195 @@ class _RegisterMateScreen5State extends State<RegisterMateScreen5> {
       ],
     );
   }
+}
 
-  Widget _buildAdditionalInfoSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '추가 내용',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+class DayCard extends StatefulWidget {
+  final List<String> daysOfWeek;
+  final Set<String> usedDays;
+  final Function(DayCard) onComplete;
+  final Function(DayCard) onDelete;
+
+  String? selectedDay;
+  DateTime? startTime;
+  DateTime? endTime;
+  bool isCompleted = false;
+
+  DayCard({
+    required this.daysOfWeek,
+    required this.usedDays,
+    required this.onComplete,
+    required this.onDelete,
+    this.selectedDay,
+    this.startTime,
+    this.endTime,
+    this.isCompleted = false,
+  });
+
+  @override
+  _DayCardState createState() => _DayCardState();
+}
+
+class _DayCardState extends State<DayCard> {
+  List<String> _startTimes = [
+    '오전 9시',
+    '오전 10시',
+    '오전 11시',
+    '정오',
+    '오후 1시',
+    '오후 2시',
+    '오후 3시',
+    '오후 4시',
+    '오후 5시',
+    '오후 6시',
+    '오후 7시',
+    '오후 8시',
+  ];
+
+  List<String> _getEndTimes(String startTime) {
+    int startIndex = _startTimes.indexOf(startTime) + 1;
+    return _startTimes.sublist(startIndex);
+  }
+
+  bool get _canComplete {
+    return widget.selectedDay != null &&
+        widget.startTime != null &&
+        widget.endTime != null;
+  }
+
+  String _timeToString(DateTime time) {
+    int hour = time.hour;
+    if (hour == 12) return '정오';
+    String period = hour < 12 ? '오전' : '오후';
+    if (hour > 12) hour -= 12;
+    return '$period $hour시';
+  }
+
+  DateTime _stringToTime(String time) {
+    if (time == '정오') return DateTime(0, 1, 1, 12);
+    List<String> parts = time.split(' ');
+    int hour = int.parse(parts[1].replaceAll('시', ''));
+    if (parts[0] == '오후' && hour < 12) hour += 12;
+    return DateTime(0, 1, 1, hour);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (widget.isCompleted) ...[
+                  Text(widget.selectedDay ?? '요일'),
+                  Text(_timeToString(widget.startTime!)),
+                  Text('~'),
+                  Text(_timeToString(widget.endTime!)),
+                ] else ...[
+                  DropdownButton<String>(
+                    hint: Text('요일'),
+                    value: widget.selectedDay,
+                    onChanged: (String? newValue) {
+                      if (!widget.isCompleted &&
+                          newValue != null &&
+                          !widget.usedDays.contains(newValue)) {
+                        setState(() {
+                          widget.selectedDay = newValue;
+                        });
+                      }
+                    },
+                    items: widget.daysOfWeek
+                        .where((day) => !widget.usedDays.contains(day))
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(width: 8),
+                  DropdownButton<String>(
+                    hint: Text('시작 시간'),
+                    value: widget.startTime != null
+                        ? _timeToString(widget.startTime!)
+                        : null,
+                    onChanged: (String? newValue) {
+                      if (!widget.isCompleted && newValue != null) {
+                        setState(() {
+                          widget.startTime = _stringToTime(newValue);
+                          widget.endTime = null;
+                        });
+                      }
+                    },
+                    items: _startTimes
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(width: 8),
+                  DropdownButton<String>(
+                    hint: Text('종료 시간'),
+                    value: widget.endTime != null
+                        ? _timeToString(widget.endTime!)
+                        : null,
+                    onChanged: (String? newValue) {
+                      if (!widget.isCompleted &&
+                          widget.startTime != null &&
+                          newValue != null) {
+                        setState(() {
+                          widget.endTime = _stringToTime(newValue);
+                        });
+                      }
+                    },
+                    items: widget.startTime == null
+                        ? []
+                        : _getEndTimes(_timeToString(widget.startTime!))
+                            .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                  ),
+                ],
+                SizedBox(width: 8),
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: _canComplete
+                          ? () {
+                              setState(() {
+                                widget.isCompleted = true;
+                                widget.onComplete(widget);
+                              });
+                            }
+                          : null,
+                      child: Text('O', style: TextStyle(fontSize: 16)),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(40, 40),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => widget.onDelete(widget),
+                      child: Text('X', style: TextStyle(fontSize: 16)),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(40, 40),
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
-        SizedBox(height: 10),
-        Container(
-          padding: EdgeInsets.all(8.0),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          child: Text(
-            _addInfo,
-            style: TextStyle(fontSize: 14),
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ],
+      ),
     );
   }
-
-  IconData _getActivityIcon(String activity) {
-    switch (activity) {
-      case '실내 오락':
-        return Icons.games;
-      case '실외 활동':
-        return Icons.nature_people;
-      case '식사 지원':
-        return Icons.restaurant;
-      case '사회적 교류':
-        return Icons.people;
-      case '문화 및 여가':
-        return Icons.theater_comedy;
-      case '정서적 지원':
-        return Icons.favorite;
-      case '지적 활동':
-        return Icons.book;
-      case '디지털 교육':
-        return Icons.computer;
-      case '생활 지원':
-        return Icons.cleaning_services;
-      case '예술 및 창작':
-        return Icons.brush;
-      case '재능 기부':
-        return Icons.volunteer_activism;
-      case '취미 활동':
-        return Icons.local_florist;
-      default:
-        return Icons.help_outline;
-    }
-  }
-
-  List<String> get _daysOfWeek => ['일', '월', '화', '수', '목', '금', '토'];
 }

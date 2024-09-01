@@ -57,14 +57,19 @@ class CustomEndDrawer extends StatelessWidget {
                             username,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 22,
+                              fontSize: 24,
+                              fontFamily: 'NotoSansKR',
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
+                          SizedBox(height: 3),
                           Text(
                             memberType,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
+                              fontFamily: 'NotoSansKR',
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ],
@@ -81,7 +86,11 @@ class CustomEndDrawer extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             child: ListTile(
               leading: Icon(Icons.person),
-              title: Text('내 프로필', style: TextStyle(fontSize: 18.0)),
+              title: Text('내 프로필',
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      fontFamily: 'NotoSansKR',
+                      fontWeight: FontWeight.w400)),
               onTap: () {
                 if (memberType == '메이트') {
                   Navigator.of(context).push(
@@ -105,7 +114,11 @@ class CustomEndDrawer extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             child: ListTile(
               leading: Icon(Icons.history),
-              title: Text('활동 기록', style: TextStyle(fontSize: 18.0)),
+              title: Text('활동 기록',
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      fontFamily: 'NotoSansKR',
+                      fontWeight: FontWeight.w400)),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -120,7 +133,11 @@ class CustomEndDrawer extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             child: ListTile(
               leading: Icon(Icons.help_outline),
-              title: Text('고객센터', style: TextStyle(fontSize: 18.0)),
+              title: Text('고객센터',
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      fontFamily: 'NotoSansKR',
+                      fontWeight: FontWeight.w400)),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -135,7 +152,11 @@ class CustomEndDrawer extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             child: ListTile(
               leading: Icon(Icons.logout),
-              title: Text('로그아웃', style: TextStyle(fontSize: 18.0)),
+              title: Text('로그아웃',
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      fontFamily: 'NotoSansKR',
+                      fontWeight: FontWeight.w400)),
               onTap: () {
                 // CustomAuthProvider의 logOut 메서드를 호출하고 로그인 페이지로 이동
                 Provider.of<CustomAuthProvider>(context, listen: false)

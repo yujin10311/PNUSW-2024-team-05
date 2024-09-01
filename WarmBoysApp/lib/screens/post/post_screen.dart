@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../widgets/member_symptom_scrollview.dart';
 import '../../widgets/member_details_scrollview.dart';
 import '../../widgets/autowrap_text_box.dart';
 import '../../utils/firebase_helper.dart';
 import '../../widgets/profile_card.dart';
+import '../../providers/custom_auth_provider.dart';
 
 class PostScreen extends StatefulWidget {
   final String memberType;
@@ -160,7 +162,9 @@ class _PostScreenState extends State<PostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("공고 상세"),
+        title: Text("공고 상세",
+            style: TextStyle(
+                fontFamily: 'NotoSansKR', fontWeight: FontWeight.w400)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -739,15 +743,14 @@ class _PostScreenState extends State<PostScreen> {
             child: DropdownButton<String>(
               value: selectedActivityType,
               items: [
+                '디지털 교육',
+                '병원 동행',
                 '실내 오락',
                 '실외 활동',
-                '식사 지원',
                 '사회적 교류',
                 '문화 및 여가',
                 '정서적 지원',
                 '지적 활동',
-                '디지털 교육',
-                '생활 지원',
                 '예술 및 창작',
                 '재능 기부',
                 '취미 활동'
@@ -840,8 +843,20 @@ class _PostScreenState extends State<PostScreen> {
   }
 
   Widget _buildMateApplyButton() {
+    final customAuthProvider =
+        Provider.of<CustomAuthProvider>(context, listen: false);
+    bool _schoolCert = customAuthProvider.userInfo!['schoolCert'];
+
     if (checkStat == 'postNotExists') {
       return Text('공고가 존재하지 않습니다.');
+    } else if (_schoolCert == false) {
+      return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+        ),
+        onPressed: null,
+        child: Text('학생 인증이 필요합니다.', style: TextStyle(fontSize: 18)),
+      );
     } else if (checkStat == 'canApply') {
       return ElevatedButton(
         style: ElevatedButton.styleFrom(
