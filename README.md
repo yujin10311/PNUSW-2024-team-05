@@ -283,14 +283,36 @@
 ├── function/                   # firebase function 설정 파일
 ├── WarmBoysApp/                # 따시게 flutter 프로젝트
 │   ├── assets/                 # 이미지, 폰트, 아이콘 등의 정적 파일
+│   │   ├── fonts/              # 폰트
+│   │   ├── icons/              # 아이콘
+│   │   ├── images/             # 이미지
+│   │   ├── logos/              # 앱 로고
+│   │   ├── models/             # AI 모델
+│   │
 │   ├── lib/                    # 소스코드
 │   │   ├── screens/            # 실제 기능하는 주요 페이지들
+│   │   │   ├── activity/                   # 활동 화면
+│   │   │   ├── chatting/                   # 채팅 화면
+│   │   │   ├── history/                    # 활동 기록 화면
+│   │   │   ├── index/                      # 인덱스 화면
+│   │   │   ├── main/                       # 홈, 채팅, 매칭, 서비스, 교환, 교육 화면
+│   │   │   ├── notification/               # 알림 화면
+│   │   │   ├── post/                       # 공고 화면
+│   │   │   ├── profile/                    # 프로필 화면
+│   │   │   ├── register/                   # 회원가입 화면
+│   │   │   ├── review/                     # 리뷰 화면
+│   │   │   ├── service/                    # 고객센터 관련 화면
+│   │   │   ├── login_screen.dart           # 로그인 화면
+│   │   │
 │   │   ├── utils/              # 복잡한 기능, 연결등을 간소화 하는 함수파일모음
-│   │   ├── widgets/             # 여러 페이지에서 사용되는 위젯 컴포넌트
-│   │   ├── providers/          # firebase 로그인시 사용자 인증을 담당
+│   │   ├── widgets/            # 여러 페이지에서 사용되는 위젯 컴포넌트
+│   │   ├── providers/          # custom auth provider
+│   │
 │   ├── build/                  # 앱의 공통적인 설정과 파이어베이스 연결등을 담당
 │   ├── android/                # 안드로이드 앱으로 빌드시 필요한 세팅 담당
 │   ├── ios/                    # ios 앱으로 빌드시 필요한 세팅 담당
+│   ├── firebase_options.dart   # firebase 설정
+│   ├── main.dart               # main
 ```
 <br/>
 
