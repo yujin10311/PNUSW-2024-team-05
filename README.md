@@ -321,11 +321,21 @@
 **필요 패키지**
 - 위의 사용 기술 참고
 
+안드로이드
 ```bash
 $ git clone https://github.com/pnusw-hackathon/PNUSW-2024-team-03.git
 $ cd PNUSW-2024-team-03/WarmBoysApp
 $ flutter pub get
 $ flutter run # 가상모바일 디바이스 or 실제 휴대폰 usb디버깅(android/ios)
+```
+
+IOS(maxos_arm64)
+```
+$ sudo arch -86_64 gem install ffi  # 1. gem 설치(macos_arm64)
+$ sudo gem install cocoapods        # 2. cocoapods 설치
+$ cd WarmBoysApp                    # 3. flutter 프로젝트 접근
+$ flutter pub get                   # 4. 패키지 다운로드
+$ flutter run                       # 5. 앱 실행
 ```
 <br/>
 
