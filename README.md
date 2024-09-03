@@ -332,7 +332,7 @@ $ flutter run # 가상모바일 디바이스 or 실제 휴대폰 usb디버깅(an
 
 ### 5. 소개 및 시연영상
 [<img width="700px" alt="소개 및 시연영상" src="docs/readmeAssets/시연영상_메인.png" />](https://youtu.be/GvQhqcAZocE)
-(재생 화질을 1080HD로 변경해주세요.)
+> 재생 화질을 '1080p60'으로 설정해주세요.
 
 <br/>
 
