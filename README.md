@@ -331,7 +331,7 @@ $ flutter run # 가상모바일 디바이스 or 실제 휴대폰 usb디버깅(an
 
 
 ### 5. 소개 및 시연영상
-[<img width="700px" alt="소개 및 시연영상" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/162132cd-9af5-4154-9b9a-41c96cf5e8fd" />]([https://www.youtube.com/watch?v=EfEgTrm5_u4](https://www.youtube.com/watch?v=GvQhqcAZocE))
+[<img width="700px" alt="소개 및 시연영상" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/162132cd-9af5-4154-9b9a-41c96cf5e8fd" />]([https://www.youtube.com/watch?v=GvQhqcAZocE])
 
 <br/>
 
