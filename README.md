@@ -146,28 +146,6 @@
 <br/>
 
 #### 2.3. 사용기술
-| 이름                  | 버전    |
-|:---------------------:|:-------:|
-| cloud_firestore | 5.1.0 |
-| cocoapods       | 1.15.2 |
-| cupertino_icons | 1.0.6 |
-| dart            | 3.4.3 |
-| firebase_auth | 5.1.2 |
-| firebase_core | 3.2.0 |
-| firebase_messaging | 15.0.3 |
-| firebase_storage | 12.1.2 |
-| flutter             | 3.22.2  |
-| flutter_email_sender | 6.0.3 |
-| google_mlkit_commons | 0.7.1 |
-| google_mlkit_face_detection | 0.11.0 |
-| image | 4.1.3 |
-| image_picker | 1.0.4 |
-| provider | 6.0.0 |
-| ruby                 | 2.6.10p210 |
-| table_calendar | 3.1.2 |
-| tflite_flutter | 0.10.4 |
-| xcode                | 15.0 |
-| youtube_player_flutter | 8.0.0 |
 
 <br/>
 
@@ -324,8 +302,29 @@
 
 
 ### 4. 설치 및 사용 방법
-**필요 패키지**
-- 위의 사용 기술 참고
+#### 4.1 필요 패키지
+| 이름                  | 버전    |
+|:---------------------:|:-------:|
+| cloud_firestore | 5.1.0 |
+| cocoapods       | 1.15.2 |
+| cupertino_icons | 1.0.6 |
+| dart            | 3.4.3 |
+| firebase_auth | 5.1.2 |
+| firebase_core | 3.2.0 |
+| firebase_messaging | 15.0.3 |
+| firebase_storage | 12.1.2 |
+| flutter             | 3.22.2  |
+| flutter_email_sender | 6.0.3 |
+| google_mlkit_commons | 0.7.1 |
+| google_mlkit_face_detection | 0.11.0 |
+| image | 4.1.3 |
+| image_picker | 1.0.4 |
+| provider | 6.0.0 |
+| ruby                 | 2.6.10p210 |
+| table_calendar | 3.1.2 |
+| tflite_flutter | 0.10.4 |
+| xcode                | 15.0 |
+| youtube_player_flutter | 8.0.0 |
 
 #### 4.2 설치 및 실행
 - 안드로이드
