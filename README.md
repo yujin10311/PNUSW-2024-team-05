@@ -52,9 +52,22 @@
 > 시스템 구성도(infra, front, back등의 node 간의 관계)의 사진을 삽입하세요.
 
 #### 2.1. 사용 기술
-> 스택 별(backend, frontend, designer등) 사용한 기술 및 버전을 작성하세요.
-> 
-> ex) React.Js - React14, Node.js - v20.0.2
+##### Backend
+###### Gemini-1.5-Flash
+###### Version: 1.5 (Flash Variant)
+###### Purpose: 대화형 AI 및 자연어 처리 작업
+###### Role in Project: 사용자 입력에 대한 자연어 이해 및 응답 생성
+###### Integration: Google API를 통해 모델 호출 및 텍스트 생성 작업 수행 / Firebase Realtime Database와 연동하여 대화 데이터를 실시간으로 처리
+
+##### Frontend & Designer
+###### Android Studio Koala | 2024.1.1
+###### Version: 2024.1.1 (Koala)
+###### Purpose: Android 애플리케이션 개발을 위한 통합 개발 환경(IDE)
+
+###### Firebase
+###### Version: Firebase BOM '33.1.1'
+###### Firebase 모듈 : Firebase Authentication (사용자 인증 관리) / Firebase Realtime Database (실시간 데이터 동기화) / Firebase Analytics (사용자 행동 분석)
+
 
 ### 3. 개발결과
 #### 3.1. 전체시스템 흐름도
