@@ -235,76 +235,115 @@
 <br/>
 
 #### 3.2. 기능설명
-##### `회원가입`
-><img width="800px" alt="회원가입 1" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입.gif" />
+##### `3.2.1. 회원가입`
+<img width="800px" alt="회원가입 1" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입.gif" />
+
 - 시니어와 케어메이트 두가지의 회원유형 중 한가지를 선택하여 회원가입을 진행합니다.(시니어는 노인, 케어메이트는 대학생을 의미)
-><img width="800px" alt="회원가입 2" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입_2.gif" />
+
+<img width="800px" alt="회원가입 2" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입_2.gif" />
+
 - 두번째 화면에서 어떤 종류의 활동을 원하는지 혹은 제공할 수 있는지 선택합니다.
-><img width="800px" alt="회원가입 2" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입_3.gif" />
+
+<img width="800px" alt="회원가입 2" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입_3.gif" />
+
 - 세번째 화면에서 거주지역 또는 활동지역과 상세주소를 입력합니다.
-><img width="800px" alt="회원가입 2" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입_4.gif" />
+
+<img width="800px" alt="회원가입 2" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입_4.gif" />
+
 - 네번째 화면에서 정면에서 촬영된 얼굴 사진을 업로드 합니다. 이후 이름과 기타 정보들을 기입합니다.
-><img width="800px" alt="회원가입 2" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입_5.gif" />
+
+<img width="800px" alt="회원가입 2" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입_5.gif" />
+
 - (메이트 작성사항)학교이름과 학과를 작성한 뒤 학생증 인증을 실시합니다. 학생증 인증이 되어있지 않으면 추후 매칭 신청이 불가합니다.
-><img width="800px" alt="회원가입 2" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입_6.gif" />
+
+<img width="800px" alt="회원가입 2" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입_6.gif" />
+
 - (메이트 작성사항) 활동가능 시간을 입력합니다. 각 요일과 시간대를 자신이 활동가능한 시간에 맞춰 작성합니다.
 - (시니어 작성사항) 본인이 키우는 반려동물이나 홈캠여부, 질병여부등을 작성합니다.
-><img width="800px" alt="회원가입 2" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입_7.gif" />
+
+<img width="800px" alt="회원가입 2" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입_7.gif" />
+
 - 모든 정보를 입력한 후 자신이 지금까지 입력한 정보를 모아 볼 수 있습니다.
-><img width="800px" alt="회원가입 2" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입_8.gif" />
+
+<img width="800px" alt="회원가입 2" src="docs/readmeAssets/gif/앱 실행 및 시니어-회원가입_8.gif" />
+
 - 다시 확인 후 이상이 없다면 마지막으로 이메일과 비밀번호를 입력해 회원가입을 완료합니다.
 <br>
 
-##### `로그인`
-><img width="800px" alt="로그인 1" src="docs/readmeAssets/gif/로그인_1.gif" />
+##### `3.2.2. 로그인`
+<img width="800px" alt="로그인 1" src="docs/readmeAssets/gif/로그인_1.gif" />
+
 - 이메일과 비밀번호를 입력하고 '로그인' 버튼을 클릭합니다.
-><img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/로그인_2.gif" />
+
+<img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/로그인_2.gif" />
+
 - 가입 후 첫 로그인 시에 약 2분간의 교육영상을 필수 시청해야 합니다. 교육 영상 시청 후에 '홈'화면으로 넘어갑니다.
 
-##### ` 메인 페이지 `
-- 내 공고 작성하기
+##### `3.2.3. 메인 페이지`
+##### `가. 공고 작성 페이지 이동`
 ><img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_1.gif" />
+
   - 클릭시 공고 작성 페이지로 넘어갑니다.
   - 시니어에게만 표시되는 버튼입니다.
 
-- 공고 작성 페이지
-><img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_2.gif" />
+##### `나. 공고 작성
+<img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_2.gif" />
+
   - 상단 프로필카드와 함께 공고 게시 캘린더를 보여줍니다.
   - 공고 게시 캘린더에서 날짜를 선택한 후 활동종류, 시작시간, 종료시간을 입력하여 공고를 작성합니다.
-><img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_3.gif" />
+
+<img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_3.gif" />
+
   - 공고를 모두 작성한 뒤 공고 올리기 버튼을 누르면 공고가 등록됩니다.
   - 공고가 등록되면 캘린더의 해당 날짜칸에 빨간점으로 표시됩니다.
   - 공고가 등록되면 캘린더 아래의 입력창은 게시된 공고를 확인할 수 있는 상태창으로 바뀝니다.
-><img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_4.gif" />
+
+<img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_4.gif" />
+
   - 상태창 아래의 공고 내리기 버튼을 이용하여 공고를 삭제할 수 있습니다.
-><img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_5.gif" />
+
+<img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_5.gif" />
   - 공고 게시 캘린더 아래에는 공고에 기재될 시니어의 신상정보가 표시됩니다.
 
-- 공고 목록
-><img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_6.gif" />
+##### `다. 공고 목록`
+<img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_6.gif" />
+
   - 기간선택 버튼 클릭시 캘린더가 나타나며 이를 통해 원하는 기간을 선택할 수 있습니다.
-><img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_7.gif" />
+
+<img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_7.gif" />
+
   - 정렬 드롭다운 버튼 클릭 시  오름차순과 내림차순을 설정할 수 있는 드롭다운 바가 나타나며 공고를 정렬 할 수 있습니다.
-><img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_8.gif" />
+
+<img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_8.gif" />
+
   - 주소 드롭다운 버튼 클릭 시 원하는 주소(동 단위)를 선택하여 검색 할 수 있습니다.
-><img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_9.gif" />
+
+<img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_9.gif" />
+
   - 목록에서 공고의 프로필 사진을 클릭하면 프로필 사진이 확대되어 보입니다.
-><img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_10.gif" />
+
+<img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_10.gif" />
+
   - 목록에서 공고의 채팅아이콘을 클릭하면 즉시 해당 공고의 시니어와 채팅을 시작할 수 있습니다.
-><img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_11.gif" />
+
+<img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_11.gif" />
+
   - 목록에서 공고를 클릭하면 공고 상세정보 페이지로 이동합니다.
 
-- 공고 상세정보 페이지
+##### `라. 공고 상세정보`
   - 시니어의 정보를 포함한 공고의 상세정보를 보여줍니다.
   - 매칭신청 버튼
-><img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_12.gif" />
+  
+<img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_12.gif" />
+
     - 회원가입 과정에서 등록한 학생증사진 인증이 완료되지 않으면 매칭신청 버튼이 비활성화되며 '학생인증이 필요합니다.'라는 문구로 대체됩니다.
-><img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_13.gif" />
+<img width="800px" alt="로그인 2" src="docs/readmeAssets/gif/공고작성_13.gif" />
+
     - 학생인증이 완료된 메이트의 경우 매칭신청 버튼이 정상적으로 표시되며 클릭시 매칭신청이 보내집니다.
     - 매칭신청 이후 버튼이 매칭취소로 바뀌며 클릭시 보낸 매칭이 취소됩니다.
 <br>
 
-##### `매칭페이지`
+##### `라. 매칭페이지`
 - 탭바
   -매칭전 탭과 매칭후 탭으로 구분되어 있습니다.
 - 매칭전 탭(시니어)
