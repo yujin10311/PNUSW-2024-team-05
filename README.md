@@ -1054,7 +1054,7 @@ $ flutter run                                                          # 가상 
 
 
 ### 5. 소개 및 시연영상
-[<img width="800px" alt="소개 및 시연영상" src="docs/readmeAssets/시연영상_메인.png" />](https://youtu.be/LwzAIRcJgs0&list=PLY-Yo2kSkHy6Qz5loHuY8-AjwF6gzVokr&index=1&t=4s)
+[<img width="800px" alt="소개 및 시연영상" src="docs/readmeAssets/시연영상_메인.png" />](https://youtu.be/LwzAIRcJgs0&list=PLY-Yo2kSkHy6Qz5loHuY8-AjwF6gzVokr&index=1)
 > 재생 화질을 '1080p60'으로 설정해주세요.
 
 <br/>
