@@ -233,6 +233,22 @@
       > 유저타입별 매칭과 활동을 진행시 행동흐름을 보여주는 플로우차트입니다.
       <img width="800px" alt="유저매칭플로우차트" src="docs/readmeAssets/유저매칭플로우차트.png" />
   <br>
+
+- ERD
+  > firebase는 NoSQL방식을 사용합니다. 아래 ERD는 이해를 돕기 위해 관계형 데이터베이스 방식으로 나타낸 것입니다.<br>
+  > - 컬렉션<br>
+  > user: 회원 정보<br>
+  > chats: 채팅 정보<br>
+  > posts: 매칭 공고글 정보<br>
+  > exchanges: 크레딧 교환처 정보<br>
+  > services: 노인 복지 서비스 정보<br>
+  > alarms: 알람 정보<br><br>
+  > - 서브 컬렉션<br>
+  > messages: 'chats' 서브 컬렉션, 대화 내용 기록<br>
+  > mates: 'posts' 서브 컬렉션, 신첟자 정보<br>
+  > applicants: 'exchanges' 서브 컬렉션, 교환 신청자 정보<br>
+  > userAlarms: 'alarms' 서브 컬렉션, 사용자 알람 정보 <br>
+  <img width="800px" alt="ERD" src="docs/readmeAssets/ERD.png" />
   
 
 <br/>
