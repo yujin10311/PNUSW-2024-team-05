@@ -22,8 +22,10 @@
 
 ### 2.상세설계
 #### 2.1. 시스템 구성도
-<img width="600px" alt="시스템 구성도" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/f0e7c7ed-deb1-47ee-8090-32f712fa2b23">
+![image](https://github.com/user-attachments/assets/3f817443-2fac-411d-af2f-99c717e19ecb)
+
 <br/>
+
 
 #### 2.3. 사용기술
 | 이름                  | 버전    |
