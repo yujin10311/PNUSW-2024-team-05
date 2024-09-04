@@ -244,43 +244,43 @@ PHQ-9 조사 없이도 전문성 있는 우울감 분석이 가능하도록 챗�
 ##### ` 메인 페이지 `
 - 로그인 페이지
 
-  - 회원가입과 로그인이 가능합니다.
+  - 회원가입과 로그인이 가능하다.
 
   <img width="200px" src = https://github.com/user-attachments/assets/9e7be31b-4111-4b85-92f3-78dbadcca172 />
   <img width="200px" src = https://github.com/user-attachments/assets/502ad38d-6e19-4998-9d33-489d0ded549a />
 
 - 메인 페이지
 
-  - 달력으로 해당 날짜의 우울 평가 점수와 채팅 기반 감정 상태 분석 결과를 확인할 수 있습니다. 
+  - 달력으로 해당 날짜의 우울 평가 점수와 채팅 기반 감정 상태 분석 결과를 확인할 수 있다. 
 
   <img width="200px" src = https://github.com/user-attachments/assets/756eb58a-bacd-4d52-876f-7d4f557b556c />
 
-  - 일기 버튼을 누르면 그날 채팅 데이터 기반 일기 내용을 확인할 수 있습니다.
+  - 일기 버튼을 누르면 그날 채팅 데이터 기반 일기 내용을 확인할 수 있다.
 
   <img width="200px" src = https://github.com/user-attachments/assets/4a17565d-3543-4cb5-b004-50cc0536e7fe />
   
 - 채팅 페이지
 
-  - 챗봇과 채팅을 할 수 있는 화면입니다.
+  - 챗봇과 채팅을 할 수 있는 화면이다.
 
   <img width="200px" src = https://github.com/user-attachments/assets/61ea1c7a-0a88-4544-b5d2-ac04d2e89f33 />
 
 
 - 커뮤니티 페이지
-  - 다른 사용자들이 올린 게시글 내용을 확인할 수 있습니다. 공감 버튼으로 게시글에 대한 공감 표시도 할 수 있습니다.
+  - 다른 사용자들이 올린 게시글 내용을 확인할 수 있다. 공감 버튼으로 게시글에 대한 공감 표시도 할 수 있다.
 
   <img width="200px" src = https://github.com/user-attachments/assets/1c7a8b6a-b5b1-4018-b06c-614e636351dd />
 
-  - 글쓰기 버튼을 누르면 게시글을 직접 작성할 수 있습니다.
+  - 글쓰기 버튼을 누르면 게시글을 직접 작성할 수 있다.
 
   <img width="200px" src = https://github.com/user-attachments/assets/b7788beb-e9e4-45f3-ba8a-091e4a88d92f />
 
 - 검사 페이지
-  - 본인의 우울척도 검사를 시행할 수 있습니다.
+  - 본인의 우울척도 검사를 시행할 수 있다.
 
   <img width="200px" src = https://github.com/user-attachments/assets/5afc8ad4-a0b2-4099-8557-49ec357c08ac />
 
-  - 우울척도 검사 결과를 확인할 수 있습니다.
+  - 우울척도 검사 결과를 확인할 수 있다다.
 
   <img width="200px" src = https://github.com/user-attachments/assets/cfe8a1dc-6af8-4885-b4d4-b194110703c1 />
 
