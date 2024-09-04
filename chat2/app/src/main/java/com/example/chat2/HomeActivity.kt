@@ -52,7 +52,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var surveyscoreTextView: TextView
     private val model = GenerativeModel(
         "gemini-1.5-flash",
-        apiKey = "AIzaSyAFUNgEWOFYm4FNk-GkBssKdrsKpCcf5Tw",
+        apiKey = BuildConfig.GEMINI_API_KEY,
     )
     private val chatHistory = mutableListOf<Content>()
     private val chat = model.startChat(chatHistory)

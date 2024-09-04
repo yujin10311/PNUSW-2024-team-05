@@ -28,7 +28,7 @@ class DiaryActivity: AppCompatActivity() {
     private lateinit var senderRoom: String // 보낸 대화방
     private val model = GenerativeModel(
         "gemini-1.5-flash",
-        apiKey = "AIzaSyAFUNgEWOFYm4FNk-GkBssKdrsKpCcf5Tw",
+        apiKey = BuildConfig.GEMINI_API_KEY,
     )
     private val chatHistory = mutableListOf<Content>()
     private val chat = model.startChat(chatHistory)

@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -15,7 +17,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        buildConfigField("String", "GEMINI_API_KEY", gradleLocalProperties(rootDir, providers).getProperty("GEMINI_API_KEY"))
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
