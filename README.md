@@ -3,6 +3,7 @@
 ### 1) 통계 
 
 건강보험심사평가원 통계에 따르면, 2022년 국내 우울증 환자는 100만을 넘겼으며, 그 중 35.9%가 2030 젊은층이다.
+![image](https://github.com/user-attachments/assets/ff3fd96b-8606-4dc6-a41d-26756c7f9470)
 
 ### 2) 우울증 시대 상황
 
@@ -55,41 +56,49 @@
 ### 1) 챗봇 기능
 
 #### 가) 채팅
-
+![image](https://github.com/user-attachments/assets/404fa3fa-8244-4679-9a96-65fb50d86e8b)
 #### 나) 설문조사(PHQ-9)
-
+![image](https://github.com/user-attachments/assets/e1619438-f079-4e4c-9491-f4ea7bb52f25)
 ### 2) 캘린더 기능
 
 #### 가) 달력 연도, 월 탐색
-
+![image](https://github.com/user-attachments/assets/deac02f5-f4f9-46dd-ba6f-772cc0cf3923)
 #### 나) 통계
-
+![image](https://github.com/user-attachments/assets/51bea53a-b751-468d-9aeb-fc91f843eead)
 ### 3) 커뮤니티 기능
-
+![image](https://github.com/user-attachments/assets/9f443ba1-74b7-4f2b-b187-702a6047235e)
 #### 가) 커뮤니티
 
 ### 4) 설정 및 사용자 관리 기능
 
 #### 가) 회원가입
+![image](https://github.com/user-attachments/assets/50a6c7d0-4fb4-44c1-a8fc-6f2ccc38c9c4)
 #### 나) 로그인
+![image](https://github.com/user-attachments/assets/c61b2d6e-bd0a-4681-9d41-679e9dc4b77e)
 #### 다) 설정
-
+![image](https://github.com/user-attachments/assets/cc7553e4-57d9-425a-a367-75058ff549d3)
 #### 1.3. 세부내용
 
 ### 1) 챗봇 기능
 #### 가) 채팅
-#### 나) 설문조사
+![image](https://github.com/user-attachments/assets/b2913eb7-43bc-44f1-9989-03aef6a4835a)
 
+#### 나) 설문조사
+![image](https://github.com/user-attachments/assets/bf3f828a-7946-4fb9-a209-d9080dd207e3)
 ### 2) 캘린더 기능
 #### 가) 달력 연도, 월 탐색 및 통계
+![image](https://github.com/user-attachments/assets/22e20ed7-6ea3-4abd-a3d6-61fc98755cc7)
 
 ### 3) 커뮤니티 기능
 #### 가) 커뮤니티
-
+![image](https://github.com/user-attachments/assets/158dbe47-174b-46a3-959b-678a13113009)
 ### 4) 설정 및 사용자 관리 기능
 #### 가) 회원가입
+![image](https://github.com/user-attachments/assets/9ec7af8e-ffa4-42fb-addb-605b1c930486)
 #### 나) 로그인
+![image](https://github.com/user-attachments/assets/978f3534-aeb7-4574-8b32-4ac8205e1221)
 #### 다) 설정
+![image](https://github.com/user-attachments/assets/b064b95a-d18c-4434-92e4-519b7b177f07)
 
 #### 1.4. 기존 서비스(상품) 대비 차별성
 
@@ -102,6 +111,7 @@
 이를 고려했을 때, 기록, 보상, 소통 그리고 의학 척도를 이용한 자가진단 기능까지 확보한 ‘인사이드아웃’
 서비스는 기존 서비스가 가지지 못한 통합성을 갖춘, 효과적인 우울감 개선 서비스라는 점에서 차별성을 확
 보한다.
+![image](https://github.com/user-attachments/assets/b7c5da72-d390-4867-ad53-72fe3b234e9c)
 <br/>
 
 #### 1.5. 사회적가지 도입 계획
