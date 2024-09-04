@@ -24,6 +24,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
+
 // 너무 어렵고
 class ChatActivity : AppCompatActivity() {
 
@@ -43,7 +44,7 @@ class ChatActivity : AppCompatActivity() {
 
     private val model = GenerativeModel(
         "gemini-1.5-flash",
-        apiKey = "AIzaSyAFUNgEWOFYm4FNk-GkBssKdrsKpCcf5Tw",
+        apiKey = BuildConfig.GEMINI_API_KEY,
     )
     private val chatHistory = mutableListOf<Content>()
     private val chat = model.startChat(chatHistory)
@@ -98,7 +99,7 @@ class ChatActivity : AppCompatActivity() {
             // 데이터 저장
             CoroutineScope(Dispatchers.Main).launch() {
                 var response = chat.sendMessage("다음 텍스트에 대해 3줄 이내로 채팅하듯이 심리상담을 해줘 텍스트:$message")
-                var emotion = chat.sendMessage("지금까지 한 사용자의 심리상담 채팅 내용과 지금 주어진 텍스트를 같이 적용해서 상담자의 감정을 다음 중 하나로 분류해줘 : (행복, 슬픔, 즐거움, 분노, 중립) 다른 설명 없이 '분류한 감정 두글자'만 알려줘. 텍스트:$message")
+                var emotion = chat.sendMessage("다음 텍스트는 심리상담 챗봇과 상담한 사용자의 채팅 내용이야. 사용자의 감정을 다음 중 하나로 분류해줘 : (행복, 슬픔, 즐거움, 분노, 중립) 다른 설명 없이 '분류한 감정 두글자'만 알려줘. 텍스트:$message")
 
                 mDbRef.child("chats").child(senderRoom).child(localDate.toString()).child("message").push()
                     .setValue(messageObject)//.addOnSuccessListener {

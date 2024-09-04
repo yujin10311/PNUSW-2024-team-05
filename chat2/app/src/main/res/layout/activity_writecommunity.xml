@@ -48,17 +48,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/submitbutton"
         android:layout_width="326dp"
         android:layout_height="66dp"
         android:text="올리기"
+        android:background="@drawable/btn_background"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bodytext"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.503" />
 
     <EditText
         android:id="@+id/HashTag"
