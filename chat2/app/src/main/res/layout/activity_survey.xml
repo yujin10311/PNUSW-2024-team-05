@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="@color/cardview_light_background"
     android:padding="10dp"
     tools:context=".SurveyActivity">
 
@@ -90,14 +91,16 @@
         android:text="a4"
         android:textSize="20sp" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/submit_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/btn_background"
         android:layout_marginTop="20dp"
         android:text="@string/submit"
         android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:textColor="@color/white"
+        android:textStyle="bold" />
 
 
 </LinearLayout>

@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/writebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/btn_background"
         android:text="글쓰기"
-        android:textColorLink="@color/green"
+        android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
@@ -73,6 +75,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/e2button"
         app:layout_constraintEnd_toEndOf="@id/textE3"
+        android:textSize="18sp"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@id/textE1"
         app:layout_constraintTop_toTopOf="@id/textHashtag"
@@ -84,6 +87,7 @@
         app:layout_constraintBottom_toTopOf="@+id/e2button"
         app:layout_constraintEnd_toEndOf="@id/textE2"
         app:layout_constraintHorizontal_bias="0.5"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/textHashtag"
         app:layout_constraintVertical_bias="0.8" />
@@ -93,39 +97,47 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/e2button"
         app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="18sp"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@id/textE2"
         app:layout_constraintTop_toTopOf="@id/textHashtag"
         app:layout_constraintVertical_bias="0.8" />
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/e2button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="❤️"
+        android:background="@drawable/btn_background"
         android:textColorLink="@color/green"
+        android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@id/refreshButton"
         app:layout_constraintEnd_toEndOf="@id/e3button"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@id/e1button"
         app:layout_constraintTop_toTopOf="@id/textE2"
         app:layout_constraintVertical_bias="0.8" />
-    <Button
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/e1button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/btn_background"
         android:text="😢"
         android:textColorLink="@color/green"
+        android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@id/refreshButton"
         app:layout_constraintEnd_toEndOf="@id/e2button"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/textE2"
         app:layout_constraintVertical_bias="0.8" />
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/e3button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="️🥺"
+        android:textSize="34sp"
+        android:background="@drawable/btn_background"
         android:textColorLink="@color/green"
         app:layout_constraintBottom_toTopOf="@id/refreshButton"
         app:layout_constraintEnd_toEndOf="parent"

@@ -18,6 +18,7 @@
         android:id="@+id/home_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:src="@drawable/insideout"
         app:layout_constraintBottom_toTopOf="@id/calendarView"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -85,7 +86,9 @@
         android:id="@+id/menu_bar"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_marginBottom="44dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="-30dp">
 
         <TextView
             android:id="@+id/chat_btn"
@@ -94,8 +97,8 @@
             android:layout_weight="1"
             android:background="@drawable/chat_btn_background"
             android:gravity="center"
-            android:text="채팅"
-            android:textSize="30dp" />
+            android:text="💬"
+            android:textSize="50dp" />
 
         <TextView
             android:id="@+id/comunity_btn"
@@ -104,9 +107,10 @@
             android:layout_weight="1"
             android:background="@drawable/comunity_btn_background"
             android:gravity="center"
-            android:text="커뮤
-            니티"
-            android:textSize="30dp" />
+            android:text="🌐"
+            android:textSize="50dp"
+            tools:layout_editor_absoluteX="103dp"
+            tools:layout_editor_absoluteY="615dp" />
 
         <TextView
             android:id="@+id/character_btn"
@@ -115,8 +119,10 @@
             android:layout_weight="1"
             android:background="@drawable/avatar_btn_background"
             android:gravity="center"
-            android:text="아바타"
-            android:textSize="30dp" />
+            android:text="👤"
+            android:textSize="50dp"
+            tools:layout_editor_absoluteX="206dp"
+            tools:layout_editor_absoluteY="583dp" />
 
         <TextView
             android:id="@+id/check_btn"
@@ -125,18 +131,22 @@
             android:layout_weight="1"
             android:background="@drawable/check_btn_background"
             android:gravity="center"
-            android:text="검사"
-            android:textSize="30dp" />
+            android:text="✔️"
+            android:textSize="50dp"
+            tools:layout_editor_absoluteX="279dp"
+            tools:layout_editor_absoluteY="585dp" />
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/diary_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="일기"
+        android:background="@drawable/btn_background"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/emotion_TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/YMD_TextView"
