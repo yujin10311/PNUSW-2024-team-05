@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">chat2</string>
+
+    <string name="question">질문</string>
+    <string name="count_label">%d/%d</string>
+    <string name="result1">
+        우울 아님
+    </string>
+
+    <string name="result2">
+        가벼운 우울
+    </string>
+
+    <string name="result3">
+        중간 정도의 우울 \n
+        (가까운 지역센터나 전문기관 방문을 요망합니다.)
+    </string>
+
+    <string name="result4">
+        심한 우울 \n
+        (전문기관의 치료적 개입과 평가가 필요합니다.)
+    </string>
+
+    <string name="submit">%s</string>
+</resources>
