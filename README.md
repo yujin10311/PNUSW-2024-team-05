@@ -1,4 +1,4 @@
-# Template for Hackathon
+![image](https://github.com/user-attachments/assets/3c7985f5-3f81-4e96-b149-7fdfc2c1331b)# Template for Hackathon
 이 레파지토리는 참여자들이 해커톤 결과물을 위한 레파지토리 생성시에 참고할 내용들을 담고 있습니다.
 1. 레파지토리 생성
 2. 레파지토리 구성
@@ -96,7 +96,76 @@
 > 노션 링크, 한글 문서, pdf 파일, 구글 스프레드 시트 등...
 
 #### 3.4. 디렉토리 구조
-> 위 레포지토리의 디렉토리 구조를 설명하세요.
+```
+├── backend/                                                        # 백엔드 코드와 서버관련 파일이 위치한 디렉토리
+│   ├── main.py                                                     # 백엔드의 주요 로직이 구현된 Python 스크립트
+├── chat2/                                                          # Android 애플리케이션의 메인 프로젝트 디렉토리
+│   ├── app/                                                        # Android 앱 소스 코드가 포함된 디렉토리
+│   │   ├── src/                                                    # 프로젝트의 소스 코드가 위치한 디렉토리
+│   │   │   ├── main/                                               # 애플리케이션의 메인 소스 디렉토리
+│   │   │   │   ├── java/com/example/chat2/                         # Kotlin 코드가 위치한 패키지 디렉토리
+│   │   │   │   │   ├── AvatarActivity.kt                           # 아바타 화면
+│   │   │   │   │   ├── ChatActivity.kt                             # 채팅 화면
+│   │   │   │   │   ├── CheckActivity.kt                            # (쓰이지 않음)
+│   │   │   │   │   ├── CommunityActivity.kt                        # 커뮤니티 화면
+│   │   │   │   │   ├── CommunityAdapter.kt                         # (쓰이지 않음)
+│   │   │   │   │   ├── CommunityWriteActivity.kt                   # 커뮤니티 글(쇼츠) 쓰기 화면
+│   │   │   │   │   ├── ContentModel.kt                             # 컨텐츠 클래스 정의
+│   │   │   │   │   ├── DiaryActivity.kt                            # 일기 화면
+│   │   │   │   │   ├── HomeActivity.kt                             # 홈 화면
+│   │   │   │   │   ├── LogInActivity.kt                            # 로그인 화면
+│   │   │   │   │   ├── MainActivity.kt                             # (쓰이지 않음)
+│   │   │   │   │   ├── Message.kt                                  # 
+│   │   │   │   │   ├── MessageAdapter.kt                           # 
+│   │   │   │   │   ├── Question.kt                                 # 설문조사 관련 변수 선언 파일
+│   │   │   │   │   ├── QuestionData.kt                             # 설문조사 내용이 저장된 파일
+│   │   │   │   │   ├── ResultActivity.kt                           # 설문조사 결과 화면
+│   │   │   │   │   ├── Score.kt                                    # 설문조사 점수 관련 번수 선언 파일
+│   │   │   │   │   ├── SignUpActivity.kt                           # 회원가입 화면
+│   │   │   │   │   ├── SurveyActivity.kt                           # 설문조사 화면
+│   │   │   │   │   ├── User.kt                                     #
+│   │   │   │   │   ├── UserAdapter.kt                              #
+│   │   │   │   ├── res/                                            # 애플리케이션 리소스 파일이 포함된 디렉토리
+│   │   │   │   │   ├── drawble/                                    # 이미지 및 XML 그래픽 리소스가 저장된 디렉토
+│   │   │   │   │   │   ├── avatar.jpg                              # 아바타 이미지 파일
+│   │   │   │   │   │   ├── avatar_btn_background.xml               # 채팅 버튼 배경을 정의한 XML 파일
+│   │   │   │   │   │   ├── btn_background.xml                      # 일반 버튼 배경을 정의한 XML 파일
+│   │   │   │   │   │   ├── chat.png                                # 로그인 화면의 이미지 파일 (쓰이지 않음)
+│   │   │   │   │   │   ├── chat_btn_background.xml                 # 채팅 버튼 배경을 정의한 XML 파일
+│   │   │   │   │   │   ├── comunity_btn_background.xml             # 커뮤니티 버튼 배경을 정의한 XML 파일
+│   │   │   │   │   │   ├── edit_background.xml                     # 회원가입 화면 버튼 배경을 정의한 XML 파일
+│   │   │   │   │   │   ├── ic_launcher_background.xml              # 애플리케이션 런쳐 배경을 정의한 XML 파일
+│   │   │   │   │   │   ├── ic_launcher_foreground.xml              # 애플리케이션 런처 전경을 정의한 XML 파
+│   │   │   │   │   │   ├── insideout.png                           # insideout 로고 이미지 파일
+│   │   │   │   │   │   ├── logo.png                                # insideout 로고 이미지 파일
+│   │   │   │   │   │   ├── option_background.xml                   # 옵션 배경을 정의한 XML 파일
+│   │   │   │   │   │   ├── selected_option_background.xml          # 선택된 옵션 배경을 정의한 XML 파일
+│   │   │   │   │   ├── layout/                                     # UI 레이아웃 XML 파일이 저장된 디렉토리
+│   │   │   │   │   │   ├── activity_avatar.xml                     # 아바타 화면의 XML 파일
+│   │   │   │   │   │   ├── activity_chat.xml                       # 채팅 화면의 XML 파일
+│   │   │   │   │   │   ├── activity_check.xml                      # (쓰이지 않음)
+│   │   │   │   │   │   ├── activity_community.xml                  # 커뮤니티 화면의 XML 파일
+│   │   │   │   │   │   ├── activity_diary.xml                      # 일기 화면의 XML 파일
+│   │   │   │   │   │   ├── activity_home.xml                       # 홈 화면의 XML 파일
+│   │   │   │   │   │   ├── activity_log_in.xml                     # 로그인 화면의 XML 파일
+│   │   │   │   │   │   ├── activity_main.xml                       # 메인 화면의 XML 파일 (쓰이지 않음)
+│   │   │   │   │   │   ├── activity_result.xml                     # 설문조사 결과 화면의 XML 파일
+│   │   │   │   │   │   ├── activity_sign_up.xml                    # 회원가입 화면의 XML 파일
+│   │   │   │   │   │   ├── activity_survey.xml                     # 설문조사 화면의 XML 파일
+│   │   │   │   │   │   ├── activity_writecommunnity.xml            # 커뮤니티 글 쓰기 화면의 XML 파일
+│   │   │   │   │   │   ├── receive.xml                             # 받는 메세지의 XML 파일
+│   │   │   │   │   │   ├── send.xml                                # 보내는 메세지의 XML 파일
+│   │   │   │   │   │   ├── user_layout.xml                         # 사용자 화면의 XML 파일 (쓰이지 않음)
+│   │   │   │   │   ├── menu/                                       # (쓰이지 않음)
+│   │   │   │   │   │   ├── menu.xml                                # (쓰이지 않음)
+│   │   │   │   │   ├── values/                                     # 다양한 XML 값이 정의된 디렉토리
+│   │   │   │   │   │   ├── colors.xml                              # 애플리케이션에서 사용되는 색상 정의 파일
+│   │   │   │   │   │   ├── strings.xml                             # 애플리케이션에서 사용되는 문자열 정의 파일
+│   │   │   │   │   │   ├── themes.xml                              # 애플리케이션 테마 정의 파일
+│   │   │   ├── build.gradle.kts                                    # 모듈에 대한 Gradle 설정 파일
+│   │   │   ├── google-services.json                                # Firebase 설정 파일
+│   │   │   ├── build.gradle.kts                                    # 전체 프로젝트에 대한 Gradle 설정 파일
+```
 
 ### 4. 설치 및 사용 방법
 > 제품을 설치하기 위헤 필요한 소프트웨어 및 설치 방법을 작성하세요.
