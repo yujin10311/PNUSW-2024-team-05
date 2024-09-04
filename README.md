@@ -1,4 +1,4 @@
-### 1. 프로젝트 소개
+![image](https://github.com/user-attachments/assets/76ba263f-e21a-4426-93e2-2ebaa6709498)### 1. 프로젝트 소개
 #### 1.1. 개발배경 및 필요성
 이 프로젝트는 창의융합 해커톤에 참여하는 사람들에게 README 작성의 가이드라인을 제공하기 위해 제작되었습니다.
 <br/>
@@ -41,26 +41,9 @@
 ### 3. 개발결과
 [코딩역량강화플랫폼 Online Judge](http://10.125.121.115:8080/)를 예시로 작성하였습니다.
 #### 3.1. 전체시스템 흐름도
-- 유저 플로우 차트
-  > 코딩 역량강화 플랫폼의 회원가입 부분만 작성했습니다. <br/>
-  > 사용자의 행동 흐름을 도식화하여 보여줍니다.
-  <img width="400px" alt="유저 플로우 차트" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/c8de7c98-efd8-4f64-a39a-720faabccd78" />
-
-- 테스크 플로우 차트
-  > 코딩 역량강화 플랫폼의 로그인 부분만 작성했습니다. <br/>
-  > 주요 테스크의 프로세스를 도식화하여 보여줍니다.
-  <img width="400px" alt="테스크 플로우 차트" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/b83502a9-032d-4453-8687-428d54643610" />
-
-- 시스템 플로우 차트
-  > 코딩 역량강화 플랫폼의 로그인 부분만 작성했습니다. <br/>
-  > 테스크의 흐름에 따른 데이터 처리를 도식화하여 보여줍니다.
-  <img width="600px" alt="시스템 플로우 차트" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/1bfb66f0-446c-4450-8a81-a78bfe5ac9ce" />
-
-  
-- IA(Information Architecture)
-  > 정보나 시스템의 구조를 도식화하여 보여줍니다. <br/>
-  <img width="600px" alt="IA" src="https://github.com/pnuswedu/SW-Hackathon-2024/assets/34933690/07d842fe-fb73-4079-97a3-58b2495ff331" />
-
+![image](https://github.com/user-attachments/assets/e9798fb2-2359-405c-ac31-fc3fd53d5fc3)
+![image](https://github.com/user-attachments/assets/5848f2bc-804b-482a-9598-c1ec738713ff)
+![image](https://github.com/user-attachments/assets/01aae17d-3a0a-4813-8174-8181e07bbb16)
 <br/>
 
 #### 3.2. 기능설명
